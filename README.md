@@ -1,47 +1,50 @@
-# Nada
+## farvm
 
-#### 介绍
-Nada
+#### 项目介绍
+玩转高级语言虚拟机系列之《nada》项目，该项目参考JVM,CLI，ZENDVM，V8,node等高级语言虚拟机的实现并实现了JVM的指令集，未来将支持运行ts,js,far,java等高级语言。
 
-Nada是一款类似于NodeJs的Js运行平台,内核使用Java实现，所以能更轻易的使用JAVA生态圈框架，
-原生支持高性能高并发、大数据处理、多线程、协程。
+#### 应用场景
+- Nada的目标是为WEB应用开发团队、桌面软件开发团队、游戏开发团队、运维团队、操作系统内核开发团队，机器学习团队，提供轻量的高性能跨平台高级语言虚拟机服务。
 
-Nada的目标：
-让JS开发者轻松构建高性能游戏服务器
-让JS开发者轻松构建微服务
-让JS开发者轻松构建桌面端程序
+#### 开发语言
+- Nada使用Go开发
 
-Nada开发者交流群：1067040570
+#### 目的
+- 纸上得来终觉浅，绝知此事要躬行。该项目是大家绝佳造轮子机会，如果你想学习虚拟机，JVM，CLI，V8，ZNEDVM的一些原理，完全可以参与该项目的开发。
+- 在这个项目中你能学习到虚拟机是如何为高级语言提供强大功能的原理，以及如何自己实现一门编程语言！COOL~同时能GET到的原理包括但不仅限于
+```
+	操作系统原理
+	解释器原理
+	多线程原理
+	高级语言内存模型
+	协程实现原理
+	IO原理
+	jit原理
+	网络原理
+	数据库原理
+	机器学习
+	游戏引擎
+	锻炼C/C++技能
+```
 
-#### 软件架构
-软件架构说明
 
 
-#### 安装教程
+#### 团队
+Q群：863823038 如果你<没时间&没兴趣&不能喷项目&不能参与贡献>请勿入！
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
 
-#### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
 
 #### 参与贡献
+> 由于本项目重点是供大家学习和研究，在代码规范上我们有很严格的要求，请认真阅读规范，以确定您能接受规范后再fork!
+-  [规范文档](https://gitee.com/grateful/farvm/wikis/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83?sort_id=3481374)
+1.  选择擅长的分组
+2. [分组列表](https://gitee.com/grateful/farvm/wikis/%E6%93%85%E9%95%BF%E5%88%86%E7%BB%84?sort_id=3481509)
+3.  Fork 本仓库
+4.  新建 Feat_xxx 分支
+5.  提交代码
+6.  新建 Pull Request
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
 
 
-#### 特技
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
