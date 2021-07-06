@@ -44,7 +44,7 @@ JIT组：熟练X86、arm、risv汇编
 编译器组：
 熟练GO 熟练编译原理，负责编译器开发，将JS，TS,Python，JAVA,编译为虚拟机字节码
 
-原生方法组：熟练go
+NDK组：熟练go
 负责原生方法包的实现，为高级语言层面提供原生方法的支持，熟悉任意一样即可（GTK、libuv、libenvent、协程、线程、IO管理）
 
 debuger组：(熟悉IDEA插件，VSCODE插件)

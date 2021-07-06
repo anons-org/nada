@@ -1,20 +1,20 @@
 package VmObject
 
 
-type String struct {
+type FString struct {
 	val string
 	len int
 }
 
-func (me *String) GetLen() int{
+func (me *FString) GetLen() int{
 	return me.len;
 }
 
-func (me *String) GetVal() string{
+func (me *FString) GetVal() string{
 	return me.val;
 }
 
-func (me String) SetVal(val string) String{
+func (me FString) SetVal(val string) FString{
 	me.val = val;
 	return me;
 }

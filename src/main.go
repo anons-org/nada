@@ -2,7 +2,6 @@ package main
 
 import (
 	"./object"
-	"encoding/binary"
 	"fmt"
 	"io"
 	"os"
@@ -29,8 +28,6 @@ func parserClass(){
 	buf := make([]byte, stat.Size());
 
 	//var data []byte;
-
-
 
 	for {
 		length, err := file.Read(buf);
@@ -66,19 +63,7 @@ func main() {
 
 	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\TestDemo1.class"
 	classN  := new(object.ClassByteFile);
-	classN.Load(fileName);
-
-	data := classN.Read(4)
-	//能正常使用
-	fmt.Println( 	binary.BigEndian.Uint32(data)==0xcafebabe )
-
-
-	version 		:= classN.ReadShort();
-	masterVersion 	:= classN.ReadShort();
-	constanCount 	:= classN.ReadShort();
-	fmt.Print( fmt.Sprintf("主版本%d,副版本%d,常量池%d\n",masterVersion,version,constanCount) );
-
-
+	classN.Load(fileName).Parser();
 
 	x :=1;fmt.Print(x)
 
