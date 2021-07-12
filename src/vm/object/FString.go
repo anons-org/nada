@@ -14,7 +14,7 @@ func (me *FString) GetVal() string{
 	return me.val;
 }
 
-func (me FString) SetVal(val string) FString{
+func (me *FString) SetVal(val string) *FString{
 	me.val = val;
 	return me;
 }

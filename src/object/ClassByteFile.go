@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	VmObject "vm/object"
 )
 
 
@@ -19,17 +20,15 @@ type ClassByteFile struct {
 	fileName string
 	//CLASS 字节码
 	data []byte
-	//constanPool []Constans.ConstansInterface
+	constanPool []VmObject.IFObject
 	//当前class常量数量
 	constanCount int
 }
 
 func (me *ClassByteFile) Load(fileName string) *ClassByteFile{
 
-
 	fmt.Print(  CommonConstan.G_OT_DEF[CommonConstan.G_OT.STRING].Name);
-
-
+	
 //	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\TestDemo1.class"
 	file, err := os.OpenFile(fileName, os.O_RDWR, 0666);
 	if err != nil {
@@ -105,6 +104,12 @@ func (me *ClassByteFile) parserConstanInteger(idx int) {
  */
 func (me *ClassByteFile) parserConstanMethod(idx int) {
 	//常量池的对象，需要转成VM中的内置类型对象
+
+	//mt := new( VmObject.FMethod ).Build();
+
+
+
+
 
 
 }

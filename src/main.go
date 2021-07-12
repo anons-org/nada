@@ -2,6 +2,7 @@ package main
 
 import (
 	"./object"
+	"./vm/object"
 	"fmt"
 	"io"
 	"os"
@@ -60,11 +61,13 @@ func parserClass(){
 func main() {
 
 
+	msg := new(VmObject.FString);
+	msg.SetVal("奥术大师多");
+
 
 	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\TestDemo1.class"
 	classN  := new(object.ClassByteFile);
 	classN.Load(fileName).Parser();
-
 	x :=1;fmt.Print(x)
 
 	for{}
