@@ -1,4 +1,4 @@
-package CommonConstan
+package VmObject
 
 //OPCODE
 var G_OPCODE_DEF = []struct {
@@ -40,3 +40,15 @@ var G_OT = struct {
 }{
 	INT:1,STRING: 2,
 }
+
+
+var KlassBean map[string]IKlass
+
+func CommonInit()  {
+	KlassBean = make( map[string]IKlass)
+	KlassBean["nada.lib.NativeMethodKlass"] 	= new(NativeMethodKlass).Init()
+	KlassBean["nada.lib.VirtualMethodKlass"] 	= new(VirtualMethodKlass).Init()
+	KlassBean["nada.lib.StringKlass"] 			= new(StringKlass).Init()
+}
+
+

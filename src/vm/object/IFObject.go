@@ -5,8 +5,10 @@ package VmObject
 	在C++中，实际上是所有内置对象的父类
  */
 type IFObject interface {
-	ValToString()
-	GetKlass()
+
+	GetKlass() IKlass
+	SetKlass( IKlass)
+
 }
 
 

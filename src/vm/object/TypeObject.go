@@ -1,20 +1,19 @@
 package VmObject
 
-import VmObjectKlass "vm/object/klass"
 /**
 	类型对象
  */
 type TypeObject struct {
 	//所属klass
-	onwKlass VmObjectKlass.IKlass
+	onwKlass IKlass
 }
 
 
-func  (me *TypeObject)SetOnwKlass(onwKlass VmObjectKlass.IKlass) {
+func  (me *TypeObject)SetOnwKlass(onwKlass IKlass) {
 	me.onwKlass = onwKlass
 }
 
-func  (me *TypeObject)GetOnwKlass() VmObjectKlass.IKlass {
+func  (me *TypeObject)GetOnwKlass() IKlass {
 	return me.onwKlass
 }
 

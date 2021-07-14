@@ -1,4 +1,4 @@
-package VmObjectKlass
+package VmObject
 
 type TypeKlass struct {
 	//klass名称
@@ -12,8 +12,7 @@ func (me *TypeKlass)GetName() string{
 }
 
 
-
-func (me *TypeKlass)Build() *TypeKlass{
+func (me *TypeKlass)Build() *TypeKlass {
 	me.name="TypeKlass"
 	return me
 }

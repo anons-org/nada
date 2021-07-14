@@ -1,11 +1,11 @@
 package main
 
 import (
-	"./object"
-	"./vm/object"
 	"fmt"
 	"io"
+	objects "object"
 	"os"
+	vmObject "vm/object"
 )
 
 
@@ -58,15 +58,31 @@ func parserClass(){
 
 
 
+
+func call(ob* vmObject.FString, fns string){
+
+	fn := ob.GetKlass().GetDict(fns)
+	mt,_ :=  fn.(vmObject.FMethod)
+	mt.Call("this",[]vmObject.IFObject{});
+}
+
+
 func main() {
 
+	vmObject.CommonInit()
+	str := new(vmObject.FString).Build()
+	call(str,"print")
 
-	msg := new(VmObject.FString);
+
+	msg := new(vmObject.FString);
 	msg.SetVal("奥术大师多");
 
 
+
+
+
 	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\TestDemo1.class"
-	classN  := new(object.ClassByteFile);
+	classN  := new(objects.ClassByteFile);
 	classN.Load(fileName).Parser();
 	x :=1;fmt.Print(x)
 

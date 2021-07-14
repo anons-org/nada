@@ -1,8 +1,7 @@
 package ConstansParser
 
 import(
-	"../.."
-
+	VmObject "vm/object"
 )
 /**
 常量池对象 int
