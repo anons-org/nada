@@ -1,4 +1,4 @@
-package VmObject
+package ftype
 
 type FFunction struct {
 	//函数名

@@ -1,19 +1,19 @@
-package object
+package Parser
 
 import (
-
-
 	"bytes"
 	"encoding/binary"
 	"fmt"
 	"io"
 	"os"
-	VmObject "vm/object"
+	ftype "vm/type"
 )
 
 
 
 type ClassByteFile struct {
+
+	constanPool []ftype.IFObject
 
 	//当前JAVA字节码读取位置
 	readIdx int
@@ -21,7 +21,7 @@ type ClassByteFile struct {
 	fileName string
 	//CLASS 字节码
 	data []byte
-	constanPool []VmObject.IFObject
+
 	//当前class常量数量
 	constanCount int
 }

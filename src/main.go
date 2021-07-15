@@ -5,7 +5,8 @@ import (
 	"io"
 	objects "object"
 	"os"
-	vmObject "vm/object"
+	"vm/type"
+	Universe "vm/universe"
 )
 
 
@@ -31,7 +32,7 @@ func parserClass(){
 	//var data []byte;
 
 	for {
-		length, err := file.Read(buf);
+		length, err := file.Read(buf)
 		if err != nil {
 			if err == io.EOF {
 				break
@@ -48,38 +49,44 @@ func parserClass(){
 		fmt.Printf("index slice= %s\n",  H)
 
 	}
-		x :=1
-
+	x :=1
 	fmt.Print(x)
-
 }
 
 
-
-
-
-
-func call(ob* vmObject.FString, fns string){
-
+func call(ob *ftype.FString, fns string){
 	fn := ob.GetKlass().GetDict(fns)
-	mt,_ :=  fn.(vmObject.FMethod)
-	mt.Call("this",[]vmObject.IFObject{});
+	mt,_ :=  fn.(ftype.FMethod)
+	mt.Call("this",[]ftype.IFObject{});
 }
 
 
 func main() {
 
-	vmObject.CommonInit()
-	str := new(vmObject.FString).Build()
+
+	////
+	////opcodes:= `
+	////				ICONST_0 1
+	////				ALOAD 0
+	//
+	//			`
+	//
+	//strOpToArr := VmCore.ConverStrOp( opcodes )
+	//fmt.Print( strOpToArr )
+	//
+	//xxx:= VmCore.GetOPIdxByValStr("ICONST_0")
+	//
+	//
+	//stargs:= VmCore.PsarserOpcodeOfString("ICONST_0 1")
+	//fmt.Print(stargs)
+	//fmt.Print(xxx)
+
+	//初始化参数 klass等
+	Universe.CommonInit()
+	str :=  ftype.NewFString()
 	call(str,"print")
-
-
-	msg := new(vmObject.FString);
-	msg.SetVal("奥术大师多");
-
-
-
-
+	msg :=   ftype.NewFString()
+	msg.SetVal("奥术大师多")
 
 	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\TestDemo1.class"
 	classN  := new(objects.ClassByteFile);

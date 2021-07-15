@@ -1,7 +1,7 @@
 package ConstansParser
 
-import(
-	VmObject "vm/object"
+import (
+	"vm/type"
 )
 /**
 常量池对象 int
@@ -11,7 +11,7 @@ type ParserMethod struct {
 }
 
 
-func (me *ParserMethod) Parser(idx int) VmObject.IFObject {
+func (me *ParserMethod) Parser(idx int) _type.IFObject {
 	return nil;
 }
 

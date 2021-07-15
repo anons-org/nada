@@ -1,16 +1,21 @@
-package VmObject
+package ftype
+
+import (
+	klass "vm/klass"
+	Universe "vm/universe"
+)
 
 type FString struct {
-	val string
-	len int
-	klass IKlass
+	val   string
+	len   int
+	klass klass.IKlass
 }
 
 func (me FString) ValToString() {
 
 }
 
-func (me* FString) GetKlass() IKlass{
+func (me*FString) GetKlass() klass.IKlass {
 	return me.klass
 }
 
@@ -23,7 +28,7 @@ func (me *FString) GetVal() string{
 	return me.val;
 }
 
-func (me *FString) SetVal(val string) *FString{
+func (me *FString) SetVal(val string) *FString {
 	me.val = val;
 	return me;
 }
@@ -32,14 +37,15 @@ func (me *FString) SetVal(val string) *FString{
 /**
 绑定klass
 */
-func (me* FString) SetKlass(klass IKlass) {
+func (me* FString) SetKlass(klass klass.IKlass) {
 	me.klass = klass
 }
 
 
 func (me* FString) Build() *FString {
 	//设置class
-	me.SetKlass(  KlassBean["nada.lib.StringKlass"]  )
+	me.SetKlass(  Universe.KlassBean["nada.lib.StringKlass"]  )
 	return me
 }
+
 

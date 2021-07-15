@@ -1,4 +1,4 @@
-package VmObject
+package klass
 
 type TypeKlass struct {
 	//klass名称

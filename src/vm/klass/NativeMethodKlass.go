@@ -1,17 +1,21 @@
-package VmObject
+package klass
+
+import (
+	"vm/type"
+)
 
 type NativeMethodKlass struct {
 	//klass名称
 	name string
 	//类型对象
-	typeObject *TypeObject
+	typeObject *ftype.TypeObject
 }
 
-func (me NativeMethodKlass) GetDict(k string) IFObject {
+func (me NativeMethodKlass) GetDict(k string) ftype.IFObject {
 	panic("implement me")
 }
 
-func (me NativeMethodKlass) GetKlassMethod(k string) IFObject {
+func (me NativeMethodKlass) GetKlassMethod(k string) ftype.IFObject {
 	return nil
 }
 
@@ -22,11 +26,11 @@ func (me NativeMethodKlass) Dict(k string) IKlass {
 /**
 	设置类型对象
  */
-func (me NativeMethodKlass)SetTypeObject(to *TypeObject) {
+func (me NativeMethodKlass)SetTypeObject(to *ftype.TypeObject) {
 	me.typeObject = to
 }
 
-func (me NativeMethodKlass)GetTypeObject() *TypeObject{
+func (me NativeMethodKlass)GetTypeObject() *ftype.TypeObject {
 	return me.typeObject
 }
 
@@ -34,7 +38,7 @@ func (me NativeMethodKlass)GetName() string{
 	return me.name
 }
 
-func (me NativeMethodKlass)Alloc() *IFObject{
+func (me NativeMethodKlass)Alloc() *ftype.IFObject {
 	return nil
 }
 
@@ -44,7 +48,7 @@ func (me NativeMethodKlass)Alloc() *IFObject{
  */
 func (me NativeMethodKlass)Init() IKlass {
 	me.name = "NativeMethodKlass"
-	typeObj := new(TypeObject)
+	typeObj := new(ftype.TypeObject)
 	typeObj.SetOnwKlass(me)
 	me.SetTypeObject( typeObj )
 	return me
