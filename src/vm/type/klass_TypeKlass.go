@@ -1,4 +1,4 @@
-package klass
+package ftype
 
 type TypeKlass struct {
 	//klass名称

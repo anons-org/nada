@@ -1,21 +1,20 @@
 package ftype
 
 import (
-	klass "vm/klass"
 	Universe "vm/universe"
 )
 
 type FString struct {
 	val   string
 	len   int
-	klass klass.IKlass
+	klass IKlass
 }
 
 func (me FString) ValToString() {
 
 }
 
-func (me*FString) GetKlass() klass.IKlass {
+func (me*FString) GetKlass() IKlass {
 	return me.klass
 }
 
@@ -37,7 +36,7 @@ func (me *FString) SetVal(val string) *FString {
 /**
 绑定klass
 */
-func (me* FString) SetKlass(klass klass.IKlass) {
+func (me* FString) SetKlass(klass IKlass) {
 	me.klass = klass
 }
 

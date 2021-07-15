@@ -1,20 +1,17 @@
 package ftype
 
-import (
-	"vm/klass"
-)
 
 type FMethod struct {
 	//方法名
 	mName string
 	//方法字节码
 	code  []byte
-	klass klass.IKlass
+	klass IKlass
 	//原生方法保存
 	call func(args []IFObject) IFObject
 }
 
-func (me FMethod) GetKlass() klass.IKlass {
+func (me FMethod) GetKlass() IKlass {
 	return me.klass
 }
 
@@ -33,7 +30,7 @@ func (me*FMethod) SetMethod(name string) {
 /**
 	绑定klass
  */
-func (me FMethod) SetKlass(klass klass.IKlass) {
+func (me FMethod) SetKlass(klass IKlass) {
 	me.klass = klass;
 }
 
@@ -57,7 +54,7 @@ func (me FMethod) SetCall(call func(args []IFObject) IFObject) FMethod {
  */
 func (me*FMethod) Build(t int) *FMethod {
 	//设置class
-	me.SetKlass(  new(klass.NativeMethodKlass).Init()  )
+	me.SetKlass(  new(NativeMethodKlass).Init()  )
 	return me
 }
 

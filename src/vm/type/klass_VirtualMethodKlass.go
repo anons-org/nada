@@ -1,21 +1,17 @@
-package klass
-
-import (
-	"vm/type"
-)
+package ftype
 
 type VirtualMethodKlass struct {
 	//klass名称
 	name string
 	//类型对象
-	typeObject *ftype.TypeObject
+	typeObject *TypeObject
 }
 
-func (me *VirtualMethodKlass) GetDict(k string) ftype.IFObject {
+func (me *VirtualMethodKlass) GetDict(k string) IFObject {
 	panic("implement me")
 }
 
-func (me *VirtualMethodKlass) GetKlassMethod(k string) ftype.IFObject {
+func (me *VirtualMethodKlass) GetKlassMethod(k string) IFObject {
 	return nil
 }
 
@@ -26,11 +22,11 @@ func (me *VirtualMethodKlass) Dict(k string) IKlass {
 /**
 	设置类型对象
  */
-func (me *VirtualMethodKlass)SetTypeObject(to *ftype.TypeObject) {
+func (me *VirtualMethodKlass)SetTypeObject(to *TypeObject) {
 	me.typeObject = to
 }
 
-func (me *VirtualMethodKlass)GetTypeObject() *ftype.TypeObject {
+func (me *VirtualMethodKlass)GetTypeObject() *TypeObject {
 	return me.typeObject
 }
 
@@ -38,7 +34,7 @@ func (me *VirtualMethodKlass)GetName() string{
 	return me.name
 }
 
-func (me *VirtualMethodKlass)Alloc() *ftype.IFObject {
+func (me *VirtualMethodKlass)Alloc() *IFObject {
 	return nil
 }
 
@@ -48,7 +44,7 @@ func (me *VirtualMethodKlass)Alloc() *ftype.IFObject {
  */
 func (me *VirtualMethodKlass)Init() IKlass {
 	me.name = "VirtualMethodKlass"
-	typeObj := new(ftype.TypeObject)
+	typeObj := new(TypeObject)
 	typeObj.SetOnwKlass(me)
 	me.SetTypeObject( typeObj )
 	return me

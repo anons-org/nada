@@ -1,6 +1,6 @@
 package ftype
 
-import "vm/klass"
+
 
 /**
 	所有内置对象需要实现的接口
@@ -8,8 +8,8 @@ import "vm/klass"
  */
 type IFObject interface {
 
-	GetKlass() klass.IKlass
-	SetKlass(klass.IKlass)
+	GetKlass() IKlass
+	SetKlass(IKlass)
 
 }
 
