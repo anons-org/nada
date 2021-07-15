@@ -1,4 +1,4 @@
-package ftype
+package Vm
 
 
 type FMethod struct {

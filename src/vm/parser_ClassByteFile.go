@@ -1,4 +1,4 @@
-package Parser
+package Vm
 
 import (
 	"bytes"
@@ -6,14 +6,13 @@ import (
 	"fmt"
 	"io"
 	"os"
-	ftype "vm/type"
 )
 
 
 
 type ClassByteFile struct {
 
-	constanPool []ftype.IFObject
+	constanPool []IFObject
 
 	//当前JAVA字节码读取位置
 	readIdx int
@@ -26,7 +25,7 @@ type ClassByteFile struct {
 	constanCount int
 }
 
-func (me *ClassByteFile) Load(fileName string) *ClassByteFile{
+func (me *ClassByteFile) Load(fileName string) *ClassByteFile {
 
 	//fmt.Print(  CommonConstan.G_OT_DEF[CommonConstan.G_OT.STRING].Name);
 

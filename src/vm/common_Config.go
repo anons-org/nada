@@ -1,4 +1,4 @@
-package fmethod
+package Vm
 
 import (
 	"strings"

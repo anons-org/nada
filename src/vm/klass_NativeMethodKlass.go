@@ -1,4 +1,4 @@
-package ftype
+package Vm
 
 type NativeMethodKlass struct {
 	//klass名称

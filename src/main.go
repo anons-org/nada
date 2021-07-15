@@ -3,10 +3,8 @@ package main
 import (
 	"fmt"
 	"io"
-	objects "object"
 	"os"
-	"vm/type"
-	Universe "vm/universe"
+	"vm"
 )
 
 
@@ -54,10 +52,11 @@ func parserClass(){
 }
 
 
-func call(ob *ftype.FString, fns string){
+func call(ob *Vm.FString, fns string){
+
 	fn := ob.GetKlass().GetDict(fns)
-	mt,_ :=  fn.(ftype.FMethod)
-	mt.Call("this",[]ftype.IFObject{});
+	mt,_ :=  fn.(Vm.FMethod)
+	mt.Call("this",[]Vm.IFObject{});
 }
 
 
@@ -82,14 +81,14 @@ func main() {
 	//fmt.Print(xxx)
 
 	//初始化参数 klass等
-	Universe.CommonInit()
-	str :=  ftype.NewFString()
+	Vm.CommonInit()
+	str :=  Vm.NewFString()
 	call(str,"print")
-	msg :=   ftype.NewFString()
+	msg :=   Vm.NewFString()
 	msg.SetVal("奥术大师多")
 
 	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\TestDemo1.class"
-	classN  := new(objects.ClassByteFile);
+	classN  := new(Vm.ClassByteFile);
 	classN.Load(fileName).Parser();
 	x :=1;fmt.Print(x)
 
