@@ -18,7 +18,7 @@ import (
 
 type ClassByteFile struct {
 
-	constanPool []IConstantObject
+	constanPool *Map
 
 	//当前JAVA字节码读取位置
 	readIdx int
@@ -29,6 +29,9 @@ type ClassByteFile struct {
 
 	//当前class常量数量
 	constanCount int
+	//常量池下标
+	idx int
+
 }
 
 func (me *ClassByteFile) Load(fileName string) *ClassByteFile {
@@ -116,7 +119,8 @@ func (me *ClassByteFile) parserMethodref(idx uint8) {
 	mt.tag = idx
 	mt.classIdx = me.ReadShort()
 	mt.nameAndType = me.ReadShort()
-	me.constanPool = append(me.constanPool,mt)
+	me.constanPool.Set(me.idx, mt)
+	me.idx++
 
 
 }
@@ -128,7 +132,8 @@ func (me *ClassByteFile) parserClassInfo(idx uint8) {
 	cls:=new(ConstantClassInfo)
 	cls.tag 		= idx
 	cls.nameIdx 	= me.ReadShort()
-	me.constanPool 	= append(me.constanPool,cls)
+	me.constanPool.Set(me.idx, cls)
+	me.idx++
 }
 
 
@@ -142,7 +147,8 @@ func (me *ClassByteFile) parserItfMethodInfo(idx uint8) {
 	itf.itfClsIdx 		= me.ReadShort()
 	//2字节
 	itf.nameAndTypeIdx 	= me.ReadShort()
-	me.constanPool 	= append(me.constanPool,itf)
+	me.constanPool.Set(me.idx, itf)
+	me.idx++
 }
 
 
@@ -164,7 +170,8 @@ func (me *ClassByteFile) parserNameAndType(idx uint8) {
 	nt.tag 			= idx
 	nt.nameIdx		= me.ReadShort()
 	nt.descIdx		= me.ReadShort()
-	me.constanPool 	= append(me.constanPool,nt)
+	me.constanPool.Set(me.idx, nt)
+	me.idx++
 }
 
 
@@ -177,9 +184,9 @@ func (me *ClassByteFile) parserUtf8(idx uint8) {
 	utf.tag = idx
 	utf.len = me.ReadShort()
 	//读取字节码 未完成，人啊，这辈子，除了生死，都是小事...先回家吃个饭 睡觉..
-	//utf.bytes = append(utf.bytes,)
-
-	me.constanPool 	= append(me.constanPool, utf)
+	utf.bytes = me.Read(int(utf.len))
+	me.constanPool.Set(me.idx, utf)
+	me.idx++
 }
 
 
@@ -191,7 +198,8 @@ func (me *ClassByteFile) parserStringInfo(idx uint8) {
 	str:=new(ConstantStringInfo)
 	str.tag = idx
 	str.strIdx = me.ReadShort()
-	me.constanPool 	= append(me.constanPool,str)
+	me.constanPool.Set(me.idx, str)
+	me.idx++
 }
 
 
@@ -199,13 +207,21 @@ func (me *ClassByteFile) parserStringInfo(idx uint8) {
 
 
 /**
-常量池内容解析
+
+	常量池内容解析
+	注意 Long double 这些类型会占用多个字节
+	导致常量池编号(下标)会移位!!
+	这在各种介绍JVM的资料中都有介绍,但没有明确说明会导致这个问题
+
  */
 func (me *ClassByteFile) parserConstansPool() {
 
 	x := int( me.ReadUi8() )
 
 	switch x {
+	case 1:
+		me.parserUtf8( uint8(x) )
+
 	case 3:
 
 	case 4:
@@ -215,15 +231,15 @@ func (me *ClassByteFile) parserConstansPool() {
 	case 6:
 
 	case 7:
-		me.parserClassInfo(uint8(x));
+		me.parserClassInfo( uint8(x) );
 	case 8:
-		me.parserStringInfo(uint8(x))
+		me.parserStringInfo( uint8(x) )
 	case 9:
 
 	case 10:
-		me.parserMethodref(uint8(x));
+		me.parserMethodref( uint8(x) );
 	case 11:
-		me.parserItfMethodInfo(uint8(x));
+		me.parserItfMethodInfo( uint8(x) );
 	case 12:
 		me.parserNameAndType(uint8(x))
 
@@ -249,13 +265,27 @@ func (me *ClassByteFile) Parser() {
 	me.constanCount = int(constanCount);
 
 	fmt.Print( fmt.Sprintf("主版本%d,副版本%d,常量池%d\n",masterVersion, version, constanCount) );
-	//不知道这多两个字节是什么鬼.. 难道是常量池内容所占的字节数？
-	d := me.ReadShort();
 
 
-	me.parserConstansPool();
+	//常量池下标是从零开始的，需要加一个空值
+	me.constanPool.Set(me.idx, struct {}{})
+	me.idx++
 
-	fmt.Print(d);
+	for i:=0;i < me.constanCount-1;i++{
+		me.parserConstansPool();
+	}
+
+	s:=fmt.Sprintf("pool sieze %d",me.constanPool.Size())
+	fmt.Println(s)
+
+	me.constanPool.ForEach(func( e *MapEntry )  {
+		fmt.Println("key %s",e.key)
+	})
+
+
+	fmt.Print("解析class完成")
+
+	//fmt.Print(d);
 
 
 }
@@ -263,6 +293,13 @@ func (me *ClassByteFile) Parser() {
 
 func (me *ClassByteFile) get(n int){
 
+}
+
+func NewClassByteFile() *ClassByteFile{
+	e:=new(ClassByteFile)
+	e.constanPool = NewMap()
+
+	return e
 }
 
 
