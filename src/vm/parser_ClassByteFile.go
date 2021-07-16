@@ -101,14 +101,13 @@ func (me *ClassByteFile) ReadUi8() int {
 读取常量池对象
  */
 func (me *ClassByteFile) parserConstanInteger(idx int) {
-	//integer := new(Constans.ConstanInteger)
-	//me.constanPool = append(me.constanPool,integer)
+
 }
 
 /**
 	方法解析
  */
-func (me *ClassByteFile) parserConstanMethod(idx uint8) {
+func (me *ClassByteFile) parserMethodref(idx uint8) {
 	//常量池的对象，需要转成VM中的内置类型对象
 
 	//mt := new( VmObject.FMethod ).Build();
@@ -125,12 +124,78 @@ func (me *ClassByteFile) parserConstanMethod(idx uint8) {
 /**
 	类引用解析
  */
-func (me *ClassByteFile) parserConstanClassInfo(idx uint8) {
+func (me *ClassByteFile) parserClassInfo(idx uint8) {
 	cls:=new(ConstantClassInfo)
 	cls.tag 		= idx
 	cls.nameIdx 	= me.ReadShort()
 	me.constanPool 	= append(me.constanPool,cls)
 }
+
+
+/**
+	接口解析
+*/
+func (me *ClassByteFile) parserItfMethodInfo(idx uint8) {
+	itf:=new(ConstantInterfaceMethodInfo)
+	itf.tag 			= idx
+	//2字节
+	itf.itfClsIdx 		= me.ReadShort()
+	//2字节
+	itf.nameAndTypeIdx 	= me.ReadShort()
+	me.constanPool 	= append(me.constanPool,itf)
+}
+
+
+/**
+
+	名称和类型解析
+
+	程序员最大的问题就是容易认真，认真起来就喜欢抬杠
+	今天同事问我：老大，车间用两台电脑直接通过C#的scoket互联保证稳定性行的通不(被车间那帮家伙打报告了)，我就简单说了两句，另外一个同事，马上质疑如此这般
+	<其实这同事也就2年JAVA开发经验，别说操作系统和更底层的玩意儿，应该连socket的有多少中模式都还不清楚,哪儿来的的勇气质疑，请看段子开头>
+	对于他的质疑，我没有反驳，感觉没必要，思维不在一个层面，所以避重就轻的说：技术都是为业务服务的，只要你能保证车间工序正常运作，不出现生产事故就行
+
+	朋友千个少，敌人一个多
+
+
+*/
+func (me *ClassByteFile) parserNameAndType(idx uint8) {
+	nt:=new(ConstantNameAndType)
+	nt.tag 			= idx
+	nt.nameIdx		= me.ReadShort()
+	nt.descIdx		= me.ReadShort()
+	me.constanPool 	= append(me.constanPool,nt)
+}
+
+
+/**
+	utf8解析
+*/
+func (me *ClassByteFile) parserUtf8(idx uint8) {
+
+	utf:=new(ConstantUtf8)
+	utf.tag = idx
+	utf.len = me.ReadShort()
+	//读取字节码 未完成，人啊，这辈子，除了生死，都是小事...先回家吃个饭 睡觉..
+	//utf.bytes = append(utf.bytes,)
+
+	me.constanPool 	= append(me.constanPool, utf)
+}
+
+
+/**
+	string字符解析
+*/
+func (me *ClassByteFile) parserStringInfo(idx uint8) {
+
+	str:=new(ConstantStringInfo)
+	str.tag = idx
+	str.strIdx = me.ReadShort()
+	me.constanPool 	= append(me.constanPool,str)
+}
+
+
+
 
 
 /**
@@ -150,13 +215,18 @@ func (me *ClassByteFile) parserConstansPool() {
 	case 6:
 
 	case 7:
-		me.parserConstanClassInfo(uint8(x))
+		me.parserClassInfo(uint8(x));
 	case 8:
-
+		me.parserStringInfo(uint8(x))
 	case 9:
 
 	case 10:
-		me.parserConstanMethod(uint8(x));
+		me.parserMethodref(uint8(x));
+	case 11:
+		me.parserItfMethodInfo(uint8(x));
+	case 12:
+		me.parserNameAndType(uint8(x))
+
 	default:
 		fmt.Print( "常量池解析错误" );
 		os.Exit(1);
