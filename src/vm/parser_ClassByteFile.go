@@ -7,12 +7,18 @@ import (
 	"io"
 	"os"
 )
-
+/**
+	Class在解析的过程中，
+	需要把常量转化为实际的数据类型
+	这样可以减少解释器执行过程中对常量转换类型的消耗
+	数据类型请看 type_  开头的文件
+	by mike
+ */
 
 
 type ClassByteFile struct {
 
-	constanPool []IFObject
+	constanPool []IConstantObject
 
 	//当前JAVA字节码读取位置
 	readIdx int
@@ -102,16 +108,28 @@ func (me *ClassByteFile) parserConstanInteger(idx int) {
 /**
 	方法解析
  */
-func (me *ClassByteFile) parserConstanMethod(idx int) {
+func (me *ClassByteFile) parserConstanMethod(idx uint8) {
 	//常量池的对象，需要转成VM中的内置类型对象
 
 	//mt := new( VmObject.FMethod ).Build();
 
+	mt:=new(ConstantMethodref)
+	mt.tag = idx
+	mt.classIdx = me.ReadShort()
+	mt.nameAndType = me.ReadShort()
+	me.constanPool = append(me.constanPool,mt)
 
 
+}
 
-
-
+/**
+	类引用解析
+ */
+func (me *ClassByteFile) parserConstanClassInfo(idx uint8) {
+	cls:=new(ConstantClassInfo)
+	cls.tag 		= idx
+	cls.nameIdx 	= me.ReadShort()
+	me.constanPool 	= append(me.constanPool,cls)
 }
 
 
@@ -132,13 +150,13 @@ func (me *ClassByteFile) parserConstansPool() {
 	case 6:
 
 	case 7:
-
+		me.parserConstanClassInfo(uint8(x))
 	case 8:
 
 	case 9:
 
 	case 10:
-		me.parserConstanMethod(x);
+		me.parserConstanMethod(uint8(x));
 	default:
 		fmt.Print( "常量池解析错误" );
 		os.Exit(1);
