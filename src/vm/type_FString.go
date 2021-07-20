@@ -32,7 +32,7 @@ func (me *FString) SetVal(val string) *FString {
 /**
 绑定klass
 */
-func (me*FString) SetKlass(klass IKlass) {
+func (me* FString) SetKlass(klass IKlass) {
 	me.klass = klass
 }
 

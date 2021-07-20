@@ -14,7 +14,6 @@ type MapEntry struct {
 
 type Map struct {
 	data *list.List
-
 }
 
 func toStr(e interface{}) string{

@@ -87,7 +87,7 @@ func main() {
 	msg :=   Vm.NewFString()
 	msg.SetVal("奥术大师多")
 
-	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\TestDemo1.class"
+	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\lib\\Test.class"
 	classN  := Vm.NewClassByteFile()
 	classN.Load(fileName).Parser();
 
