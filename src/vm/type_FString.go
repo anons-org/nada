@@ -43,4 +43,12 @@ func (me* FString) Build() *FString {
 	return me
 }
 
+//func (me* FString) NewFString(str string) *FString {
+//	//设置class
+//	me.SetVal(str)
+//	me.SetKlass(  KlassBean["nada.lib.StringKlass"]  )
+//	return me
+//}
+
+
 

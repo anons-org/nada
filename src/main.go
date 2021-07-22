@@ -82,10 +82,10 @@ func main() {
 
 	//初始化参数 klass等
 	Vm.CommonInit()
-	str :=  Vm.NewFString()
+	str :=  Vm.NewFString("test")
 	call(str,"print")
-	msg :=   Vm.NewFString()
-	msg.SetVal("奥术大师多")
+	//msg :=   Vm.NewFString("奥术大师多")
+
 
 	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\lib\\Test.class"
 	classN  := Vm.NewClassByteFile()

@@ -279,7 +279,7 @@ func (me *ClassByteFile) parserAttrsInfo() {
 		attr.nameIdx 		= me.ReadShort()
 		attr.len 			= int(me.ReadUint32())
 		attr.bytes 			=  me.Read(attr.len)
-		me.attrs 	= append(me.attrs, attr)
+		me.attrs 			= append(me.attrs, attr)
 	}
 
 }
@@ -310,6 +310,10 @@ func (me *ClassByteFile) parserMethodInfo() {
 			attr.len 			= int(me.ReadUint32())
 			attr.bytes 			=  me.Read(attr.len)
 			method.attriButes 	= append(method.attriButes, attr)
+			//
+			//oo:=me.constanPool.Get(attr.nameIdx)
+			//fmt.Print(oo)
+
 		}
 		me.methods = append(me.methods, method)
 	}
@@ -513,8 +517,11 @@ func (me *ClassByteFile) Parser() {
 	//解析字段 目前还有问题
 	me.parserFieldInfo()
 	me.parserMethodInfo()
-
+	//属性段
 	me.parserAttrsInfo()
+
+	//生成KLASS
+	me.buildKlass()
 
 	s:=fmt.Sprintf("pool sieze %d", me.constanPool.Size() )
 	fmt.Println(s)
@@ -567,13 +574,77 @@ func (me *ClassByteFile) get(n int){
 
 }
 
-func NewClassByteFile() *ClassByteFile{
-	e:=new(ClassByteFile);
-	e.constanPool = NewMap();
-	return e;
+
+
+
+func (me *ClassByteFile) buildKlass() {
+
+	kls:=createKlass("")
+	kls.name = NewFString("Test")
+	//遍历方法
+	for _, v:=range me.methods{
+
+		desc:=ctConvStr(me,v.descIdx)
+		desc+=""
+		name :=ctConvStr(me,v.nameIdx)
+		mt:=NewFMethod(METHOD_VIRTUAL, name)
+
+		for _, va:=range v.attriButes{
+			//打印属性名称
+			  val := me.constanPool.Get(va.nameIdx)
+			  if utf8, ok:=val.(*ConstantUtf8);ok{
+			  		if  string(utf8.bytes)=="Code"  {
+						mt.setCode( va.bytes )
+					}
+			  }
+		}
+		//根据访问标识添加对应方法
+		if int(v.accessFlag) == ACC_PUBLIC|ACC_STATIC{
+			kls.addStaticMethod(name, mt )
+		}
+	}
+	//添加
+	me.addKlass(kls)
+
 }
 
 
+
+
+
+
+func NewClassByteFile() *ClassByteFile{
+	e:=new(ClassByteFile)
+	e.constanPool = NewMap()
+	return e
+}
+
+
+/**
+	添加Klass
+ */
+func (me *ClassByteFile)addKlass(kls *Klass ) {
+	KlassBean["nada.lib.TestKlass"] 			= kls
+}
+
+
+
+/**
+	常量对象转string
+ */
+func ctConvStr(me *ClassByteFile,idx uint16 ) string{
+	val := me.constanPool.Get(idx)
+	if utf8, ok:=val.(*ConstantUtf8);ok{
+		return string(utf8.bytes)
+	}
+	return ""
+}
+
+func ct2FString(me *ClassByteFile,idx uint16 ) *FString{
+	s := ctConvStr(me,idx)
+	s2:=NewFString(s)
+	return s2
+}
 
 
 

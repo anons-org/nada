@@ -9,6 +9,15 @@ type FMethod struct {
 	klass IKlass
 	//原生方法保存
 	call func(args []IFObject) IFObject
+
+	//方法访问权限
+	//静态还是动态方法
+	isNativa bool
+	//方法参数个数
+	//方法返回值
+	//方法返回值个数
+	//是否是匿名方法
+
 }
 
 func (me FMethod) GetKlass() IKlass {
@@ -49,14 +58,31 @@ func (me FMethod) SetCall(call func(args []IFObject) IFObject) FMethod {
 
 
 
+
 /**
 	初始化方法
  */
-func (me*FMethod) Build(t int) *FMethod {
+func (me* FMethod) Build(t int) *FMethod {
 	//设置class
-	me.SetKlass(  new(NativeMethodKlass).Init()  )
+	if t==2{
+		//虚拟类
+		me.SetKlass(  new(VirtualMethodKlass).Init()  )
+	}else{
+		//原生类
+		me.SetKlass(  new(NativeMethodKlass).Init()  )
+	}
+
 	return me
 }
+
+
+
+
+func (me *FMethod) setCode(code []byte)  *FMethod {
+	me.code = code
+	return me
+}
+
 
 
 
