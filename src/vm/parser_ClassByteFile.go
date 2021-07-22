@@ -301,15 +301,51 @@ func (me *ClassByteFile) parserMethodInfo() {
 		method:=new(MethodInfo)
 		method.accessFlag 	= me.ReadShort()
 		method.nameIdx  	= me.ReadShort()
+		method.name = ctConvStr(me,method.nameIdx)
 		method.descIdx 		= me.ReadShort()
 		method.attrCount 	= me.ReadShort()
-
+		//方法的属性解析
 		for i:=0; i < int(method.attrCount); i++{
-			attr:=new(Attributes)
-			attr.nameIdx 		= me.ReadShort()
-			attr.len 			= int(me.ReadUint32())
-			attr.bytes 			=  me.Read(attr.len)
-			method.attriButes 	= append(method.attriButes, attr)
+			//先读出属性名
+			nameIdx:=me.ReadShort();
+			aName:= 	ctConvStr(me,nameIdx)
+			if aName=="Code"{
+				attr:=new(CodeAttr)
+				attr.nameIdx = nameIdx
+				attr.name = aName
+				attr.len 			= int(me.ReadUint32())
+				attr.maxStack = me.ReadShort()
+				attr.maxLocals = me.ReadShort()
+				attr.codeLen = me.ReadUint32()
+				attr.code = me.Read(int(attr.codeLen))
+				attr.expTableLen = me.ReadShort()
+				attr.attrCount = me.ReadShort()
+
+				for i:=0; i < int(attr.attrCount); i++{
+					nameIdx=me.ReadShort();
+					aName:= 	ctConvStr(me,nameIdx)
+					if aName=="LineNumberTable"{
+						lAttr:=new(LineNumberTableAttr)
+						lAttr.nameIdx = nameIdx
+						lAttr.name = aName
+						lAttr.attrLen  = me.ReadUint32()
+						me.Read(int(lAttr.attrLen))
+					}else if aName=="StackMapTable"{
+						//先偷懒不处理。。。。
+						attrLen:= me.ReadUint32()
+						me.Read(int(attrLen))
+					}
+
+				}
+
+
+				method.attriButes 	= append(method.attriButes, attr)
+			}else{
+				aa:=0
+				aa++
+			}
+
+
 			//
 			//oo:=me.constanPool.Get(attr.nameIdx)
 			//fmt.Print(oo)
@@ -589,15 +625,15 @@ func (me *ClassByteFile) buildKlass() {
 		name :=ctConvStr(me,v.nameIdx)
 		mt:=NewFMethod(METHOD_VIRTUAL, name)
 
-		for _, va:=range v.attriButes{
-			//打印属性名称
-			  val := me.constanPool.Get(va.nameIdx)
-			  if utf8, ok:=val.(*ConstantUtf8);ok{
-			  		if  string(utf8.bytes)=="Code"  {
-						mt.setCode( va.bytes )
-					}
-			  }
-		}
+		//for _, va:=range v.attriButes{
+		//	//打印属性名称
+		//	  val := me.constanPool.Get(va.nameIdx)
+		//	  if utf8, ok:=val.(*ConstantUtf8);ok{
+		//	  		if  string(utf8.bytes)=="Code"  {
+		//				mt.setCode( va.bytes )
+		//			}
+		//	  }
+		//}
 		//根据访问标识添加对应方法
 		if int(v.accessFlag) == ACC_PUBLIC|ACC_STATIC{
 			kls.addStaticMethod(name, mt )
@@ -648,22 +684,22 @@ func ct2FString(me *ClassByteFile,idx uint16 ) *FString{
 
 
 
-func Uint16(b []byte) uint16 {
-	_ = b[1]
-	return uint16(b[0]) | uint16(b[1])<<8
-}
-
-
-func BytesToUint32(b []byte) uint32 {
-	_ = b[3] // bounds check hint to compiler; see golang.org/issue/14808
-	return uint32(b[0]) | uint32(b[1])<<8 | uint32(b[2])<<16 | uint32(b[3])<<24
-}
-
-
-func Uint64(b []byte) uint64 {
-	_ = b[7]
-	return uint64(b[0]) | uint64(b[1])<<8 | uint64(b[2])<<16 | uint64(b[3])<<24 |        uint64(b[4])<<32 | uint64(b[5])<<40 | uint64(b[6])<<48 | uint64(b[7])<<56
-}
-
-
+//func Uint16(b []byte) uint16 {
+//	_ = b[1]
+//	return uint16(b[0]) | uint16(b[1])<<8
+//}
+//
+//
+//func BytesToUint32(b []byte) uint32 {
+//	_ = b[3] // bounds check hint to compiler; see golang.org/issue/14808
+//	return uint32(b[0]) | uint32(b[1])<<8 | uint32(b[2])<<16 | uint32(b[3])<<24
+//}
+//
+//
+//func Uint64(b []byte) uint64 {
+//	_ = b[7]
+//	return uint64(b[0]) | uint64(b[1])<<8 | uint64(b[2])<<16 | uint64(b[3])<<24 |        uint64(b[4])<<32 | uint64(b[5])<<40 | uint64(b[6])<<48 | uint64(b[7])<<56
+//}
+//
+//
 
