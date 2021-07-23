@@ -51,6 +51,27 @@ var G_OT = struct {
 
 
 
+
+
+
+var BUILTN = struct {
+	JAVA_LANG_STRING   string
+	NADA_STRING string
+	NADA_VIRTUAL string
+	NADA_NATIVE string
+	NADA_TYPE string
+
+}{
+
+	NADA_NATIVE: "nada.core.native",
+	NADA_VIRTUAL: "nada.core.virtual",
+	NADA_STRING:"nada.core.String",
+	NADA_TYPE:"nada.core.type",
+	JAVA_LANG_STRING:"nada.core.String",
+}
+
+
+
 //
 //func PsarserOpcodeOfString(intr string) []IFObject{
 //

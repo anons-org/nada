@@ -16,6 +16,12 @@ func NewFMethod(t int,name string)  *FMethod {
 }
 
 
+func NewFMap()  *FMap {
+	n := new(FMap).Build()
+	return  n
+}
+
+
 
 
 

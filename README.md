@@ -33,31 +33,44 @@ Nada参考了JVM,CLI，ZENDVM，V8,Node等运行时的设计，并支实现了JV
  
 
 ### 特有功能
-- javascript增强,Nada使用jss规范对javascript进行了增强
-  
-    类型增强
-    ```
-    int boolean string map array any
-    ```
-    demo
-    ```
-    function test(int a, any b){
-    }
-    ```
 
-    接口支持
-    ```
-    class Test extends A:IA,IB,IC{
-    }
-    ```
-    静态属性和方法支持
-  ```
-    class Test extends A:IA,IB,IC{
-        static string name;
-        static getName(){
-        }
-    }
-  ```
+- javascript增强,Nada使用jss规范对javascript进行了增强
+    
+    - let、function可忽略
+    - 注解支持
+      ```
+      属性注解、类注解、方法注解、接口注解、自定义注解
+      ```
+
+    - 类型增强
+      ```
+      int  bigInt boolean string  double float array any
+      ```
+    - demo
+      ```
+      test(int a, any b){
+      }
+      ```
+
+    - 接口支持
+      ```
+      class Test extends A implements IA,IB,IC{
+      }
+      ```
+    - 静态属性和方法支持
+      ```
+      class Test extends A implements IA,IB,IC{
+          static string name;
+          static getName(){
+          }
+      }
+      ```
+    - 接口
+      ```
+      Interface IFoo{
+      }
+      ```
+
 
 
 - 热更
@@ -67,29 +80,25 @@ Nada参考了JVM,CLI，ZENDVM，V8,Node等运行时的设计，并支实现了JV
 
 
 ### 开发计划
-
-- class解析 10%
-- 数据类型 70%
-- 解释器 10%
-- ndk(对标NODE API) 0%
-- 多线程 0%
-- 工具包 1%
+- 第一阶段
+  - class解析 60%
+  - 数据类型 70%
+  - 解释器 2%
+  - 工具包 1%
     - jar、zip解析 0%
-- debug agent 0%
-- vscode语法插件 0%
-- idea 语法插件 0%
-
-
-
-### 团队
-Q群：863823038 如果你<没时间&没兴趣&不能喷项目&不能参与贡献>请勿入！项目同步GITEE和GITHUB
-急寻编译器前端高手
+- 第二阶段
+   - ndk(对标NODE API) 0%
+   - debug agent 0%
+   - vscode语法插件 0%
+   - idea 语法插件 0%
+   - LSP语言服务器
+   - 多线程 0%
 
 
 
 
 ### 参与贡献
-> 由于本项目重点是供大家学习和研究，在代码规范上我们有很严格的要求，请认真阅读规范，以确定您能接受规范后再fork!
+>  在代码规范上我们有很严格的要求，请认真阅读规范，以确定您能接受规范后再fork!
 -  [规范文档](https://gitee.com/grateful/farvm/wikis/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83?sort_id=3481374)
 1.  选择擅长的分组
 2. [分组列表](https://gitee.com/grateful/farvm/wikis/%E6%93%85%E9%95%BF%E5%88%86%E7%BB%84?sort_id=3481509)

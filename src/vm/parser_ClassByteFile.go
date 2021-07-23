@@ -12,6 +12,8 @@ import (
 	需要把常量转化为实际的数据类型
 	这样可以减少解释器执行过程中对常量转换类型的消耗
 	数据类型请看 type_  开头的文件
+	class的解析并不是多神秘的事情，照着规范一个个字节处理就行了
+	没啥技术含量，就是细致活儿量大而已...
 	by mike
  */
 
@@ -301,7 +303,7 @@ func (me *ClassByteFile) parserMethodInfo() {
 		method:=new(MethodInfo)
 		method.accessFlag 	= me.ReadShort()
 		method.nameIdx  	= me.ReadShort()
-		method.name = ctConvStr(me,method.nameIdx)
+		method.name 		= ctConvStr(me,method.nameIdx)
 		method.descIdx 		= me.ReadShort()
 		method.attrCount 	= me.ReadShort()
 		//方法的属性解析
@@ -314,13 +316,13 @@ func (me *ClassByteFile) parserMethodInfo() {
 				attr.nameIdx = nameIdx
 				attr.name = aName
 				attr.len 			= int(me.ReadUint32())
-				attr.maxStack = me.ReadShort()
-				attr.maxLocals = me.ReadShort()
-				attr.codeLen = me.ReadUint32()
-				attr.code = me.Read(int(attr.codeLen))
-				attr.expTableLen = me.ReadShort()
-				attr.attrCount = me.ReadShort()
-
+				attr.maxStack 		= me.ReadShort()
+				attr.maxLocals 		= me.ReadShort()
+				attr.codeLen 		= me.ReadUint32()
+				attr.code 			= me.Read(int(attr.codeLen))
+				attr.expTableLen 	= me.ReadShort()
+				attr.attrCount 		= me.ReadShort()
+				//code自己附加的属性
 				for i:=0; i < int(attr.attrCount); i++{
 					nameIdx=me.ReadShort();
 					aName:= 	ctConvStr(me,nameIdx)
@@ -329,26 +331,19 @@ func (me *ClassByteFile) parserMethodInfo() {
 						lAttr.nameIdx = nameIdx
 						lAttr.name = aName
 						lAttr.attrLen  = me.ReadUint32()
+						//读出来，不处理
 						me.Read(int(lAttr.attrLen))
 					}else if aName=="StackMapTable"{
 						//先偷懒不处理。。。。
 						attrLen:= me.ReadUint32()
 						me.Read(int(attrLen))
 					}
-
 				}
-
-
 				method.attriButes 	= append(method.attriButes, attr)
 			}else{
 				aa:=0
 				aa++
 			}
-
-
-			//
-			//oo:=me.constanPool.Get(attr.nameIdx)
-			//fmt.Print(oo)
 
 		}
 		me.methods = append(me.methods, method)
@@ -375,7 +370,6 @@ func (me *ClassByteFile) parserFloatInfo( idx uint8) {
 	o.bytes = me.ReadUint32()
 	me.constanPool.Set(me.idx, o)
 	me.idx++
-
 }
 
 
@@ -625,27 +619,22 @@ func (me *ClassByteFile) buildKlass() {
 		name :=ctConvStr(me,v.nameIdx)
 		mt:=NewFMethod(METHOD_VIRTUAL, name)
 
-		//for _, va:=range v.attriButes{
-		//	//打印属性名称
-		//	  val := me.constanPool.Get(va.nameIdx)
-		//	  if utf8, ok:=val.(*ConstantUtf8);ok{
-		//	  		if  string(utf8.bytes)=="Code"  {
-		//				mt.setCode( va.bytes )
-		//			}
-		//	  }
-		//}
+		for _, va:=range v.attriButes{
+			if vaOb,ok:=va.(*CodeAttr); ok{
+				mt.setCode( vaOb.code )
+			}
+		}
 		//根据访问标识添加对应方法
-		if int(v.accessFlag) == ACC_PUBLIC|ACC_STATIC{
+		if int(v.accessFlag) == ACC_PUBLIC|ACC_STATIC || int(v.accessFlag) == ACC_PRIVATE|ACC_STATIC || int(v.accessFlag) == ACC_PRIVATE|ACC_STATIC|ACC_SYNTHETIC {
 			kls.addStaticMethod(name, mt )
+		}else{
+			kls.addInsMethod(name, mt )
 		}
 	}
 	//添加
 	me.addKlass(kls)
 
 }
-
-
-
 
 
 
@@ -660,7 +649,7 @@ func NewClassByteFile() *ClassByteFile{
 	添加Klass
  */
 func (me *ClassByteFile)addKlass(kls *Klass ) {
-	KlassBean["nada.lib.TestKlass"] 			= kls
+	KlassBean.set("nada.lib.TestKlass",kls)
 }
 
 

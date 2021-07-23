@@ -15,19 +15,14 @@ type StringKlass struct {
 
 }
 
-/**
-	获取方法
- */
-func (me StringKlass) GetKlassMethod(k string) IFObject {
-	return me.dict[k]
-}
 
-func (me StringKlass) Dict(k string) IKlass {
+
+func (me *StringKlass) Dict(k string) IKlass {
 	panic("implement me")
 }
 
 
-func (me StringKlass) GetDict(k string) IFObject {
+func (me *StringKlass) GetDict(k string) IFObject {
 	return me.dict[k]
 }
 
@@ -36,22 +31,22 @@ func (me StringKlass) GetDict(k string) IFObject {
 /**
 	设置类型对象
 */
-func (me StringKlass)SetTypeObject(to *TypeObject) {
+func (me *StringKlass)SetTypeObject(to *TypeObject) {
 	me.typeObject = to
 }
 
 /**
 	获取类型对象
  */
-func (me StringKlass)GetTypeObject() *TypeObject {
+func (me *StringKlass)GetTypeObject() *TypeObject {
 	return me.typeObject
 }
 
-func (me StringKlass)GetName() string{
+func (me *StringKlass)GetName() string{
 	return me.name
 }
 
-func (me StringKlass)Alloc() *IFObject {
+func (me *StringKlass)Alloc() *IFObject {
 	return nil
 }
 
@@ -59,9 +54,9 @@ func (me StringKlass)Alloc() *IFObject {
 /**
 初始化Klass
 */
-func (me StringKlass)Init() IKlass {
+func (me *StringKlass)Init() IKlass {
 	me.name = "StringKlass"
-	typeObj := new(TypeObject)
+	typeObj := new(TypeObject).Build()
 	typeObj.SetOnwKlass(me)
 	me.SetTypeObject( typeObj )
 	me.dict = make(map[string]IFObject)

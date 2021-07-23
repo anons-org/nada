@@ -31,7 +31,6 @@ func (me* Map ) Get(k interface{})  interface{}{
 
 	//fmt.Print(toStr(k))
 
-
 	for e:=me.data.Front();e!=nil; e= e.Next(){
 		if ele , ok := (e.Value).(*MapEntry); ok==true{
 			if toStr(ele.key) == toStr(k){

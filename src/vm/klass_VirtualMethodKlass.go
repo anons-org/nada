@@ -11,9 +11,6 @@ func (me *VirtualMethodKlass) GetDict(k string) IFObject {
 	panic("implement me")
 }
 
-func (me *VirtualMethodKlass) GetKlassMethod(k string) IFObject {
-	return nil
-}
 
 func (me *VirtualMethodKlass) Dict(k string) IKlass {
 	panic("implement me")
@@ -44,7 +41,7 @@ func (me *VirtualMethodKlass)Alloc() *IFObject {
  */
 func (me *VirtualMethodKlass)Init() IKlass {
 	me.name = "VirtualMethodKlass"
-	typeObj := new(TypeObject)
+	typeObj := new(TypeObject).Build()
 	typeObj.SetOnwKlass(me)
 	me.SetTypeObject( typeObj )
 	return me

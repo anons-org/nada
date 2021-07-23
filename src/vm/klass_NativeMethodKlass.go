@@ -7,34 +7,31 @@ type NativeMethodKlass struct {
 	typeObject *TypeObject
 }
 
-func (me NativeMethodKlass) GetDict(k string) IFObject {
+func (me *NativeMethodKlass) GetDict(k string) IFObject {
 	panic("implement me")
 }
 
-func (me NativeMethodKlass) GetKlassMethod(k string) IFObject {
-	return nil
-}
 
-func (me NativeMethodKlass) Dict(k string) IKlass {
+func (me *NativeMethodKlass) Dict(k string) IKlass {
 	panic("implement me")
 }
 
 /**
 	设置类型对象
  */
-func (me NativeMethodKlass)SetTypeObject(to *TypeObject) {
+func (me *NativeMethodKlass)SetTypeObject(to *TypeObject) {
 	me.typeObject = to
 }
 
-func (me NativeMethodKlass)GetTypeObject() *TypeObject {
+func (me *NativeMethodKlass)GetTypeObject() *TypeObject {
 	return me.typeObject
 }
 
-func (me NativeMethodKlass)GetName() string{
+func (me *NativeMethodKlass)GetName() string{
 	return me.name
 }
 
-func (me NativeMethodKlass)Alloc() *IFObject {
+func (me *NativeMethodKlass)Alloc() *IFObject {
 	return nil
 }
 
@@ -42,9 +39,9 @@ func (me NativeMethodKlass)Alloc() *IFObject {
 /**
 	初始化Klass
  */
-func (me NativeMethodKlass)Init() IKlass {
+func (me *NativeMethodKlass)Init() IKlass {
 	me.name = "NativeMethodKlass"
-	typeObj := new(TypeObject)
+	typeObj := new(TypeObject).Build()
 	typeObj.SetOnwKlass(me)
 	me.SetTypeObject( typeObj )
 	return me

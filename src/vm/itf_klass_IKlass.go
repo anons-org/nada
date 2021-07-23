@@ -19,7 +19,6 @@ type IKlass interface {
 
  	GetDict(k string) IFObject
 
-	//获取指定的方法 可能是原生
-	GetKlassMethod(k string) IFObject
+
 
 }

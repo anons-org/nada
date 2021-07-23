@@ -39,8 +39,12 @@ func (me* FString) SetKlass(klass IKlass) {
 
 func (me* FString) Build() *FString {
 	//设置class
-	me.SetKlass(  KlassBean["nada.lib.StringKlass"]  )
+
+	me.SetKlass(  KlassBean.get(BUILTN.NADA_STRING).(*StringKlass)  )
+
+
 	return me
+
 }
 
 //func (me* FString) NewFString(str string) *FString {
