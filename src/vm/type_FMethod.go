@@ -66,10 +66,10 @@ func (me* FMethod) Build(t int) *FMethod {
 	//设置class
 	if t==2{
 		//虚拟类
-		me.SetKlass(   KlassBean.get(BUILTN.NADA_VIRTUAL).(*VirtualMethodKlass) )
+		me.SetKlass(   vms.metaKlass.get(BUILTN.NADA_VIRTUAL).(*VirtualMethodKlass) )
 	}else{
 		//原生类
-		me.SetKlass(  KlassBean.get(BUILTN.NADA_NATIVE).(*NativeMethodKlass) )
+		me.SetKlass(  vms.metaKlass.get(BUILTN.NADA_NATIVE).(*NativeMethodKlass) )
 	}
 
 	return me

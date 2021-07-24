@@ -37,7 +37,7 @@ func (me *TypeObject) SetKlass(klass IKlass) {
 
 
 func (me *TypeObject) Build() *TypeObject{
-	me.SetKlass( KlassBean.get(BUILTN.NADA_TYPE).(*TypeKlass) )
+	me.SetKlass( vms.metaKlass.get(BUILTN.NADA_TYPE).(*TypeKlass) )
 	return me
 }
 

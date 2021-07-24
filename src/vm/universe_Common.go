@@ -28,19 +28,8 @@ var  METHOD_VIRTUAL=2
 
 
 
-var KlassBean *FMap
 
-func initKlass()  {
-
-	KlassBean = NewFMap()
-	KlassBean.set(BUILTN.NADA_TYPE,   	new(TypeKlass).Init())
-	KlassBean.set(BUILTN.NADA_NATIVE, 	new(NativeMethodKlass).Init())
-	KlassBean.set(BUILTN.NADA_VIRTUAL,	new(VirtualMethodKlass).Init())
-	KlassBean.set(BUILTN.NADA_STRING,   new(StringKlass).Init())
-
-
-}
-
+var vms *Vms
 
 
 func createKlass(name string) *Klass {
@@ -62,10 +51,14 @@ func createKlass(name string) *Klass {
 
 
 func CommonInit()  {
-	initKlass()
+	vms = new(Vms).Build()
 	TRUE = NewFString("true")
 	FALSE = NewFString("false")
 	NONE = NewFString("none")
+}
+
+func Start(){
+	vms.start()
 }
 
 

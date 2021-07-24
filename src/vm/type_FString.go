@@ -40,7 +40,7 @@ func (me* FString) SetKlass(klass IKlass) {
 func (me* FString) Build() *FString {
 	//设置class
 
-	me.SetKlass(  KlassBean.get(BUILTN.NADA_STRING).(*StringKlass)  )
+	me.SetKlass(  vms.metaKlass.get(BUILTN.NADA_STRING).(*StringKlass)  )
 
 
 	return me

@@ -649,7 +649,7 @@ func NewClassByteFile() *ClassByteFile{
 	添加Klass
  */
 func (me *ClassByteFile)addKlass(kls *Klass ) {
-	KlassBean.set("nada.lib.TestKlass",kls)
+	vms.metaKlass.set("nada.lib.TestKlass",kls)
 }
 
 
