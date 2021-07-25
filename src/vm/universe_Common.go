@@ -51,7 +51,8 @@ func createKlass(name string) *Klass {
 
 
 func CommonInit()  {
-	vms = new(Vms).Build()
+	vms = new(Vms)
+	vms.Build()
 	TRUE = NewFString("true")
 	FALSE = NewFString("false")
 	NONE = NewFString("none")

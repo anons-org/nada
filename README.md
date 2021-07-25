@@ -1,88 +1,90 @@
 ## Nada
 
-### 项目介绍
-Nada参考了JVM,CLI，ZENDVM，V8,Node等运行时的设计，并支实现了JVM的指令集，支持运行Ts,Js,PHP,Java等高级语言,同时又对javascript进行了增强（类型、接口、泛型）、从根本上解决了JS多年的诟病。
+### Project introduction
+Nada refers to the design of JVM,CLI, ZENDVM, V8,Node and other runtime, and implements the instruction set of JVM, supports the running of Ts,Js,PHP,Java and other high-level languages. At the same time, it enhances javascript (type, interface, generics), and fundamentally solves the longstanding complaints of Js.
 
-### 目的
-- Nada作为一个运行时，核心目标是为创业者和企业提供快速试错，快速验证产品，让产品以最低的技术成本快速占领市场的底层服务框架。
+# # #  
+- As a runtime, the core goal of Nada is to provide entrepreneurs and businesses with a basic service framework for fast trial and error, fast product validation, and fast market capture at the lowest technology cost.
 
-### 特有功能
+### Features
 
-- javascript增强,Nada使用jss规范对javascript进行了增强
-    
-    - let、function可忽略
-    - 注解支持
-      ```
-      属性注解、类注解、方法注解、接口注解、自定义注解
-      ```
+- javascript enhancements. Nada uses the JSS specification to enhance javascript
 
-    - 类型增强
-      ```
-      int  bigInt boolean string  double float array any
-      ```
-    - demo
-      ```
-      test(int a, any b){
-      }
-      ```
+- Let and function can be ignored
+- Annotation support  
+  ` ` `  
+  Attribute annotation, class annotation, method annotation, interface annotation, custom annotation  
+  ` ` `
 
-    - 接口支持
-      ```
-      class Test extends A implements IA,IB,IC{
-      }
-      ```
-    - 静态属性和方法支持
-      ```
-      class Test extends A implements IA,IB,IC{
-          static string name;
-          static getName(){
-          }
-      }
-      ```
-    - 接口
-      ```
-      Interface IFoo{
-      }
-      ```
+- Type enhancement  
+  ` ` `  
+  int bigInt boolean string double float array any  
+  ` ` `
+- demo  
+  ` ` `  
+  test(int a, any b){  
+  }  
+  ` ` `
 
-
-
-- 热更
-- 原生分布式
-- 支持编译插件
-- 多指令集支持
-
-
-### 开发计划
-- 第一阶段
-  - class解析 60%
-  - 数据类型 70%
-  - 解释器 2%
-  - 工具包 1%
-    - jar、zip解析 0%
-- 第二阶段
-   - ndk(对标NODE API) 0%
-   - debug agent 0%
-   - vscode语法插件 0%
-   - idea 语法插件 0%
-   - LSP语言服务器
-   - 多线程 0%
-- 第三阶段
-   - 跨平台桌面UI库
+- Interface Support  
+  ` ` `  
+  class Test extends A implements IA,IB,IC{  
+  }  
+  ` ` `
+- Static property and method support  
+  ` ` `  
+  class Test extends A implements IA,IB,IC{  
+  static string name;  
+  static getName(){  
+  }  
+  }  
+  ` ` `
+- interface  
+  ` ` `  
+  Interface IFoo{  
+  }  
+  ` ` `
 
 
 
+- hot more
+- Native distributed
+- Support for compiling plug-ins
+- Multiple instruction set support
 
-### 参与贡献
->  在代码规范上我们有很严格的要求，请认真阅读规范，以确定您能接受规范后再fork!
--  [规范文档](https://gitee.com/grateful/farvm/wikis/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83?sort_id=3481374)
-1.  选择擅长的分组
-2. [分组列表](https://gitee.com/grateful/farvm/wikis/%E6%93%85%E9%95%BF%E5%88%86%E7%BB%84?sort_id=3481509)
-3.  Fork 本仓库
-4.  新建 Feat_xxx 分支
-5.  提交代码
-6.  新建 Pull Request
+
+### Development plan
+- Stage 1
+- Class resolves 60%
+- Data type 70%
+- Interpreter 2%
+- Toolkit 1%
+- Jar and zip parsing 0%
+- Stage 2
+- NDK (NODE API) 0%
+- debug agent 0%
+- Vscode syntax plugin 0%
+- Idea syntax plugin 0%
+- LSP Language server
+- Multithreaded 0%
+- Stage 3
+- Cross-platform desktop UI library
+- package management
 
 
 
 
+#### Related support
+- LSP https://microsoft.github.io/language-server-protocol/
+- vscode debug protocol https://vscode.readthedocs.io/en/latest/extensions/example-debuggers/
+
+
+### Contribute
+> We have very strict requirements on the code specification, please read the specification carefully to make sure that you can accept the specification before fork!
+- [specification] (https://gitee.com/grateful/farvm/wikis/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83?sort_id=3481374)
+1. Choose groups you are good at
+2. The grouping [list] (https://gitee.com/grateful/farvm/wikis/%E6%93%85%E9%95%BF%E5%88%86%E7%BB%84?sort_id=3481509)
+3. Fork the warehouse
+4. Add Feat_ XXX branch
+5. Submit the code
+6. Create a Pull Request  

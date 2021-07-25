@@ -55,7 +55,7 @@ func parserClass(){
 func call(ob *Vm.FString, fns string){
 
 	fn := ob.GetKlass().GetDict(fns)
-	mt,_ :=  fn.(Vm.FMethod)
+	mt,_ :=  fn.(*Vm.FMethod)
 	mt.Call("this",[]Vm.IFObject{});
 }
 

@@ -67,6 +67,11 @@ func (me *StringKlass)Init() IKlass {
 }
 
 
+func (me *StringKlass) getStaticDict(k string) IFObject {
+	return nil
+}
+
+
 
 /**
 String print
@@ -86,13 +91,7 @@ func indexOf(args []IFObject) IFObject {
 	return nil
 }
 
-/**
-String len
-*/
-func len(args []IFObject) IFObject {
 
-	return nil
-}
 
 /**
 String split

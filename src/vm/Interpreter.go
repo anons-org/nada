@@ -19,15 +19,12 @@ func (me *Interpreter)eval(){
 	设置栈帧
  */
 func (me *Interpreter)setFrame(f *Frame){
-
 	me.frame = f;
 }
 
 
-func (me *Interpreter)run(m FMethod){
-	me.frame = 1
-	//frame = new FrameObject(method);
-
+func (me *Interpreter)run(f *FMethod){
+	me.frame = NewFrame(f)
 	// 执行代码
 	me.exec();
 }

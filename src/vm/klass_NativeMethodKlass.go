@@ -7,6 +7,10 @@ type NativeMethodKlass struct {
 	typeObject *TypeObject
 }
 
+
+
+
+
 func (me *NativeMethodKlass) GetDict(k string) IFObject {
 	panic("implement me")
 }
@@ -47,3 +51,7 @@ func (me *NativeMethodKlass)Init() IKlass {
 	return me
 }
 
+
+func (me *NativeMethodKlass) getStaticDict(k string) IFObject {
+	return nil
+}

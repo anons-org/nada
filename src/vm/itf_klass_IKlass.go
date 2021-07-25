@@ -9,7 +9,11 @@ type IKlass interface {
 	GetTypeObject()  *TypeObject
 	SetTypeObject(	*TypeObject)
 
-	//每个Klass都应该有分配具体实例的方法
+    getStaticDict(k string) IFObject
+
+
+
+//每个Klass都应该有分配具体实例的方法
 	Alloc() *IFObject
 
 	Init() IKlass

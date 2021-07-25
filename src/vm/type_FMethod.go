@@ -1,11 +1,12 @@
 package Vm
 
-
 type FMethod struct {
 	//方法名
 	mName string
 	//方法字节码
 	code  []byte
+	//已经处理好的立即数
+	codeList map[uint16]IFObject
 	klass IKlass
 	//原生方法保存
 	call func(args []IFObject) IFObject
@@ -20,11 +21,11 @@ type FMethod struct {
 
 }
 
-func (me FMethod) GetKlass() IKlass {
+func (me *FMethod) GetKlass() IKlass {
 	return me.klass
 }
 
-func (me FMethod) ValToString(){
+func (me *FMethod) ValToString(){
 
 }
 
@@ -39,19 +40,19 @@ func (me* FMethod) SetMethod(name string) {
 /**
 	绑定klass
  */
-func (me FMethod) SetKlass(klass IKlass) {
+func (me *FMethod) SetKlass(klass IKlass) {
 	me.klass = klass;
 }
 
 
-func (me FMethod) Call(caller string, args []IFObject) IFObject {
+func (me *FMethod) Call(caller string, args []IFObject) IFObject {
 	return me.call(args)
 }
 
 /**
 	设置原生方法的call
  */
-func (me FMethod) SetCall(call func(args []IFObject) IFObject) FMethod {
+func (me *FMethod) SetCall(call func(args []IFObject) IFObject) *FMethod {
 	me.call = call
 	return me
 }
@@ -65,10 +66,10 @@ func (me FMethod) SetCall(call func(args []IFObject) IFObject) FMethod {
 func (me* FMethod) Build(t int) *FMethod {
 	//设置class
 	if t==2{
-		//虚拟类
-		me.SetKlass(   vms.metaKlass.get(BUILTN.NADA_VIRTUAL).(*VirtualMethodKlass) )
+		//虚拟方法
+		me.SetKlass(   vms.metaKlass.get(BUILTN.NADA_VIRTUAL).(*MethodKlass) )
 	}else{
-		//原生类
+		//原生方法
 		me.SetKlass(  vms.metaKlass.get(BUILTN.NADA_NATIVE).(*NativeMethodKlass) )
 	}
 

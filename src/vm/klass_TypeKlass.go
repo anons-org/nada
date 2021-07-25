@@ -58,3 +58,8 @@ func (me *TypeKlass)Init() IKlass {
 	me.SetTypeObject( typeObj )
 	return me
 }
+
+
+func (me *TypeKlass) getStaticDict(k string) IFObject {
+	return nil
+}

@@ -606,32 +606,57 @@ func (me *ClassByteFile) get(n int){
 
 
 
+/**
+	生成栈上立即数
+ */
+func (me *ClassByteFile) bulidImmediate(method *FMethod,code []byte) {
+	//codes:=bytes.NewBuffer(code)
+	//codes.Read(2);
+
+	data:=NewBytes(code)
+
+
+
+	for data.idx < len(code){
+		op:=data.read(1)
+		ops := op[0]
+		if ops==0x01{
+
+		}
+	}
+
+
+}
+
 
 func (me *ClassByteFile) buildKlass() {
 
 	kls:=createKlass("")
 	kls.name = NewFString("Test")
-	//遍历方法
+	//each method
 	for _, v:=range me.methods{
 
 		desc:=ctConvStr(me,v.descIdx)
 		desc+=""
 		name :=ctConvStr(me,v.nameIdx)
 		mt:=NewFMethod(METHOD_VIRTUAL, name)
-
+		//each method att
 		for _, va:=range v.attriButes{
+			//deal with code attr
 			if vaOb,ok:=va.(*CodeAttr); ok{
 				mt.setCode( vaOb.code )
+				//advance processing immediate may optimize performance
+				me.bulidImmediate(mt,vaOb.code)
 			}
 		}
-		//根据访问标识添加对应方法
+		//deal with of accessFlag
 		if int(v.accessFlag) == ACC_PUBLIC|ACC_STATIC || int(v.accessFlag) == ACC_PRIVATE|ACC_STATIC || int(v.accessFlag) == ACC_PRIVATE|ACC_STATIC|ACC_SYNTHETIC {
 			kls.addStaticMethod(name, mt )
 		}else{
 			kls.addInsMethod(name, mt )
 		}
 	}
-	//添加
+
 	me.addKlass(kls)
 
 }
