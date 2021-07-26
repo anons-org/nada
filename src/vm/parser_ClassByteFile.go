@@ -615,13 +615,20 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod,code []byte) {
 
 	data:=NewBytes(code)
 
-
-
 	for data.idx < len(code){
-		op:=data.read(1)
-		ops := op[0]
-		if ops==0x01{
-
+		op:=data.read(1)[0]
+		if op==OP.ALOAD_0{
+			method.codeList[op] = nil
+			continue
+		}else  if op == OP.INVOKESPECIAL{
+		//https://www.cnblogs.com/cfas/p/15063669.html
+			mt:=me.getCtMethodRef( binary.BigEndian.Uint16(data.read(2) ) );
+			fmt:=NewFMethod(2,mt.rtFnName);
+			method.codeList[op] = fmt;
+			continue
+		}else  if op == OP.RETURN {
+			method.codeList[op] = nil;
+			continue
 		}
 	}
 
@@ -676,6 +683,47 @@ func NewClassByteFile() *ClassByteFile{
 func (me *ClassByteFile)addKlass(kls *Klass ) {
 	vms.metaKlass.set("nada.lib.TestKlass",kls)
 }
+
+/**
+	获取常量池中的Methodref
+ */
+func (me *ClassByteFile)getCtMethodRef(idx uint16 ) *ConstantMethodref{
+	val := me.constanPool.Get(idx)
+	if mt, ok:=val.(*ConstantMethodref);ok{
+		//完善该对象的值
+		cls:=me.getCtClass(mt.classIdx);
+		mt.rtClsName = ctConvStr(me,cls.nameIdx)
+		nt:=me.getCtNameAndType(mt.nameAndType)
+		mt.rtFnName  = ctConvStr(me,nt.nameIdx)
+		mt.rtFnType  = ctConvStr(me,nt.descIdx)
+		return mt
+	}
+	return nil
+}
+
+
+/**
+	获取常量池中的Class
+*/
+func (me *ClassByteFile)getCtClass(idx uint16 ) *ConstantClassInfo{
+	val := me.constanPool.Get(idx)
+	if cls, ok:=val.(*ConstantClassInfo);ok{
+		return cls
+	}
+	return nil
+}
+
+/**
+	获取常量池中的NameAndType
+*/
+func (me *ClassByteFile)getCtNameAndType(idx uint16 ) *ConstantNameAndType{
+	val := me.constanPool.Get(idx)
+	if nt, ok:=val.(*ConstantNameAndType);ok{
+		return nt
+	}
+	return nil
+}
+
 
 
 

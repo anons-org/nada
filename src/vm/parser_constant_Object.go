@@ -7,6 +7,13 @@ type ConstantMethodref struct {
 	classIdx uint16
 	nameAndType uint16
 
+	//所属的类
+	rtClsName string
+	//方法名
+	rtFnName string
+	//方法的参数 返回值类型
+	rtFnType string
+
 }
 
 func (me* ConstantMethodref ) getTag() uint8  {

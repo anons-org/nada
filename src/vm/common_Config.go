@@ -11,17 +11,28 @@ var OPD = []struct {
 }{
 	{0x03, "ICONST_0"},
 	{0x04, "ICONST_1"},
+	//0x2a aload_0    将第一个引用类型本地变量推送至栈顶 在非静态方法中， aload_0 表示对this的操作，在static 方法中，aload_0表示对方法的第一参数的操作。
+	{0x2A, "ALOAD_0"},
+	{0xb1,"RETURN"},
+	{0xb7,"INVOKESPECIAL"},
 }
 
 
 //指令索引
 var OP = struct {
-	ICONST_0 int16
-	ICONST_1   int16
+	ICONST_0 uint8
+	ICONST_1   uint8
+	ALOAD_0 	uint8
+	INVOKESPECIAL uint8
+	RETURN uint8
+
 
 }{
 	ICONST_0:0x03,
 	ICONST_1:0x04,
+	ALOAD_0:0x2A,
+	RETURN:0xb1,
+	INVOKESPECIAL:0xb7,
 
 }
 
@@ -170,7 +181,7 @@ func ConverStrOp(str string) []string{
 //// 0x21 lload_3 将第四个long型本地变量推送至栈顶
 //public static final int OP_LLOAD_3 = 0x21;
 //
-////	0x2a aload_0    将第一个引用类型本地变量推送至栈顶
+////
 //
 //public static final int OP_ALOAD_0 = 0x2a;
 //

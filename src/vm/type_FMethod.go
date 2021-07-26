@@ -6,7 +6,7 @@ type FMethod struct {
 	//方法字节码
 	code  []byte
 	//已经处理好的立即数
-	codeList map[uint16]IFObject
+	codeList map[uint8]IFObject
 	klass IKlass
 	//原生方法保存
 	call func(args []IFObject) IFObject
@@ -72,7 +72,7 @@ func (me* FMethod) Build(t int) *FMethod {
 		//原生方法
 		me.SetKlass(  vms.metaKlass.get(BUILTN.NADA_NATIVE).(*NativeMethodKlass) )
 	}
-
+	me.codeList = make(map[uint8]IFObject)
 	return me
 }
 

@@ -77,6 +77,8 @@ Nada refers to the design of JVM,CLI, ZENDVM, V8,Node and other runtime, and imp
 #### Related support
 - LSP https://microsoft.github.io/language-server-protocol/
 - vscode debug protocol https://vscode.readthedocs.io/en/latest/extensions/example-debuggers/
+- https://www.cnblogs.com/cangqinglang/p/14204957.html
+- https://www.zhihu.com/question/49043143
 
 
 ### Contribute
