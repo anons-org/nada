@@ -16,12 +16,17 @@ var OPD = []struct {
 	{OP.LDC_W,"LDC_W"},
 	//0x2a aload_0    将第一个引用类型本地变量推送至栈顶 在非静态方法中， aload_0 表示对this的操作，在static 方法中，aload_0表示对方法的第一参数的操作。
 	{OP.ALOAD_0, "ALOAD_0"},
+	{OP.ISTORE_0, "ISTORE_0"},
+	{OP.ISTORE_1, "ISTORE_1"},
+	{OP.ISTORE_2, "ISTORE_2"},
+	{OP.ISTORE_3, "ISTORE_3"},
 	{OP.ASTORE_0, "ASTORE_0"},
 	{OP.ASTORE_1, "ASTORE_1"},
 	{OP.ASTORE_2, "ASTORE_2"},
 	{OP.ASTORE_3, "ASTORE_3"},
 	{OP.RETURN,"RETURN"},
 	{OP.INVOKESPECIAL,"INVOKESPECIAL"},
+	{OP.INVOKESTATIC,"INVOKESTATIC"},
 }
 
 
@@ -32,24 +37,34 @@ var OP = struct {
 	LDC,
 	LDC_W,
 	ALOAD_0,
+	ISTORE_0,
+	ISTORE_1,
+	ISTORE_2,
+	ISTORE_3,
 	ASTORE_0,
 	ASTORE_1,
 	ASTORE_2,
 	ASTORE_3,
 	RETURN,
-	INVOKESPECIAL uint8
+	INVOKESPECIAL,
+	INVOKESTATIC uint8
 }{
 	ICONST_0:0x03,
 	ICONST_1:0x04,
 	LDC:0x12,
 	LDC_W:0x14,
 	ALOAD_0:0x2A,
+	ISTORE_0:0x3b,
+	ISTORE_1:0x3c,
+	ISTORE_2:0x3d,
+	ISTORE_3:0x3e,
 	ASTORE_0:0x4b,
 	ASTORE_1:0x4c,
 	ASTORE_2:0x4d,
 	ASTORE_3:0x4e,
 	RETURN:0xb1,
 	INVOKESPECIAL:0xb7,
+	INVOKESTATIC:0xb8,
 }
 
 

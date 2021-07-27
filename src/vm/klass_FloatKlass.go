@@ -52,8 +52,6 @@ func (me *FloatKlass)Init() IKlass {
 	typeObj := new(TypeObject).Build()
 	typeObj.SetOnwKlass(me)
 	me.SetTypeObject( typeObj )
-
-
 	return me
 }
 
