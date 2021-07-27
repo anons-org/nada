@@ -8,11 +8,18 @@ func NewFString(str string)  *FString {
 	return  n
 }
 
+
+func NewFFLoat(v float64)  *FFloat {
+	n := new(FFloat).Build().setVal(v)
+	return  n
+}
+
+
 func NewFInt()  {
 
 }
 
-func NewFMethod(t int,name string)  *FMethod {
+func NewFMethod(t MethodType,name string)  *FMethod {
 	n := new(FMethod).Build(t)
 	n.mName=name
 	return  n

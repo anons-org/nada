@@ -4,43 +4,56 @@ import (
 	"strings"
 )
 
-//指令
+//opcode desc
 var OPD = []struct {
-	Intr int16
+	Intr uint8
 	ValStr string
 }{
 	{0x03, "ICONST_0"},
 	{0x04, "ICONST_1"},
+
+	{OP.LDC,"LDC"},
+	{OP.LDC_W,"LDC_W"},
 	//0x2a aload_0    将第一个引用类型本地变量推送至栈顶 在非静态方法中， aload_0 表示对this的操作，在static 方法中，aload_0表示对方法的第一参数的操作。
-	{0x2A, "ALOAD_0"},
-	{0xb1,"RETURN"},
-	{0xb7,"INVOKESPECIAL"},
+	{OP.ALOAD_0, "ALOAD_0"},
+	{OP.ASTORE_0, "ASTORE_0"},
+	{OP.ASTORE_1, "ASTORE_1"},
+	{OP.ASTORE_2, "ASTORE_2"},
+	{OP.ASTORE_3, "ASTORE_3"},
+	{OP.RETURN,"RETURN"},
+	{OP.INVOKESPECIAL,"INVOKESPECIAL"},
 }
 
 
-//指令索引
+//opcode index
 var OP = struct {
-	ICONST_0 uint8
-	ICONST_1   uint8
-	ALOAD_0 	uint8
+	ICONST_0,
+	ICONST_1,
+	LDC,
+	LDC_W,
+	ALOAD_0,
+	ASTORE_0,
+	ASTORE_1,
+	ASTORE_2,
+	ASTORE_3,
+	RETURN,
 	INVOKESPECIAL uint8
-	RETURN uint8
-
-
 }{
 	ICONST_0:0x03,
 	ICONST_1:0x04,
+	LDC:0x12,
+	LDC_W:0x14,
 	ALOAD_0:0x2A,
+	ASTORE_0:0x4b,
+	ASTORE_1:0x4c,
+	ASTORE_2:0x4d,
+	ASTORE_3:0x4e,
 	RETURN:0xb1,
 	INVOKESPECIAL:0xb7,
-
 }
 
 
-
-
-
-//对象类型---------------------
+//object type---------------------
 var G_OT_DEF = []struct {
 	Id   int
 	Name string
@@ -60,9 +73,14 @@ var G_OT = struct {
 }
 
 
+type MethodType int
 
+const (
+	METHOD_TYPE_NATIVE      MethodType = 1
+	METHOD_TYPE_VIRTUAL     MethodType = 2
+	METHOD_TYPE_FUNC      	MethodType = 3
 
-
+)
 
 
 var BUILTN = struct {
@@ -71,50 +89,20 @@ var BUILTN = struct {
 	NADA_VIRTUAL string
 	NADA_NATIVE string
 	NADA_TYPE string
+	NADA_FLOAT string
 
 }{
 
 	NADA_NATIVE: "nada.core.native",
 	NADA_VIRTUAL: "nada.core.method",
 	NADA_STRING:"nada.core.String",
+	NADA_FLOAT:"nada.builin.Float",
 	NADA_TYPE:"nada.core.type",
 	JAVA_LANG_STRING:"nada.core.String",
 }
 
 
 
-//
-//func PsarserOpcodeOfString(intr string) []IFObject{
-//
-//
-//	parts := strings.Split(intr," ")
-//
-//	opi := GetOPIdxByValStr( parts[0] )
-//
-//	//根据指令生成不同类型操作数
-//	switch opi{
-//
-//		case OP.ICONST_0:
-//
-//
-//		case OP.ICONST_1:
-//
-//
-//
-//		default:
-//
-//
-//	}
-//
-//}
-//
-//
-//
-//func buildOPICONST_0Data(op int16, v string){
-//
-//
-//
-//}
 
 
 func ConverStrOp(str string) []string{

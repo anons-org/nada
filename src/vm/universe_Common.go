@@ -22,9 +22,6 @@ var ACC_PRIVATE = 0x0002
 var ACC_STATIC 	= 0x0008
 var ACC_SYNTHETIC = 0x1000
 
-//虚拟方法和原生方法（go函数）
-var METHOD_NATIVE = 1
-var  METHOD_VIRTUAL=2
 
 
 

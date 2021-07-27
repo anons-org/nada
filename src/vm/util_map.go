@@ -6,6 +6,7 @@ import (
 )
 /**
 	这个map，实现潦草，性能一般，本着“先有”的战略定位，先临时用着
+	temporary implementation MAP
  */
 type MapEntry struct {
 	key interface{}

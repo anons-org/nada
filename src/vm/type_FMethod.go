@@ -63,9 +63,9 @@ func (me *FMethod) SetCall(call func(args []IFObject) IFObject) *FMethod {
 /**
 	初始化方法
  */
-func (me* FMethod) Build(t int) *FMethod {
+func (me* FMethod) Build(t MethodType) *FMethod {
 	//设置class
-	if t==2{
+	if t  ==  METHOD_TYPE_VIRTUAL{
 		//虚拟方法
 		me.SetKlass(   vms.metaKlass.get(BUILTN.NADA_VIRTUAL).(*MethodKlass) )
 	}else{

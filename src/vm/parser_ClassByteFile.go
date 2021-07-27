@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	Utils "utils"
 )
 /**
 	Class在解析的过程中，
@@ -377,8 +378,8 @@ func (me *ClassByteFile) parserDoubleInfo(idx uint8 ) {
 
 	o:=new(ConstantDoubleInfo)
 	o.tag = idx
-	o.hByte = me.ReadUint32()
-	o.lByte = me.ReadUint32()
+	o.hByte = me.Read(4)
+	o.lByte = me.Read(4)
 	me.constanPool.Set(me.idx, o)
 	me.idx+=2
 	me.constantObjSpan++
@@ -389,8 +390,8 @@ func (me *ClassByteFile) parserLongInfo(idx uint8 ) {
 
 	o:=new(ConstantLongInfo)
 	o.tag = idx
-	o.hByte = me.ReadUint32()
-	o.lByte = me.ReadUint32()
+	o.hByte = me.Read(4)
+	o.lByte = me.Read(4)
 	me.constanPool.Set(me.idx, o)
 	me.idx+=2
 	me.constantObjSpan++
@@ -604,10 +605,8 @@ func (me *ClassByteFile) get(n int){
 
 }
 
-
-
 /**
-	生成栈上立即数
+	initialize operands in advance
  */
 func (me *ClassByteFile) bulidImmediate(method *FMethod,code []byte) {
 	//codes:=bytes.NewBuffer(code)
@@ -617,18 +616,50 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod,code []byte) {
 
 	for data.idx < len(code){
 		op:=data.read(1)[0]
-		if op==OP.ALOAD_0{
-			method.codeList[op] = nil
-			continue
-		}else  if op == OP.INVOKESPECIAL{
-		//https://www.cnblogs.com/cfas/p/15063669.html
-			mt:=me.getCtMethodRef( binary.BigEndian.Uint16(data.read(2) ) );
-			fmt:=NewFMethod(2,mt.rtFnName);
-			method.codeList[op] = fmt;
-			continue
-		}else  if op == OP.RETURN {
-			method.codeList[op] = nil;
-			continue
+		switch op {
+			case OP.ALOAD_0:
+				method.codeList[op] = nil;
+			case  OP.INVOKESPECIAL:
+				//https://www.cnblogs.com/cfas/p/15063669.html
+				mt:=me.getCtMethodRef( binary.BigEndian.Uint16(data.read(2) ) );
+				fmt:=NewFMethod(METHOD_TYPE_VIRTUAL, mt.rtFnName);
+				method.codeList[op] = fmt;
+			case OP.RETURN:
+				method.codeList[op] = nil;
+			case OP.LDC:
+				idx:=data.read(1)[0]
+				v:=me.constanPool.Get(  idx   );
+				switch v.(type) {
+					case *ConstantIntegerInfo, *ConstantFloatInfo:
+						method.codeList[op] = nil;
+					case *ConstantStringInfo:
+						method.codeList[op] = me.getCtStringToFString(v.(*ConstantStringInfo).strIdx);
+					default:
+						fmt.Print("The operand of the LDC instruction is not Int or float when the operand is generated")
+				}
+			case OP.ASTORE_0,OP.ASTORE_1, OP.ASTORE_2,OP.ASTORE_3://don't need operands
+				method.codeList[op] = nil;
+			case OP.LDC_W:
+				idx:=binary.BigEndian.Uint16(data.read(2) )
+				v:=me.constanPool.Get(  idx   );
+				switch v.(type) {
+				case *ConstantIntegerInfo, *ConstantFloatInfo:
+					method.codeList[op] = nil;
+				case *ConstantStringInfo:
+					method.codeList[op] = me.getCtStringToFString(v.(*ConstantStringInfo).strIdx);
+				case *ConstantDoubleInfo:
+					hb:=	v.(*ConstantDoubleInfo).hByte;
+					lb:=	v.(*ConstantDoubleInfo).lByte;
+					hb = append(hb, lb...);
+					fVal:= Utils.Float64frombytes(hb);
+					method.codeList[op] = NewFFLoat(fVal);
+				case *ConstantLongInfo:
+
+				default:
+					fmt.Print("The operand of the LDC instruction is not Int or float when the operand is generated")
+				}
+			default:
+				fmt.Print("failed to initialize operands in advance. procedure...")
 		}
 	}
 
@@ -646,7 +677,7 @@ func (me *ClassByteFile) buildKlass() {
 		desc:=ctConvStr(me,v.descIdx)
 		desc+=""
 		name :=ctConvStr(me,v.nameIdx)
-		mt:=NewFMethod(METHOD_VIRTUAL, name)
+		mt:=NewFMethod(METHOD_TYPE_VIRTUAL, name)
 		//each method att
 		for _, va:=range v.attriButes{
 			//deal with code attr
@@ -726,6 +757,22 @@ func (me *ClassByteFile)getCtNameAndType(idx uint16 ) *ConstantNameAndType{
 
 
 
+func (me *ClassByteFile)getCtStringToFString(idx uint16 ) *FString{
+	s := me.getCtString(idx)
+	s2:=NewFString(s)
+	return s2
+}
+
+
+func (me *ClassByteFile)getCtString(idx uint16 ) string{
+	val := me.constanPool.Get(idx)
+	if utf8, ok:=val.(*ConstantUtf8);ok{
+		return string(utf8.bytes)
+	}
+	return ""
+}
+
+
 
 /**
 	常量对象转string
@@ -743,6 +790,8 @@ func ct2FString(me *ClassByteFile,idx uint16 ) *FString{
 	s2:=NewFString(s)
 	return s2
 }
+
+
 
 
 

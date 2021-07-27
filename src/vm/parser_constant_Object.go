@@ -97,8 +97,8 @@ func (me* ConstantStringInfo ) getTag() uint8  {
 type ConstantDoubleInfo struct {
 	tag uint8
 	//指向UTF8常量对象
-	hByte uint32
-	lByte uint32
+	hByte []byte
+	lByte []byte
 }
 
 
@@ -112,8 +112,8 @@ func (me* ConstantDoubleInfo ) getTag() uint8  {
 type ConstantLongInfo struct {
 	tag uint8
 	//指向UTF8常量对象
-	hByte uint32
-	lByte uint32
+	hByte []byte
+	lByte []byte
 }
 
 
