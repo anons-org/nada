@@ -3,27 +3,26 @@ package main
 import (
 	"fmt"
 	"io"
+	"nada/src/Vm"
 	"os"
-	"vm"
 )
 
-
 /**
-	class文件解析
- */
-func parserClass(){
+class文件解析
+*/
+func parserClass() {
 	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\TestDemo1.class"
-	file, err := os.OpenFile(fileName, os.O_RDWR, 0666);
+	file, err := os.OpenFile(fileName, os.O_RDWR, 0666)
 	if err != nil {
-		fmt.Println("Open file error!", err);
+		fmt.Println("Open file error!", err)
 		return
 	}
 
-	stat, _ := file.Stat();
+	stat, _ := file.Stat()
 
-	fmt.Print(stat.Size());
+	fmt.Print(stat.Size())
 
-	buf := make([]byte, stat.Size());
+	buf := make([]byte, stat.Size())
 
 	//var data []byte;
 
@@ -38,37 +37,36 @@ func parserClass(){
 			}
 		}
 		//data = append(data,buf);
-		fmt.Println(length, string(buf));
+		fmt.Println(length, string(buf))
 	}
 	for _, val := range buf {
-		H:=fmt.Sprintf("%016x", val);
-		fmt.Printf("index slice= %s\n",  H)
+		H := fmt.Sprintf("%016x", val)
+		fmt.Printf("index slice= %s\n", H)
 
 	}
-	x :=1
+	x := 1
 	fmt.Print(x)
 }
 
-
-func call(ob *Vm.FString, fns string){
+func call(ob *Vm.FString, fns string) {
 
 	fn := ob.GetKlass().GetDict(fns)
-	mt,_ :=  fn.(*Vm.FMethod)
-	mt.Call("this",[]Vm.IFObject{});
+	mt, _ := fn.(*Vm.FMethod)
+	mt.Call("this", []Vm.IFObject{})
 }
-
 
 func main() {
 
 	Vm.CommonInit()
 	Vm.Start()
 
-	x :=1;fmt.Print(x)
+	x := 1
+	fmt.Print(x)
 
-	for{}
+	for {
+	}
 
 }
-
 
 //func main() {
 //	str := "月色真美，风也温柔，233333333，~！@#"  //go字符串编码为utf-8
