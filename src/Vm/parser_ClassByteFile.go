@@ -597,36 +597,18 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 			method.codeList[op] = nil
 		case OP.LDC:
 			idx := data.read(1)[0]
-			v := me.constanPool.Get(idx)
-			switch v.(type) {
-			case *ConstantIntegerInfo, *ConstantFloatInfo:
-				method.codeList[op] = nil
-			case *ConstantStringInfo:
-				method.codeList[op] = me.getCtStringToFString(v.(*ConstantStringInfo).strIdx)
-			default:
-				fmt.Print("The operand of the LDC instruction is not Int or float when the operand is generated")
-			}
-		case OP.ASTORE_0, OP.ASTORE_1, OP.ASTORE_2, OP.ASTORE_3: //don't need operands
+			method.codeList[op] = me.getCtToIFObject(idx)
+
+		case OP.ASTORE_0, OP.ASTORE_1, OP.ASTORE_2, OP.ASTORE_3,OP.ISTORE_0,OP.ISTORE_1,OP.ISTORE_2,OP.ISTORE_3: //don't need operands
 			method.codeList[op] = nil
+		case OP.FSTORE://本地变量编号全部为2字节
+			idx := uint16(data.read(1)[0]);
 		case OP.LDC_W:
 			idx := binary.BigEndian.Uint16(data.read(2))
-			v := me.constanPool.Get(idx)
-			switch v.(type) {
-			case *ConstantIntegerInfo, *ConstantFloatInfo:
-				method.codeList[op] = nil
-			case *ConstantStringInfo:
-				method.codeList[op] = me.getCtStringToFString(v.(*ConstantStringInfo).strIdx)
-			case *ConstantDoubleInfo:
-				hb := v.(*ConstantDoubleInfo).hByte
-				lb := v.(*ConstantDoubleInfo).lByte
-				hb = append(hb, lb...)
-				fVal := Utils.Float64frombytes(hb)
-				method.codeList[op] = NewFFLoat(fVal)
-			case *ConstantLongInfo:
-
-			default:
-				fmt.Print("The operand of the LDC instruction is not Int or float when the operand is generated")
-			}
+			method.codeList[op] = me.getCtToIFObject(idx)
+		case OP.INVOKESTATIC:
+			idx := binary.BigEndian.Uint16(data.read(2))
+			method.codeList[op] = me.getCtToIFObject(idx)
 		default:
 			fmt.Print("failed to initialize operands in advance. procedure...")
 		}
@@ -678,6 +660,54 @@ func NewClassByteFile() *ClassByteFile {
 func (me *ClassByteFile) addKlass(kls *Klass) {
 	vms.metaKlass.set("nada.lib.TestKlass", kls)
 }
+
+
+
+
+/**
+	把常量池中的对象转为类型对象
+*/
+func (me *ClassByteFile) getCtToIFObject(idx interface{}) IFObject {
+
+	v := me.constanPool.Get(idx);
+	var ob IFObject = nil;
+	switch v.(type) {
+		case *ConstantIntegerInfo:
+		case *ConstantFloatInfo:
+		case *ConstantStringInfo:
+			ob = me.getCtStringToFString(v.(*ConstantStringInfo).strIdx)
+		case *ConstantDoubleInfo:
+			hb := v.(*ConstantDoubleInfo).hByte
+			lb := v.(*ConstantDoubleInfo).lByte
+			hb = append(hb, lb...)
+			fVal := Utils.Float64frombytes(hb)
+			ob= NewFFLoat(fVal)
+		case *ConstantLongInfo:
+		case *ConstantMethodref:
+
+			if mt, ok := v.(*ConstantMethodref); ok {
+				//完善该对象的值
+				cls := me.getCtClass(mt.classIdx)
+				mt.rtClsName = ctConvStr(me, cls.nameIdx)
+				nt := me.getCtNameAndType(mt.nameAndType)
+				mt.rtFnName = ctConvStr(me, nt.nameIdx)
+				mt.rtFnType = ctConvStr(me, nt.descIdx)
+				//这个方法后面需要设置成引用类型的方法，因为在当前klass中引用了他
+				ob =  NewFMethod(METHOD_TYPE_VIRTUAL, mt.rtFnName)
+
+			}
+
+
+		default:
+			fmt.Print("The operand of the LDC instruction is not Int or float when the operand is generated")
+		}
+
+	return ob
+}
+
+
+
+
 
 /**
 获取常量池中的Methodref

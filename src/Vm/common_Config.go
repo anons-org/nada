@@ -16,6 +16,7 @@ var OPD = []struct {
 	{OP.LDC_W,"LDC_W"},
 	//0x2a aload_0    将第一个引用类型本地变量推送至栈顶 在非静态方法中， aload_0 表示对this的操作，在static 方法中，aload_0表示对方法的第一参数的操作。
 	{OP.ALOAD_0, "ALOAD_0"},
+	{OP.FSTORE, "FSTORE"},
 	{OP.ISTORE_0, "ISTORE_0"},
 	{OP.ISTORE_1, "ISTORE_1"},
 	{OP.ISTORE_2, "ISTORE_2"},
@@ -37,6 +38,7 @@ var OP = struct {
 	LDC,
 	LDC_W,
 	ALOAD_0,
+	FSTORE,
 	ISTORE_0,
 	ISTORE_1,
 	ISTORE_2,
@@ -54,6 +56,7 @@ var OP = struct {
 	LDC:0x12,
 	LDC_W:0x14,
 	ALOAD_0:0x2A,
+	FSTORE:0x38,
 	ISTORE_0:0x3b,
 	ISTORE_1:0x3c,
 	ISTORE_2:0x3d,
