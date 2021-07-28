@@ -24,5 +24,4 @@ type IKlass interface {
  	GetDict(k string) IFObject
 
 
-
 }

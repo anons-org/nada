@@ -601,8 +601,9 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 
 		case OP.ASTORE_0, OP.ASTORE_1, OP.ASTORE_2, OP.ASTORE_3,OP.ISTORE_0,OP.ISTORE_1,OP.ISTORE_2,OP.ISTORE_3: //don't need operands
 			method.codeList[op] = nil
-		case OP.FSTORE://本地变量编号全部为2字节
+		case OP.FSTORE://为压缩空间 nada 本地变量编号全部为2字节
 			idx := uint16(data.read(1)[0]);
+			method.codeList[op] = NewFUint16(idx)
 		case OP.LDC_W:
 			idx := binary.BigEndian.Uint16(data.read(2))
 			method.codeList[op] = me.getCtToIFObject(idx)
