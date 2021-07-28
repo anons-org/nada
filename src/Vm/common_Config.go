@@ -10,13 +10,20 @@ var OPD = []struct {
 	ValStr string
 }{
 	{0x03, "ICONST_0"},
-	{0x04, "ICONST_1"},
-
+	{OP.ICONST_1, "ICONST_1"},
+	{OP.ICONST_2, "ICONST_2"},
+	{OP.ICONST_3, "ICONST_3"},
+	{OP.ICONST_4, "ICONST_4"},
+	{OP.ICONST_5, "ICONST_5"},
+	{OP.BIPUSH, "BIPUSH"},
 	{OP.LDC,"LDC"},
 	{OP.LDC_W,"LDC_W"},
 	//0x2a aload_0    将第一个引用类型本地变量推送至栈顶 在非静态方法中， aload_0 表示对this的操作，在static 方法中，aload_0表示对方法的第一参数的操作。
 	{OP.ALOAD_0, "ALOAD_0"},
+	{OP.ISTORE, "ISTORE"},
+	{OP.LSTORE, "LSTORE"},
 	{OP.FSTORE, "FSTORE"},
+	{OP.ASTORE, "ASTORE"},
 	{OP.ISTORE_0, "ISTORE_0"},
 	{OP.ISTORE_1, "ISTORE_1"},
 	{OP.ISTORE_2, "ISTORE_2"},
@@ -35,10 +42,18 @@ var OPD = []struct {
 var OP = struct {
 	ICONST_0,
 	ICONST_1,
+	ICONST_2,
+	ICONST_3,
+	ICONST_4,
+	ICONST_5,
+	BIPUSH,
 	LDC,
 	LDC_W,
 	ALOAD_0,
+	ISTORE,
+	LSTORE,
 	FSTORE,
+	ASTORE,
 	ISTORE_0,
 	ISTORE_1,
 	ISTORE_2,
@@ -53,10 +68,18 @@ var OP = struct {
 }{
 	ICONST_0:0x03,
 	ICONST_1:0x04,
+	ICONST_2:0x05,
+	ICONST_3:0x06,
+	ICONST_4:0x07,
+	ICONST_5:0x08,
+	BIPUSH:0x10,
 	LDC:0x12,
 	LDC_W:0x14,
 	ALOAD_0:0x2A,
+	ISTORE :0x37,
+	LSTORE :0x37,
 	FSTORE:0x38,
+	ASTORE:0x3a,
 	ISTORE_0:0x3b,
 	ISTORE_1:0x3c,
 	ISTORE_2:0x3d,
@@ -109,6 +132,7 @@ var BUILTN = struct {
 	NADA_TYPE string
 	NADA_FLOAT string
 	NADA_UINT16 string
+	NADA_INT string
 
 }{
 
@@ -117,6 +141,7 @@ var BUILTN = struct {
 	NADA_STRING:"nada.core.String",
 	NADA_FLOAT:"nada.core.Float",
 	NADA_UINT16:"nada.core.Uint16",
+	NADA_INT:"nada.core.Int",
 	NADA_TYPE:"nada.core.type",
 	JAVA_LANG_STRING:"nada.core.String",
 }

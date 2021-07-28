@@ -45,6 +45,7 @@ func (me *Vms ) Build() *Vms{
 	me.metaKlass.set(BUILTN.NADA_STRING,    new(StringKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_FLOAT,    new(FloatKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_UINT16,    new(Uint16Klass).Init())
+	me.metaKlass.set(BUILTN.NADA_INT,    new(IntKlass).Init())
 
 
 	return me

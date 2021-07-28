@@ -70,6 +70,7 @@ Nada参考了JVM,CLI，ZENDVM，V8,Node等运行时的设计，并支实现了JV
 - 第三阶段
    - 跨平台桌面UI库
     - 包管理
+    - ffi
 
 
 

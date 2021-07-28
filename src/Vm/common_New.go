@@ -14,14 +14,15 @@ func NewFFLoat(v float64)  *FFloat {
 	return  n
 }
 
-func NewFUint16(v uint16)  *FUint16 {
-	n := new(FUint16).Build().setVal(v)
+
+func NewFInt(v int)  *FInt {
+	n := new(FInt).Build().setVal(v)
 	return  n
 }
 
-
-func NewFInt()  {
-
+func NewFUint16(v uint16)  *FUint16 {
+	n := new(FUint16).Build().setVal(v)
+	return  n
 }
 
 func NewFMethod(t MethodType,name string)  *FMethod {

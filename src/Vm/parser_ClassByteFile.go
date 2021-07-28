@@ -595,11 +595,13 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 			method.codeList[op] = fmt
 		case OP.RETURN:
 			method.codeList[op] = nil
+		case OP.ICONST_1://nada:压入int到栈 jvm:压入uint8到栈
+			method.codeList[op] = NewFInt(1)
 		case OP.LDC:
 			idx := data.read(1)[0]
 			method.codeList[op] = me.getCtToIFObject(idx)
-
-		case OP.ASTORE_0, OP.ASTORE_1, OP.ASTORE_2, OP.ASTORE_3,OP.ISTORE_0,OP.ISTORE_1,OP.ISTORE_2,OP.ISTORE_3: //don't need operands
+		case OP.ASTORE_0, OP.ASTORE_1, OP.ASTORE_2, OP.ASTORE_3,OP.ISTORE_0,OP.ISTORE_1,
+			 OP.ISTORE_2,OP.ISTORE_3: //don't need operands
 			method.codeList[op] = nil
 		case OP.FSTORE://为压缩空间 nada 本地变量编号全部为2字节
 			idx := uint16(data.read(1)[0]);
@@ -610,6 +612,18 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 		case OP.INVOKESTATIC:
 			idx := binary.BigEndian.Uint16(data.read(2))
 			method.codeList[op] = me.getCtToIFObject(idx)
+		case OP.ASTORE:
+			idx := uint16(data.read(1)[0]);
+			method.codeList[op] = NewFUint16(idx)
+		case OP.LSTORE:
+			idx := uint16(data.read(1)[0]);
+			method.codeList[op] = NewFUint16(idx)
+		case OP.ISTORE:
+			idx := uint16(data.read(1)[0]);
+			method.codeList[op] = NewFUint16(idx)
+		case OP.BIPUSH://nada:压入int到栈 jvm:压入uint8到栈
+			idx := uint16(data.read(1)[0]);
+			method.codeList[op] = NewFInt(int(idx))
 		default:
 			fmt.Print("failed to initialize operands in advance. procedure...")
 		}
