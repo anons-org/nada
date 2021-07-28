@@ -258,6 +258,7 @@ func (me *ClassByteFile) parserFieldInfo() {
 
 //class文件的attr属性解析
 func (me *ClassByteFile) parserAttrsInfo() {
+
 	me.attrsCount = me.ReadShort()
 
 	if me.attrsCount <= 0 { //没有字段就不处理了...
@@ -266,10 +267,39 @@ func (me *ClassByteFile) parserAttrsInfo() {
 
 	for i := 0; i < int(me.attrsCount); i++ {
 		attr := new(Attributes)
-		attr.nameIdx = me.ReadShort()
-		attr.len = int(me.ReadUint32())
-		attr.bytes = me.Read(attr.len)
-		me.attrs = append(me.attrs, attr)
+		//下面两个属性先取出来
+		attr.nameIdx 	= me.ReadShort()
+
+
+		aName:=me.getCtString(attr.nameIdx)
+
+		if aName == "BootstrapMethods"{
+
+			btms:=new(BootstrapMethods)
+			btms.nameIdx = attr.nameIdx
+			btms.attrLen = me.ReadUint32()
+			btms.methodsNum = me.ReadShort()
+			for j := 0; j < int(btms.methodsNum); j++ {
+				btm:=new(BootstrapMethod)
+				btm.bootsMethodRef = me.ReadShort()
+				//参数个数
+				btm.argNum = me.ReadShort()
+				for x := 0; x < int(btm.argNum) ; x++ {
+					//读取参数
+					btm.args = append(btm.args,me.ReadShort())
+				}
+				btms.methods = append(btms.methods,btm);
+			}
+
+		}else {
+			//如果都不是，先把数据取了再说，保证解析正常，以后再按需处理
+			attr.len 		= int(me.ReadUint32())
+			attr.bytes 		= me.Read(attr.len)
+			me.attrs 		= append(me.attrs, attr)
+		}
+
+
+
 	}
 
 }
@@ -575,7 +605,18 @@ func (me *ClassByteFile) get(n int) {
 }
 
 /**
-initialize operands in advance
+	initialize operands in advance
+	需要提前生成的操作数：引用的，直接常量的
+	如:ILOAD 1 ,STORE 1
+	其他的一概在解释器中生成
+	为什么？
+	SIPUSH 1000
+	由于提前生成操作数的办法是NEW一个FINT对象，这种如果提前NEW 就已经和当前的指令绑定了
+	如果这个字节码在正好在一个可复用的方法中，就出现问题了！
+
+	虽然不处理 但还是需要把字节数据截取出来，保证能在解释器中快速处理
+	取出来的数据存为FByte数据类型，草，还要加个数据类型。。。
+
 */
 func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 	//codes:=bytes.NewBuffer(code)
@@ -595,8 +636,10 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 			method.codeList[op] = fmt
 		case OP.RETURN:
 			method.codeList[op] = nil
+		case OP.ICONST_0://nada:压入int到栈 jvm:压入uint8到栈
+			method.codeList[op] = nil
 		case OP.ICONST_1://nada:压入int到栈 jvm:压入uint8到栈
-			method.codeList[op] = NewFInt(1)
+			method.codeList[op] = nil
 		case OP.LDC:
 			idx := data.read(1)[0]
 			method.codeList[op] = me.getCtToIFObject(idx)
@@ -605,27 +648,40 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 			method.codeList[op] = nil
 		case OP.FSTORE://为压缩空间 nada 本地变量编号全部为2字节
 			idx := uint16(data.read(1)[0]);
-			method.codeList[op] = NewFUint16(idx)
+			method.codeList[op] = NewFUint16(idx);
 		case OP.LDC_W:
-			idx := binary.BigEndian.Uint16(data.read(2))
-			method.codeList[op] = me.getCtToIFObject(idx)
+			idx := binary.BigEndian.Uint16(data.read(2));
+			method.codeList[op] = me.getCtToIFObject(idx);
 		case OP.INVOKESTATIC:
-			idx := binary.BigEndian.Uint16(data.read(2))
-			method.codeList[op] = me.getCtToIFObject(idx)
+			idx := binary.BigEndian.Uint16(data.read(2));
+			method.codeList[op] = me.getCtToIFObject(idx);
 		case OP.ASTORE:
 			idx := uint16(data.read(1)[0]);
-			method.codeList[op] = NewFUint16(idx)
+			method.codeList[op] = NewFUint16(idx);
 		case OP.LSTORE:
 			idx := uint16(data.read(1)[0]);
-			method.codeList[op] = NewFUint16(idx)
+			method.codeList[op] = NewFUint16(idx);
 		case OP.ISTORE:
 			idx := uint16(data.read(1)[0]);
-			method.codeList[op] = NewFUint16(idx)
+			method.codeList[op] = NewFUint16(idx);
 		case OP.BIPUSH://nada:压入int到栈 jvm:压入uint8到栈
+			method.codeList[op] = NewFByte(data.read(1));
+		case OP.SIPUSH:
+			method.codeList[op] = NewFByte(data.read(1));
+		case OP.ILOAD:
 			idx := uint16(data.read(1)[0]);
-			method.codeList[op] = NewFInt(int(idx))
+			method.codeList[op] = NewFUint16(idx);
+		case OP.IF_CMPGE:
+			v := binary.BigEndian.Uint16(data.read(2));
+			method.codeList[op] = NewFUint16(v);
+		case OP.NEW:
+			idx := binary.BigEndian.Uint16(data.read(2));
+			method.codeList[op] = me.getCtToIFObject(idx);
+		case OP.DUP:
+			method.codeList[op] = nil;
 		default:
-			fmt.Print("failed to initialize operands in advance. procedure...")
+			method.codeList[op] = nil;
+			//fmt.Print("failed to initialize operands in advance. procedure...")
 		}
 	}
 
@@ -658,9 +714,7 @@ func (me *ClassByteFile) buildKlass() {
 			kls.addInsMethod(name, mt)
 		}
 	}
-
 	me.addKlass(kls)
-
 }
 
 func NewClassByteFile() *ClassByteFile {
@@ -675,8 +729,6 @@ func NewClassByteFile() *ClassByteFile {
 func (me *ClassByteFile) addKlass(kls *Klass) {
 	vms.metaKlass.set("nada.lib.TestKlass", kls)
 }
-
-
 
 
 /**
@@ -699,7 +751,6 @@ func (me *ClassByteFile) getCtToIFObject(idx interface{}) IFObject {
 			ob= NewFFLoat(fVal)
 		case *ConstantLongInfo:
 		case *ConstantMethodref:
-
 			if mt, ok := v.(*ConstantMethodref); ok {
 				//完善该对象的值
 				cls := me.getCtClass(mt.classIdx)
@@ -709,12 +760,10 @@ func (me *ClassByteFile) getCtToIFObject(idx interface{}) IFObject {
 				mt.rtFnType = ctConvStr(me, nt.descIdx)
 				//这个方法后面需要设置成引用类型的方法，因为在当前klass中引用了他
 				ob =  NewFMethod(METHOD_TYPE_VIRTUAL, mt.rtFnName)
-
 			}
-
-
 		default:
-			fmt.Print("The operand of the LDC instruction is not Int or float when the operand is generated")
+			fmt.Print("Unresolvable constant pool data was encountered,Closing program....")
+			os.Exit(1)
 		}
 
 	return ob

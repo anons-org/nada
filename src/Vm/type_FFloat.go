@@ -13,8 +13,6 @@ type FFloat struct {
 
 	val float64
 
-
-
 }
 
 
@@ -52,13 +50,3 @@ func (me* FFloat) Build() *FFloat {
 	return me
 
 }
-
-
-
-
-
-
-
-
-
-

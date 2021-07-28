@@ -110,3 +110,34 @@ type LineNumberTableAttr struct {
 func (me *LineNumberTableAttr ) getName()  string{
 	return me.name
 }
+
+
+//---------------------------------------------------------
+type BootstrapMethod struct {
+
+	bootsMethodRef uint16
+	argNum uint16
+	args []uint16
+	name string
+
+}
+
+func (me *BootstrapMethod ) getName()  string{
+	return me.name
+}
+
+
+
+//---------------------------------------------------------
+type BootstrapMethods struct {
+
+	nameIdx uint16
+	attrLen uint32
+	methodsNum uint16
+	methods []*BootstrapMethod
+	name string
+}
+
+func (me *BootstrapMethods ) getName()  string{
+	return me.name
+}

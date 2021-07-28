@@ -172,7 +172,6 @@ type ConstantInvokeDynInfo struct {
 	//class文件中的bootstrap_methods中的项
 	bootMethodAttrIdx uint16
 	nameAndTypeIdx uint16
-
 }
 
 

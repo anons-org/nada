@@ -16,8 +16,19 @@ var OPD = []struct {
 	{OP.ICONST_4, "ICONST_4"},
 	{OP.ICONST_5, "ICONST_5"},
 	{OP.BIPUSH, "BIPUSH"},
+	{OP.SIPUSH, "SIPUSH"},
 	{OP.LDC,"LDC"},
 	{OP.LDC_W,"LDC_W"},
+	{OP.ILOAD,"ILOAD"},
+
+
+	{OP.IF_CMPEQ,"IF_CMPEQ"},
+	{OP.IF_CMPNE,"IF_CMPNE"},
+	{OP.IF_CMPLT,"IF_CMPLT"},
+	{OP.IF_CMPGE,"IF_CMPGE"},
+	{OP.IF_CMPGT,"IF_CMPGT"},
+	{OP.IF_CMPLE,"IF_CMPLE"},
+
 	//0x2a aload_0    将第一个引用类型本地变量推送至栈顶 在非静态方法中， aload_0 表示对this的操作，在static 方法中，aload_0表示对方法的第一参数的操作。
 	{OP.ALOAD_0, "ALOAD_0"},
 	{OP.ISTORE, "ISTORE"},
@@ -32,9 +43,11 @@ var OPD = []struct {
 	{OP.ASTORE_1, "ASTORE_1"},
 	{OP.ASTORE_2, "ASTORE_2"},
 	{OP.ASTORE_3, "ASTORE_3"},
+	{OP.DUP,"DUP"},
 	{OP.RETURN,"RETURN"},
 	{OP.INVOKESPECIAL,"INVOKESPECIAL"},
 	{OP.INVOKESTATIC,"INVOKESTATIC"},
+	{OP.NEW,"NEW"},
 }
 
 
@@ -47,8 +60,18 @@ var OP = struct {
 	ICONST_4,
 	ICONST_5,
 	BIPUSH,
+	SIPUSH,
 	LDC,
 	LDC_W,
+	ILOAD,
+
+	IF_CMPEQ,
+	IF_CMPNE,
+	IF_CMPLT,
+	IF_CMPGE,
+	IF_CMPGT,
+	IF_CMPLE,
+
 	ALOAD_0,
 	ISTORE,
 	LSTORE,
@@ -62,9 +85,11 @@ var OP = struct {
 	ASTORE_1,
 	ASTORE_2,
 	ASTORE_3,
+	DUP,
 	RETURN,
 	INVOKESPECIAL,
-	INVOKESTATIC uint8
+	INVOKESTATIC,
+	NEW uint8
 }{
 	ICONST_0:0x03,
 	ICONST_1:0x04,
@@ -73,8 +98,18 @@ var OP = struct {
 	ICONST_4:0x07,
 	ICONST_5:0x08,
 	BIPUSH:0x10,
+	SIPUSH:0x11,
 	LDC:0x12,
 	LDC_W:0x14,
+	ILOAD:0x15,
+
+	IF_CMPEQ:0x9f,
+	IF_CMPNE:0xa0,
+	IF_CMPLT:0xa1,
+	IF_CMPGE:0xa2,
+	IF_CMPGT:0xa3,
+	IF_CMPLE:0xa4,
+
 	ALOAD_0:0x2A,
 	ISTORE :0x37,
 	LSTORE :0x37,
@@ -88,12 +123,24 @@ var OP = struct {
 	ASTORE_1:0x4c,
 	ASTORE_2:0x4d,
 	ASTORE_3:0x4e,
+	DUP:0x59,
 	RETURN:0xb1,
 	INVOKESPECIAL:0xb7,
 	INVOKESTATIC:0xb8,
+	NEW:0xbb,
 }
 
-
+//if_icmpeq = 159 (0x9f)
+//
+//if_icmpne = 160 (0xa0)
+//
+//if_icmplt = 161 (0xa1)
+//
+//if_icmpge = 162 (0xa2)
+//
+//if_icmpgt = 163 (0xa3)
+//
+//if_icmple = 164 (0xa4)
 //object type---------------------
 var G_OT_DEF = []struct {
 	Id   int
@@ -133,6 +180,7 @@ var BUILTN = struct {
 	NADA_FLOAT string
 	NADA_UINT16 string
 	NADA_INT string
+	NADA_BYTE string
 
 }{
 
@@ -142,6 +190,7 @@ var BUILTN = struct {
 	NADA_FLOAT:"nada.core.Float",
 	NADA_UINT16:"nada.core.Uint16",
 	NADA_INT:"nada.core.Int",
+	NADA_BYTE:"nada.core.Byte",
 	NADA_TYPE:"nada.core.type",
 	JAVA_LANG_STRING:"nada.core.String",
 }

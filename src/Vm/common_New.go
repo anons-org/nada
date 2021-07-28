@@ -15,6 +15,13 @@ func NewFFLoat(v float64)  *FFloat {
 }
 
 
+func NewFByte(v []byte)  *FByte {
+	n := new(FByte).Build().setVal(v)
+	return  n
+}
+
+
+
 func NewFInt(v int)  *FInt {
 	n := new(FInt).Build().setVal(v)
 	return  n
