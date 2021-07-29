@@ -6,7 +6,10 @@ type FMethod struct {
 	//方法字节码
 	code  []byte
 	//已经处理好的立即数
-	codeList map[uint8]IFObject
+	//codeList map[uint8]IFObject
+
+	codes []*OpcodeStruct
+
 	klass IKlass
 	//原生方法保存
 	call func(args []IFObject) IFObject
@@ -65,7 +68,14 @@ func (me *FMethod) SetCall(call func(args []IFObject) IFObject) *FMethod {
 	return me
 }
 
-
+func (me *FMethod) addCode(n int,op uint8, oper IFObject) *FMethod{
+	me.codes = append(me.codes,&OpcodeStruct{
+		n: n,
+		op: op,
+		oper: oper,
+	})
+	return me;
+}
 
 
 /**
@@ -80,7 +90,7 @@ func (me* FMethod) Build(t MethodType) *FMethod {
 		//原生方法
 		me.SetKlass(  vms.metaKlass.get(BUILTN.NADA_NATIVE).(*NativeMethodKlass) )
 	}
-	me.codeList = make(map[uint8]IFObject)
+	//me.codeList = make(map[uint8]IFObject)
 	me.spec = make(map[string]string)
 	me.spec["java"] = "";
 	return me

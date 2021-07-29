@@ -22,8 +22,17 @@ var ACC_PRIVATE = 0x0002
 var ACC_STATIC 	= 0x0008
 var ACC_SYNTHETIC = 0x1000
 
+//-----------------------------
 
+type OpcodeStruct struct {
 
+	//指令所在行 有效PC地址
+	n int
+	//指令
+	op uint8
+	//操作数
+	oper IFObject
+}
 
 
 var vms *Vms

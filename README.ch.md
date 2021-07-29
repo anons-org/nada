@@ -59,7 +59,7 @@ Nada参考了JVM,CLI，ZENDVM，V8,Node等运行时的设计，并支实现了JV
 
 ### 开发计划
 - 第一阶段
-  - class解析 60%
+  - class解析 70%
   - 数据类型 70%
   - 解释器 2%
   - 工具包 1%
@@ -75,24 +75,25 @@ Nada参考了JVM,CLI，ZENDVM，V8,Node等运行时的设计，并支实现了JV
    - 跨平台桌面UI库
     - 包管理
     - ffi
+    - JS语法树
+    - PHP语法树
+    - typescript语法树
+    - python 语法树
 
 
 
-
-#### 相关支持
+#### 相关参考
 - LSP https://microsoft.github.io/language-server-protocol/
 - vscode debug protocol https://vscode.readthedocs.io/en/latest/extensions/example-debuggers/
+- Go协程这样用才安全 https://taoshu.in/go/safe-goroutine.html
+- Go 语言 map 的并发安全问题 https://taoshu.in/go/go-map-concurrent-misue.html
 
 
 ### 参与贡献
->  在代码规范上我们有很严格的要求，请认真阅读规范，以确定您能接受规范后再fork!
--  [规范文档](https://gitee.com/grateful/farvm/wikis/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83?sort_id=3481374)
-1.  选择擅长的分组
-2. [分组列表](https://gitee.com/grateful/farvm/wikis/%E6%93%85%E9%95%BF%E5%88%86%E7%BB%84?sort_id=3481509)
-3.  Fork 本仓库
-4.  新建 Feat_xxx 分支
-5.  提交代码
-6.  新建 Pull Request
+-  Fork 本仓库
+-  新建 Feat_xxx 分支
+-  提交代码
+-  新建 Pull Request
 
 
 

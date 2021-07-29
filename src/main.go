@@ -12,7 +12,7 @@ import (
 class文件解析
 */
 func parserClass() {
-	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\TestDemo1.class"
+	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\untitled\\target\\classes\\Test.class"
 	file, err := os.OpenFile(fileName, os.O_RDWR, 0666)
 	if err != nil {
 		fmt.Println("Open file error!", err)

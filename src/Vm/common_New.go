@@ -1,7 +1,5 @@
 package Vm
 
-import "fmt"
-
 func NewFString(str string)  *FString {
 
 	n := new(FString).Build().SetVal(str)
@@ -54,11 +52,11 @@ func NewFMap()  *FMap {
 
 func  NewFrame ( e IFObject) *Frame{
 
-	xxx:=e.GetKlass()
-	fmt.Print(xxx)
 	me:=new(Frame)
+	me.pc = -1;
 	me.fn = e;
 	me.code = e.(*FMethod).code;
+	me.codes = e.(*FMethod).codes;
 
 
 	///**

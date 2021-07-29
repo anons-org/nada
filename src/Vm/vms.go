@@ -1,5 +1,6 @@
 package Vm
 
+import "fmt"
 
 type Vms struct {
 
@@ -14,17 +15,18 @@ type Vms struct {
 }
 
 func (me *Vms ) start()  {
-
-
 	//初始化参数 klass等
-	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\lib\\Test.class"
+	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\untitled\\target\\classes\\Test.class"
 	classN  := NewClassByteFile()
 	classN.Load(fileName).Parser();
 	main:=me.metaKlass.get("nada.lib.TestKlass").(IKlass)
 	f:=main.getStaticDict("main").(*FMethod)
 
-	interp:=new(Interpreter)
-	interp.run(f)
+	go func() {
+		interp:=new(Interpreter)
+		interp.run(f)
+	}()
+	fmt.Print("asdasd")
 
 }
 

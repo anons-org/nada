@@ -1,57 +1,56 @@
 package Vm
 
-import (
-	"strings"
-)
-
-//opcode desc
-var OPD = []struct {
-	Intr uint8
-	ValStr string
-}{
-	{0x03, "ICONST_0"},
-	{OP.ICONST_1, "ICONST_1"},
-	{OP.ICONST_2, "ICONST_2"},
-	{OP.ICONST_3, "ICONST_3"},
-	{OP.ICONST_4, "ICONST_4"},
-	{OP.ICONST_5, "ICONST_5"},
-	{OP.BIPUSH, "BIPUSH"},
-	{OP.SIPUSH, "SIPUSH"},
-	{OP.LDC,"LDC"},
-	{OP.LDC_W,"LDC_W"},
-	{OP.ILOAD,"ILOAD"},
+import "strings"
 
 
-	{OP.IF_CMPEQ,"IF_CMPEQ"},
-	{OP.IF_CMPNE,"IF_CMPNE"},
-	{OP.IF_CMPLT,"IF_CMPLT"},
-	{OP.IF_CMPGE,"IF_CMPGE"},
-	{OP.IF_CMPGT,"IF_CMPGT"},
-	{OP.IF_CMPLE,"IF_CMPLE"},
+var OPCODE_DESC = map[uint8]string{
+	OP.ICONST_0: "ICONST_0",
+	OP.ICONST_1: "ICONST_1",
+	OP.ICONST_2: "ICONST_2",
+	OP.ICONST_3: "ICONST_3",
+	OP.ICONST_4: "ICONST_4",
+	OP.ICONST_5: "ICONST_5",
+	OP.BIPUSH: "BIPUSH",
+	OP.SIPUSH: "SIPUSH",
+	OP.LDC:"LDC",
+	OP.LDC_W:"LDC_W",
+	OP.ILOAD:"ILOAD",
+
+
+	OP.IF_CMPEQ:"IF_CMPEQ",
+	OP.IF_CMPNE:"IF_CMPNE",
+	OP.IF_CMPLT:"IF_CMPLT",
+	OP.IF_CMPGE:"IF_CMPGE",
+	OP.IF_CMPGT:"IF_CMPGT",
+	OP.IF_CMPLE:"IF_CMPLE",
 
 	//0x2a aload_0    将第一个引用类型本地变量推送至栈顶 在非静态方法中， aload_0 表示对this的操作，在static 方法中，aload_0表示对方法的第一参数的操作。
-	{OP.ALOAD_0, "ALOAD_0"},
-	{OP.ISTORE, "ISTORE"},
-	{OP.LSTORE, "LSTORE"},
-	{OP.FSTORE, "FSTORE"},
-	{OP.ASTORE, "ASTORE"},
-	{OP.ISTORE_0, "ISTORE_0"},
-	{OP.ISTORE_1, "ISTORE_1"},
-	{OP.ISTORE_2, "ISTORE_2"},
-	{OP.ISTORE_3, "ISTORE_3"},
-	{OP.ASTORE_0, "ASTORE_0"},
-	{OP.ASTORE_1, "ASTORE_1"},
-	{OP.ASTORE_2, "ASTORE_2"},
-	{OP.ASTORE_3, "ASTORE_3"},
-	{OP.POP,"POP"},
-	{OP.POP2,"POP2"},
-	{OP.DUP,"DUP"},
-	{OP.RETURN,"RETURN"},
-	{OP.INVOKEDYNAMIC,"INVOKEDYNAMIC"},
-	{OP.INVOKESPECIAL,"INVOKESPECIAL"},
-	{OP.INVOKESTATIC,"INVOKESTATIC"},
-	{OP.NEW,"NEW"},
+	OP.ALOAD_0: "ALOAD_0",
+	OP.ISTORE: "ISTORE",
+	OP.LSTORE: "LSTORE",
+	OP.FSTORE: "FSTORE",
+	OP.ASTORE: "ASTORE",
+	OP.ISTORE_0: "ISTORE_0",
+	OP.ISTORE_1: "ISTORE_1",
+	OP.ISTORE_2: "ISTORE_2",
+	OP.ISTORE_3: "ISTORE_3",
+	OP.ASTORE_0: "ASTORE_0",
+	OP.ASTORE_1: "ASTORE_1",
+	OP.ASTORE_2: "ASTORE_2",
+	OP.ASTORE_3: "ASTORE_3",
+	OP.POP:"POP",
+	OP.POP2:"POP2",
+	OP.DUP:"DUP",
+	OP.IINC:"IINC",
+	OP.GOTO:"GOTO",
+	OP.RETURN:"RETURN",
+	OP.INVOKEDYNAMIC:"INVOKEDYNAMIC",
+	OP.INVOKESPECIAL:"INVOKESPECIAL",
+	OP.INVOKESTATIC:"INVOKESTATIC",
+	OP.NEW:"NEW",
+
 }
+
 
 
 //opcode index
@@ -91,6 +90,8 @@ var OP = struct {
 	POP,
 	POP2,
 	DUP,
+	IINC,
+	GOTO,
 	RETURN,
 	INVOKEDYNAMIC,
 	INVOKESPECIAL,
@@ -117,7 +118,7 @@ var OP = struct {
 	IF_CMPLE:0xa4,
 
 	ALOAD_0:0x2A,
-	ISTORE :0x37,
+	ISTORE :0x36,
 	LSTORE :0x37,
 	FSTORE:0x38,
 	ASTORE:0x3a,
@@ -132,7 +133,10 @@ var OP = struct {
 	POP:0x57,
 	POP2:0x58,
 	DUP:0x59,
+	IINC:0x84,
+	GOTO:0xa7,
 	RETURN:0xb1,
+
 	INVOKEDYNAMIC:0xba,
 	INVOKESPECIAL:0xb7,
 	INVOKESTATIC:0xb8,
@@ -201,7 +205,7 @@ var BUILTN = struct {
 	NADA_UINT16:"nada.core.Uint16",
 	NADA_INT:"nada.core.Int",
 	NADA_BYTE:"nada.core.Byte",
-	NADA_TYPE:"nada.core.type",
+	NADA_TYPE:"nada.core.Type",
 	NADA_ARRAY:"nada.core.Array",
 	JAVA_LANG_STRING:"nada.core.String",
 }

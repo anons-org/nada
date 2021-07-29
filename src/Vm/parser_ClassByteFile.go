@@ -361,7 +361,17 @@ func (me *ClassByteFile) parserMethodInfo() {
 				attr.code = me.Read(int(attr.codeLen))
 				attr.expTableLen = me.ReadShort()
 				attr.attrCount = me.ReadShort()
+
 				//code自己附加的属性
+				/**
+					LocalVariableTable 等属性由编译器生成，可有可无
+					具体信息参考《深入理解JAVA虚拟机》
+					所以，不管有么有都要处理，不然一旦有这些属性又没有解析
+					就出问题了
+					javac -g:none 不生成 LocalVariableTable
+					javac -g:vars   生成 LocalVariableTable
+					如果是IDEA等编辑器生成的class必然有LocalVariableTable
+				 */
 				for i := 0; i < int(attr.attrCount); i++ {
 					nameIdx = me.ReadShort()
 					aName := ctConvStr(me, nameIdx)
@@ -372,7 +382,7 @@ func (me *ClassByteFile) parserMethodInfo() {
 						lAttr.attrLen = me.ReadUint32()
 						//读出来，不处理
 						me.Read(int(lAttr.attrLen))
-					} else if aName == "StackMapTable" {
+					} else if aName == "StackMapTable" || aName == "LocalVariableTable" {
 						//先偷懒不处理。。。。
 						attrLen := me.ReadUint32()
 						me.Read(int(attrLen))
@@ -647,70 +657,111 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 	//codes.Read(2);
 
 	data := NewBytes(code)
-
+	n:=0;
 	for data.idx < len(code) {
+
 		op := data.read(1)[0]
+
 		switch op {
 		case OP.ALOAD_0:
-			method.codeList[op] = nil
+			method.addCode(n,op,nil)
+			n++;
 		case OP.INVOKESPECIAL:
 			//https://www.cnblogs.com/cfas/p/15063669.html
 			mt := me.getCtMethodRef(binary.BigEndian.Uint16(data.read(2)))
 			fmt := NewFMethod(METHOD_TYPE_VIRTUAL, mt.rtFnName)
-			method.codeList[op] = fmt
+			method.addCode(n,op,fmt)
+			n+=2;
 		case OP.RETURN:
-			method.codeList[op] = nil
-		case OP.ICONST_0://nada:压入int到栈 jvm:压入uint8到栈
-			method.codeList[op] = nil
-		case OP.ICONST_1://nada:压入int到栈 jvm:压入uint8到栈
-			method.codeList[op] = nil
+			method.addCode(n,op,nil)
+
+		case OP.ICONST_0,OP.ICONST_1://nada:压入int到栈 jvm:压入uint8到栈
+			method.addCode(n,op,nil)
+
 		case OP.LDC:
 			idx := data.read(1)[0]
-			method.codeList[op] = me.getCtToIFObject(idx)
+			method.addCode(n,op, me.getCtToIFObject(idx))
+			n++;
 		case OP.ASTORE_0, OP.ASTORE_1, OP.ASTORE_2, OP.ASTORE_3,OP.ISTORE_0,OP.ISTORE_1,
 			 OP.ISTORE_2,OP.ISTORE_3: //don't need operands
-			method.codeList[op] = nil
+			method.addCode(n,op,nil)
+
 		case OP.FSTORE://为压缩空间 nada 本地变量编号全部为2字节
 			idx := uint16(data.read(1)[0]);
-			method.codeList[op] = NewFUint16(idx);
+			method.addCode(n,op, NewFUint16(idx))
+			n++;
 		case OP.LDC_W:
 			idx := binary.BigEndian.Uint16(data.read(2));
-			method.codeList[op] = me.getCtToIFObject(idx);
+			method.addCode(n,op, me.getCtToIFObject(idx))
+			n+=2;
 		case OP.INVOKESTATIC:
 			idx := binary.BigEndian.Uint16(data.read(2));
-			method.codeList[op] = me.getCtToIFObject(idx);
+			method.addCode(n,op, me.getCtToIFObject(idx))
+			n+=2;
 		case OP.ASTORE:
 			idx := uint16(data.read(1)[0]);
-			method.codeList[op] = NewFUint16(idx);
+			method.addCode(n,op, NewFUint16(idx));
+			n++;
 		case OP.LSTORE:
 			idx := uint16(data.read(1)[0]);
-			method.codeList[op] = NewFUint16(idx);
+			method.addCode(n,op, NewFUint16(idx))
+			n++;
 		case OP.ISTORE:
 			idx := uint16(data.read(1)[0]);
-			method.codeList[op] = NewFUint16(idx);
+			method.addCode(n,op, NewFUint16(idx))
+			n++;
 		case OP.BIPUSH://nada:压入int到栈 jvm:压入uint8到栈
-			method.codeList[op] = NewFByte(data.read(1));
+			method.addCode(n,op,  NewFByte(data.read(1)));
+			n++;
 		case OP.SIPUSH:
-			method.codeList[op] = NewFByte(data.read(1));
+			idx := binary.BigEndian.Uint16(data.read(2));
+			method.addCode(n,op,NewFInt(int(idx)));
+			n+=2;
 		case OP.ILOAD:
 			idx := uint16(data.read(1)[0]);
-			method.codeList[op] = NewFUint16(idx);
+			method.addCode(n,op, NewFUint16(idx))
+			n++;
 		case OP.IF_CMPGE:
-			v := binary.BigEndian.Uint16(data.read(2));
-			method.codeList[op] = NewFUint16(v);
+			idx := binary.BigEndian.Uint16(data.read(2));
+			method.addCode(n,op, NewFUint16(idx))
+			n+=2;
 		case OP.NEW:
 			idx := binary.BigEndian.Uint16(data.read(2));
-			method.codeList[op] = me.getCtToIFObject(idx);
+			method.addCode(n,op, me.getCtToIFObject(idx))
+			n+=2;
 		case OP.DUP:
-			method.codeList[op] = nil;
+
+			method.addCode(n,op,nil)
+
 		case OP.INVOKEDYNAMIC:
 			idx := binary.BigEndian.Uint16(data.read(2));
-			method.codeList[op] = me.getCtToIFObject(idx);
-			fmt.Printf("INVOKEDYNAMIC:%s",method.codeList[op])
+			//规定还有预留的2字节。。。
+			data.read(2);
+			method.addCode(n,op, me.getCtToIFObject(idx))
+			n+=4;
+			//fmt.Printf("INVOKEDYNAMIC:%s",method.codeList[op])
+		case OP.POP,OP.POP2://iinc index(uint8) const(int8) to int
+			method.addCode(n,op,nil)
+
+		case OP.IINC:
+			idx:=uint16(data.read(1)[0]);
+			c:=int(data.read(1)[0]);
+			a:=NewFArray()
+			a.add(NewFUint16(idx))
+			a.add(NewFInt(c))
+			method.addCode(n,op,a)
+			n+=2;
+		case OP.GOTO:
+			idx := binary.BigEndian.Uint16(data.read(2));
+
+			method.addCode( n, op,NewFInt(int(idx)) )
+			n++;
 		default:
-			method.codeList[op] = nil;
-			//fmt.Print("failed to initialize operands in advance. procedure...")
+			method.addCode(n,op,nil)
+
+
 		}
+		n++;
 	}
 
 }
@@ -785,17 +836,17 @@ func (me *ClassByteFile) getCtToIFObject(idx interface{}) IFObject {
 		case *ConstantNameAndType:
 
 		case *ConstantInvokeDynInfo:
-			//需要在属性中找
-			//获取引导属性
+			//search in bootstrap
+			//Getbootstrap attributes
 			idv:=v.(*ConstantInvokeDynInfo)
 			iv:=idv.bootMethodAttrIdx;
 			v:=me.attriDict["BootstrapMethods"].(*BootstrapMethods).methods[iv]
 			mrf:=me.getCtMethodHandle(v.bootsMethodRef)
-			//调用点
+			//callSite
 			callSite:= me.getCtMethodRefToFMethod(mrf.refIdx)
-			//被调用信息
+			//be call infos
 			beCallInfos:= me.getCtNameAndTypeToFArray( idv.nameAndTypeIdx )
-			//返回数组
+			//return array
 			ob=NewFArray().add(callSite).add(beCallInfos)
 
 		default:
