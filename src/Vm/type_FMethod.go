@@ -11,9 +11,14 @@ type FMethod struct {
 	//原生方法保存
 	call func(args []IFObject) IFObject
 
+	//参数和返回值的类型
+	argsType string
+	//限定符 说白了就是类的路径 java/lang/xxoo
+	spec map[string]string
+
 	//方法访问权限
 	//静态还是动态方法
-	isNativa bool
+
 	//方法参数个数
 	//方法返回值
 	//方法返回值个数
@@ -25,16 +30,19 @@ func (me *FMethod) GetKlass() IKlass {
 	return me.klass
 }
 
-func (me *FMethod) ValToString(){
-
-}
-
 
 /**
 	设置方法名
  */
 func (me* FMethod) SetMethod(name string) {
 
+}
+
+
+func (me* FMethod) setSpec(s string) {
+	me.spec["java"] = s;
+	me.spec["js"] = s;
+	me.spec["php"] = s;
 }
 
 /**
@@ -73,6 +81,8 @@ func (me* FMethod) Build(t MethodType) *FMethod {
 		me.SetKlass(  vms.metaKlass.get(BUILTN.NADA_NATIVE).(*NativeMethodKlass) )
 	}
 	me.codeList = make(map[uint8]IFObject)
+	me.spec = make(map[string]string)
+	me.spec["java"] = "";
 	return me
 }
 

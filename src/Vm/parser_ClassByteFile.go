@@ -58,7 +58,15 @@ type ClassByteFile struct {
 	methods []*MethodInfo
 	//这个是整个class文件的属性总数，和fields、methods的不一样!
 	attrsCount uint16
+
+	//临时用用 主要存class文件的属性但属性都是字节码
 	attrs      []*Attributes
+	//也是class文件的属性 但已经解析成对象了
+	attriDict map[string]IAttributes
+
+
+
+
 }
 
 func (me *ClassByteFile) Load(fileName string) *ClassByteFile {
@@ -282,13 +290,27 @@ func (me *ClassByteFile) parserAttrsInfo() {
 			for j := 0; j < int(btms.methodsNum); j++ {
 				btm:=new(BootstrapMethod)
 				btm.bootsMethodRef = me.ReadShort()
+				//mh:= me.getCtMethodHandle( btm.bootsMethodRef )
+				//
+				//
+				//if mh.refKind == 6{//invokeStatic 方法
+				//
+				//}
+				//交给按对象获取....
+
+
+
+
 				//参数个数
 				btm.argNum = me.ReadShort()
 				for x := 0; x < int(btm.argNum) ; x++ {
 					//读取参数
-					btm.args = append(btm.args,me.ReadShort())
+					btm.args = append(btm.args, me.ReadShort())
 				}
 				btms.methods = append(btms.methods,btm);
+			}
+			if me.attriDict["BootstrapMethods"] == nil{
+				me.attriDict["BootstrapMethods"] = btms
 			}
 
 		}else {
@@ -415,6 +437,8 @@ func (me *ClassByteFile) parserFieldrefInfo(idx uint8) {
 	me.idx++
 
 }
+
+//https://www.cnblogs.com/cfas/p/15074068.html
 
 func (me *ClassByteFile) parserInvokeDynInfo(idx uint8) {
 	o := new(ConstantInvokeDynInfo)
@@ -679,6 +703,10 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 			method.codeList[op] = me.getCtToIFObject(idx);
 		case OP.DUP:
 			method.codeList[op] = nil;
+		case OP.INVOKEDYNAMIC:
+			idx := binary.BigEndian.Uint16(data.read(2));
+			method.codeList[op] = me.getCtToIFObject(idx);
+			fmt.Printf("INVOKEDYNAMIC:%s",method.codeList[op])
 		default:
 			method.codeList[op] = nil;
 			//fmt.Print("failed to initialize operands in advance. procedure...")
@@ -720,6 +748,8 @@ func (me *ClassByteFile) buildKlass() {
 func NewClassByteFile() *ClassByteFile {
 	e := new(ClassByteFile)
 	e.constanPool = NewMap()
+	e.attriDict = make(map[string]IAttributes)
+	//e.attriDict["BootstrapMethods"] =
 	return e
 }
 
@@ -751,19 +781,26 @@ func (me *ClassByteFile) getCtToIFObject(idx interface{}) IFObject {
 			ob= NewFFLoat(fVal)
 		case *ConstantLongInfo:
 		case *ConstantMethodref:
-			if mt, ok := v.(*ConstantMethodref); ok {
-				//完善该对象的值
-				cls := me.getCtClass(mt.classIdx)
-				mt.rtClsName = ctConvStr(me, cls.nameIdx)
-				nt := me.getCtNameAndType(mt.nameAndType)
-				mt.rtFnName = ctConvStr(me, nt.nameIdx)
-				mt.rtFnType = ctConvStr(me, nt.descIdx)
-				//这个方法后面需要设置成引用类型的方法，因为在当前klass中引用了他
-				ob =  NewFMethod(METHOD_TYPE_VIRTUAL, mt.rtFnName)
-			}
+			ob = me.getCtMethodRefToFMethod(idx)
+		case *ConstantNameAndType:
+
+		case *ConstantInvokeDynInfo:
+			//需要在属性中找
+			//获取引导属性
+			idv:=v.(*ConstantInvokeDynInfo)
+			iv:=idv.bootMethodAttrIdx;
+			v:=me.attriDict["BootstrapMethods"].(*BootstrapMethods).methods[iv]
+			mrf:=me.getCtMethodHandle(v.bootsMethodRef)
+			//调用点
+			callSite:= me.getCtMethodRefToFMethod(mrf.refIdx)
+			//被调用信息
+			beCallInfos:= me.getCtNameAndTypeToFArray( idv.nameAndTypeIdx )
+			//返回数组
+			ob=NewFArray().add(callSite).add(beCallInfos)
+
 		default:
 			fmt.Print("Unresolvable constant pool data was encountered,Closing program....")
-			os.Exit(1)
+
 		}
 
 	return ob
@@ -790,6 +827,39 @@ func (me *ClassByteFile) getCtMethodRef(idx uint16) *ConstantMethodref {
 	return nil
 }
 
+
+
+func (me *ClassByteFile) getCtMethodRefToFMethod(idx interface{}) *FMethod {
+	val := me.constanPool.Get(idx)
+	if mt, ok := val.(*ConstantMethodref); ok {
+		//完善该对象的值
+		cls := me.getCtClass(mt.classIdx)
+		mt.rtClsName = ctConvStr(me, cls.nameIdx)
+		nt := me.getCtNameAndType(mt.nameAndType)
+		mt.rtFnName = ctConvStr(me, nt.nameIdx)
+		mt.rtFnType = ctConvStr(me, nt.descIdx)
+		//这个方法后面需要设置成引用类型的方法，因为在当前klass中引用了他
+		ob:=  NewFMethod(METHOD_TYPE_VIRTUAL, mt.rtFnName)
+		//设置方法参数类型和限定符
+		ob.argsType = mt.rtFnType
+		ob.setSpec(mt.rtClsName)
+		return ob
+	}
+	return nil
+}
+
+
+func (me *ClassByteFile) getCtMethodHandle(idx uint16) *ConstantMethodHandleInfo {
+	val := me.constanPool.Get(idx)
+	if mt, ok := val.(*ConstantMethodHandleInfo); ok {
+		//完善该对象的值
+		return mt
+	}
+	return nil
+}
+
+
+
 /**
 获取常量池中的Class
 */
@@ -811,6 +881,21 @@ func (me *ClassByteFile) getCtNameAndType(idx uint16) *ConstantNameAndType {
 	}
 	return nil
 }
+
+func (me *ClassByteFile) getCtNameAndTypeToFArray(idx uint16) *FArray {
+	val := me.constanPool.Get(idx)
+	if nt, ok := val.(*ConstantNameAndType); ok {
+		ob:=NewFArray();
+		nameStr:=me.getCtStringToFString(nt.nameIdx);
+		descStr:=me.getCtStringToFString(nt.descIdx);
+		ob.add(nameStr)
+		ob.add(descStr)
+		return ob;
+	}
+	return nil
+}
+
+
 
 func (me *ClassByteFile) getCtStringToFString(idx uint16) *FString {
 	s := me.getCtString(idx)
@@ -843,21 +928,3 @@ func ct2FString(me *ClassByteFile, idx uint16) *FString {
 	return s2
 }
 
-//func Uint16(b []byte) uint16 {
-//	_ = b[1]
-//	return uint16(b[0]) | uint16(b[1])<<8
-//}
-//
-//
-//func BytesToUint32(b []byte) uint32 {
-//	_ = b[3] // bounds check hint to compiler; see golang.org/issue/14808
-//	return uint32(b[0]) | uint32(b[1])<<8 | uint32(b[2])<<16 | uint32(b[3])<<24
-//}
-//
-//
-//func Uint64(b []byte) uint64 {
-//	_ = b[7]
-//	return uint64(b[0]) | uint64(b[1])<<8 | uint64(b[2])<<16 | uint64(b[3])<<24 |        uint64(b[4])<<32 | uint64(b[5])<<40 | uint64(b[6])<<48 | uint64(b[7])<<56
-//}
-//
-//

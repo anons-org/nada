@@ -17,8 +17,6 @@ func (me *Vms ) start()  {
 
 
 	//初始化参数 klass等
-
-
 	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\lib\\Test.class"
 	classN  := NewClassByteFile()
 	classN.Load(fileName).Parser();
@@ -45,8 +43,9 @@ func (me *Vms ) Build() *Vms{
 	me.metaKlass.set(BUILTN.NADA_STRING,    new(StringKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_FLOAT,    new(FloatKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_UINT16,    new(Uint16Klass).Init())
-	me.metaKlass.set(BUILTN.NADA_INT,    new(IntKlass).Init())
+	me.metaKlass.set(BUILTN.NADA_INT,    	new(IntKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_BYTE,    new(ByteKlass).Init())
+	me.metaKlass.set(BUILTN.NADA_ARRAY,    new(ArrayKlass).Init())
 	return me
 }
 

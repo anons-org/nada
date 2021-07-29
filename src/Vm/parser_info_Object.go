@@ -114,7 +114,8 @@ func (me *LineNumberTableAttr ) getName()  string{
 
 //---------------------------------------------------------
 type BootstrapMethod struct {
-
+	//这东西对应的是MethodHandle 还以为是Methodref 坑.
+	//不过各种资料定义的名字就是这个 那就这个吧
 	bootsMethodRef uint16
 	argNum uint16
 	args []uint16

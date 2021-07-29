@@ -27,6 +27,13 @@ func NewFInt(v int)  *FInt {
 	return  n
 }
 
+
+func NewFArray()  *FArray {
+	n := new(FArray).Build()
+	return  n
+}
+
+
 func NewFUint16(v uint16)  *FUint16 {
 	n := new(FUint16).Build().setVal(v)
 	return  n

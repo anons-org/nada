@@ -43,8 +43,11 @@ var OPD = []struct {
 	{OP.ASTORE_1, "ASTORE_1"},
 	{OP.ASTORE_2, "ASTORE_2"},
 	{OP.ASTORE_3, "ASTORE_3"},
+	{OP.POP,"POP"},
+	{OP.POP2,"POP2"},
 	{OP.DUP,"DUP"},
 	{OP.RETURN,"RETURN"},
+	{OP.INVOKEDYNAMIC,"INVOKEDYNAMIC"},
 	{OP.INVOKESPECIAL,"INVOKESPECIAL"},
 	{OP.INVOKESTATIC,"INVOKESTATIC"},
 	{OP.NEW,"NEW"},
@@ -85,8 +88,11 @@ var OP = struct {
 	ASTORE_1,
 	ASTORE_2,
 	ASTORE_3,
+	POP,
+	POP2,
 	DUP,
 	RETURN,
+	INVOKEDYNAMIC,
 	INVOKESPECIAL,
 	INVOKESTATIC,
 	NEW uint8
@@ -123,8 +129,11 @@ var OP = struct {
 	ASTORE_1:0x4c,
 	ASTORE_2:0x4d,
 	ASTORE_3:0x4e,
+	POP:0x57,
+	POP2:0x58,
 	DUP:0x59,
 	RETURN:0xb1,
+	INVOKEDYNAMIC:0xba,
 	INVOKESPECIAL:0xb7,
 	INVOKESTATIC:0xb8,
 	NEW:0xbb,
@@ -181,6 +190,7 @@ var BUILTN = struct {
 	NADA_UINT16 string
 	NADA_INT string
 	NADA_BYTE string
+	NADA_ARRAY string
 
 }{
 
@@ -192,6 +202,7 @@ var BUILTN = struct {
 	NADA_INT:"nada.core.Int",
 	NADA_BYTE:"nada.core.Byte",
 	NADA_TYPE:"nada.core.type",
+	NADA_ARRAY:"nada.core.Array",
 	JAVA_LANG_STRING:"nada.core.String",
 }
 

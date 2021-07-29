@@ -184,7 +184,6 @@ func (me* ConstantInvokeDynInfo ) getTag() uint8  {
 //ConstantMethodHandleInfo info tag=15
 type ConstantMethodHandleInfo struct {
 	tag uint8
-
 	refKind uint8
 	refIdx uint16
 

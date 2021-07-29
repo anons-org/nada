@@ -1,5 +1,9 @@
 ## Nada
 
+### 项目同步
+https://github.com/anons-org/nada
+https://gitee.com/grateful/nada
+
 ### 项目介绍
 Nada参考了JVM,CLI，ZENDVM，V8,Node等运行时的设计，并支实现了JVM的指令集，支持运行Ts,Js,PHP,Java等高级语言,同时又对javascript进行了增强（类型、接口、泛型）、从根本上解决了JS多年的诟病。
 
