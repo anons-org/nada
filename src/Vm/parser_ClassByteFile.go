@@ -5,22 +5,24 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	"strings"
 	Utils "utils"
 
 	"os"
 )
 
 /**
-Class在解析的过程中，
-需要把常量转化为实际的数据类型
-这样可以减少解释器执行过程中对常量转换类型的消耗
-数据类型请看 type_  开头的文件
-class的解析并不是多神秘的事情，照着规范一个个字节处理就行了
-没啥技术含量，就是细致活儿量大而已...
-by mike
+	Class在解析的过程中，
+	需要把常量转化为实际的数据类型
+	这样可以减少解释器执行过程中对常量转换类型的消耗
+	数据类型请看 type_  开头的文件
+	class的解析并不是多神秘的事情，照着规范一个个字节处理就行了
+	没啥技术含量，就是细致活儿量大而已...
+	by mike
 */
 
 type ClassByteFile struct {
+
 	constanPool *Map
 
 	//当前JAVA字节码读取位置
@@ -140,14 +142,14 @@ func (me *ClassByteFile) ReadUi8() int {
 }
 
 /**
-读取常量池对象
+	读取常量池对象
 */
 func (me *ClassByteFile) parserConstanInteger(idx int) {
 
 }
 
 /**
-方法解析
+	方法解析
 */
 func (me *ClassByteFile) parserMethodref(idx uint8) {
 	//常量池的对象，需要转成VM中的内置类型对象
@@ -160,7 +162,7 @@ func (me *ClassByteFile) parserMethodref(idx uint8) {
 }
 
 /**
-类引用解析
+	类引用解析
 */
 func (me *ClassByteFile) parserClassInfo(idx uint8) {
 	cls := new(ConstantClassInfo)
@@ -171,7 +173,7 @@ func (me *ClassByteFile) parserClassInfo(idx uint8) {
 }
 
 /**
-接口解析
+	接口解析
 */
 func (me *ClassByteFile) parserItfMethodInfo(idx uint8) {
 	itf := new(ConstantInterfaceMethodRefInfo)
@@ -186,14 +188,14 @@ func (me *ClassByteFile) parserItfMethodInfo(idx uint8) {
 
 /**
 
-名称和类型解析
+	名称和类型解析
 
-程序员最大的问题就是容易认真，认真起来就喜欢抬杠
-今天同事问我：老大，车间用两台电脑直接通过C#的scoket互联保证稳定性行的通不(被车间那帮家伙打报告了)，我就简单说了两句，另外一个同事，马上质疑如此这般
-<其实这同事也就2年JAVA开发经验，别说操作系统和更底层的玩意儿，应该连socket的有多少中模式都还不清楚,哪儿来的的勇气质疑，请看段子开头>
-对于他的质疑，我没有反驳，感觉没必要，思维不在一个层面，所以避重就轻的说：技术都是为业务服务的，只要你能保证车间工序正常运作，不出现生产事故就行
+	程序员最大的问题就是容易认真，认真起来就喜欢抬杠
+	今天同事问我：老大，车间用两台电脑直接通过C#的scoket互联保证稳定性行的通不(被车间那帮家伙打报告了)，我就简单说了两句，另外一个同事，马上质疑如此这般
+	<其实这同事也就2年JAVA开发经验，别说操作系统和更底层的玩意儿，应该连socket的有多少中模式都还不清楚,哪儿来的的勇气质疑，请看段子开头>
+	对于他的质疑，我没有反驳，感觉没必要，思维不在一个层面，所以避重就轻的说：技术都是为业务服务的，只要你能保证车间工序正常运作，不出现生产事故就行
 
-朋友千个少，敌人一个多
+	朋友千个少，敌人一个多
 
 
 */
@@ -590,7 +592,7 @@ func (me *ClassByteFile) Parser() {
 
 	s := fmt.Sprintf("pool sieze %d", me.constanPool.Size())
 	fmt.Println(s)
-	fmt.Print("解析class完成")
+	fmt.Print("解析class完成\n")
 
 	//fmt.Print(d);
 }
@@ -666,18 +668,17 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 		case OP.ALOAD_0:
 			method.addCode(n,op,nil)
 			n++;
+		case OP.ALOAD_1:
+			method.addCode(n,op,nil)
 		case OP.INVOKESPECIAL:
 			//https://www.cnblogs.com/cfas/p/15063669.html
-			mt := me.getCtMethodRef(binary.BigEndian.Uint16(data.read(2)))
-			fmt := NewFMethod(METHOD_TYPE_VIRTUAL, mt.rtFnName)
-			method.addCode(n,op,fmt)
+			mt := me.getCtMethodRefToFArray(binary.BigEndian.Uint16(data.read(2)))
+			method.addCode(n,op,mt)
 			n+=2;
 		case OP.RETURN:
 			method.addCode(n,op,nil)
-
 		case OP.ICONST_0,OP.ICONST_1://nada:压入int到栈 jvm:压入uint8到栈
 			method.addCode(n,op,nil)
-
 		case OP.LDC:
 			idx := data.read(1)[0]
 			method.addCode(n,op, me.getCtToIFObject(idx))
@@ -742,7 +743,6 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 			//fmt.Printf("INVOKEDYNAMIC:%s",method.codeList[op])
 		case OP.POP,OP.POP2://iinc index(uint8) const(int8) to int
 			method.addCode(n,op,nil)
-
 		case OP.IINC:
 			idx:=uint16(data.read(1)[0]);
 			c:=int(data.read(1)[0]);
@@ -753,9 +753,16 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 			n+=2;
 		case OP.GOTO:
 			idx := binary.BigEndian.Uint16(data.read(2));
-
 			method.addCode( n, op,NewFInt(int(idx)) )
 			n++;
+		case OP.GETSTATIC:
+			idx := binary.BigEndian.Uint16(data.read(2));
+			method.addCode(n,op, me.getCtToIFObject(idx))
+			n+=2;
+		case OP.INVOKEVIRTUAL:
+			idx := binary.BigEndian.Uint16(data.read(2));
+			method.addCode(n,op, me.getCtToIFObject(idx))
+			n+=2;
 		default:
 			method.addCode(n,op,nil)
 
@@ -805,7 +812,7 @@ func NewClassByteFile() *ClassByteFile {
 }
 
 /**
-添加Klass
+	添加Klass
 */
 func (me *ClassByteFile) addKlass(kls *Klass) {
 	vms.metaKlass.set("nada.lib.TestKlass", kls)
@@ -832,7 +839,7 @@ func (me *ClassByteFile) getCtToIFObject(idx interface{}) IFObject {
 			ob= NewFFLoat(fVal)
 		case *ConstantLongInfo:
 		case *ConstantMethodref:
-			ob = me.getCtMethodRefToFMethod(idx)
+			ob = me.getCtMethodRefToFArray(idx)
 		case *ConstantNameAndType:
 
 		case *ConstantInvokeDynInfo:
@@ -843,7 +850,7 @@ func (me *ClassByteFile) getCtToIFObject(idx interface{}) IFObject {
 			v:=me.attriDict["BootstrapMethods"].(*BootstrapMethods).methods[iv]
 			mrf:=me.getCtMethodHandle(v.bootsMethodRef)
 			//callSite
-			callSite:= me.getCtMethodRefToFMethod(mrf.refIdx)
+			callSite:= me.getCtMethodRefToFArray(mrf.refIdx)
 			//be call infos
 			beCallInfos:= me.getCtNameAndTypeToFArray( idv.nameAndTypeIdx )
 			//return array
@@ -862,7 +869,7 @@ func (me *ClassByteFile) getCtToIFObject(idx interface{}) IFObject {
 
 
 /**
-获取常量池中的Methodref
+	获取常量池中的Methodref
 */
 func (me *ClassByteFile) getCtMethodRef(idx uint16) *ConstantMethodref {
 	val := me.constanPool.Get(idx)
@@ -880,24 +887,85 @@ func (me *ClassByteFile) getCtMethodRef(idx uint16) *ConstantMethodref {
 
 
 
-func (me *ClassByteFile) getCtMethodRefToFMethod(idx interface{}) *FMethod {
+//func (me *ClassByteFile) getCtMethodRefToFMethod(idx interface{}) *FMethod {
+//	val := me.constanPool.Get(idx)
+//	if mt, ok := val.(*ConstantMethodref); ok {
+//		//完善该对象的值
+//		cls := me.getCtClass(mt.classIdx)
+//		mt.rtClsName = ctConvStr(me, cls.nameIdx)
+//		nt := me.getCtNameAndType(mt.nameAndType)
+//		mt.rtFnName = ctConvStr(me, nt.nameIdx)
+//		mt.rtFnType = ctConvStr(me, nt.descIdx)
+//		//这个方法后面需要设置成引用类型的方法，因为在当前klass中引用了他
+//		ob:=  NewFMethod(METHOD_TYPE_VIRTUAL, mt.rtFnName)
+//		//设置方法参数类型和限定符
+//		ob.argsType = mt.rtFnType
+//		ob.setSpec(mt.rtClsName)
+//		return ob
+//	}
+//	return nil
+//}
+
+
+func (me *ClassByteFile) getCtMethodRefToFArray(idx interface{}) *FArray {
 	val := me.constanPool.Get(idx)
 	if mt, ok := val.(*ConstantMethodref); ok {
-		//完善该对象的值
+
 		cls := me.getCtClass(mt.classIdx)
 		mt.rtClsName = ctConvStr(me, cls.nameIdx)
 		nt := me.getCtNameAndType(mt.nameAndType)
+		// runtime name
 		mt.rtFnName = ctConvStr(me, nt.nameIdx)
+		//runtime arg and type
 		mt.rtFnType = ctConvStr(me, nt.descIdx)
-		//这个方法后面需要设置成引用类型的方法，因为在当前klass中引用了他
-		ob:=  NewFMethod(METHOD_TYPE_VIRTUAL, mt.rtFnName)
-		//设置方法参数类型和限定符
-		ob.argsType = mt.rtFnType
-		ob.setSpec(mt.rtClsName)
-		return ob
+		ary:=NewFArray()
+		//class name
+		ary.add(NewFString(mt.rtClsName))
+		//method name
+		ary.add(NewFString(mt.rtFnName))
+		//method args type
+		ary.add(NewFString(mt.rtFnType))
+
+		//method args count
+		ary.add(me.getMethodArgTypeInfo(mt.rtFnType))
+
+
+		return ary
 	}
 	return nil
 }
+
+
+func (me *ClassByteFile) getMethodArgTypeInfo(buf string)  IFObject {
+
+
+	// 原生字符串
+	//buf := `(Ljava/lang/String;)V`
+
+	//先用)切割 分开参数和返回参数
+
+	bufArg:=strings.Split(buf,")")
+
+	fmt.Print( bufArg )
+
+	bufArg[0] = strings.ReplaceAll(bufArg[0],"(","");
+
+	argst:=strings.Split(bufArg[0],";")
+
+	var args []string
+	for _,v:= range argst{
+		if v!=""{
+			args = append(args,v);
+		}
+	}
+
+	return &NSMethodArgType{
+		args: args,
+		argCount: len(args),
+	};
+
+}
+
 
 
 func (me *ClassByteFile) getCtMethodHandle(idx uint16) *ConstantMethodHandleInfo {
@@ -963,7 +1031,7 @@ func (me *ClassByteFile) getCtString(idx uint16) string {
 }
 
 /**
-常量对象转string
+	常量对象转string
 */
 func ctConvStr(me *ClassByteFile, idx uint16) string {
 	val := me.constanPool.Get(idx)

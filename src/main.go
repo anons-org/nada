@@ -4,7 +4,6 @@ import (
 	"Vm"
 	"fmt"
 	"io"
-
 	"os"
 )
 
@@ -58,10 +57,23 @@ func call(ob *Vm.FString, fns string) {
 
 func main() {
 
+
+	s:=[]string{"a","b","c","d"}
+
+
+	fmt.Print( s[:len(s)-1] )
+
+	//过滤<></>
+	//for _, text := range result {
+	//	fmt.Println("text[1] = ", text[1])
+	//}
+
+
 	Vm.CommonInit()
 	Vm.Start()
 
 	x := 1
+
 	fmt.Print(x)
 
 	for {

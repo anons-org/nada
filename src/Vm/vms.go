@@ -26,7 +26,7 @@ func (me *Vms ) start()  {
 		interp:=new(Interpreter)
 		interp.run(f)
 	}()
-	fmt.Print("asdasd")
+	fmt.Print("strap!\n")
 
 }
 
@@ -46,8 +46,9 @@ func (me *Vms ) Build() *Vms{
 	me.metaKlass.set(BUILTN.NADA_FLOAT,    new(FloatKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_UINT16,    new(Uint16Klass).Init())
 	me.metaKlass.set(BUILTN.NADA_INT,    	new(IntKlass).Init())
-	me.metaKlass.set(BUILTN.NADA_BYTE,    new(ByteKlass).Init())
+	me.metaKlass.set(BUILTN.NADA_BYTE,     new(ByteKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_ARRAY,    new(ArrayKlass).Init())
+	me.metaKlass.set(BUILTN.NADA_STACK,    new(StackKlass).Init())
 	return me
 }
 

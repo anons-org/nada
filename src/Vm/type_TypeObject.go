@@ -20,11 +20,6 @@ func  (me *TypeObject)GetOnwKlass() IKlass {
 	return me.onwKlass
 }
 
-
-func (me *TypeObject) ValToString(){
-
-}
-
 //IFObject----------------------------------------
 func (me *TypeObject) GetKlass() IKlass{
 	return me.klass

@@ -1,7 +1,5 @@
 package Vm
 
-import "container/list"
-
 /**
 	栈帧
  */
@@ -14,7 +12,7 @@ type Frame struct {
 	sendFrame *Frame;
 
 	//操作栈
-	statck list.List;
+	statck *FStack
 
 	//localVal<int,*FMap>  每个数据类型都有自己的槽
 	localVal *FMap

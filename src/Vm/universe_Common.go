@@ -34,6 +34,22 @@ type OpcodeStruct struct {
 	oper IFObject
 }
 
+type NSMethodArgType struct {
+	args []string
+	argCount int
+	retArgs []string
+	retArgCount int
+}
+
+func (me *NSMethodArgType) GetKlass() IKlass {
+	return nil
+}
+
+func (me *NSMethodArgType) SetKlass(kls IKlass)  {
+
+}
+
+
 
 var vms *Vms
 
@@ -65,7 +81,19 @@ func CommonInit()  {
 }
 
 func Start(){
+
+
+	//fa:=NewFArray()
+	//fa.add(NewFString("1"))
+	//fa.add(NewFString("2"))
+	//
+	//fa.pop()
+
+
 	vms.start()
+
+
+
 }
 
 

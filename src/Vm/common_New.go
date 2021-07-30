@@ -50,11 +50,20 @@ func NewFMap()  *FMap {
 }
 
 
+func NewFStack()  *FStack {
+	n := new(FStack).Build()
+	return  n
+}
+
+
+
 func  NewFrame ( e IFObject) *Frame{
 
 	me:=new(Frame)
 	me.pc = -1;
 	me.fn = e;
+	me.localVal = NewFMap()
+	me.statck = NewFStack()
 	me.code = e.(*FMethod).code;
 	me.codes = e.(*FMethod).codes;
 
