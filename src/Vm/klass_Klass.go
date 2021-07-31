@@ -1,6 +1,8 @@
 package Vm
 
+
 type Klass struct {
+
 	//klass名称
 	name *FString
 	//类型对象
@@ -11,8 +13,14 @@ type Klass struct {
 
 	//静态属性和静态方法
 	staticDict map[string]IFObject
+	//属性
+	staticField map[string]IFObject
+
 	//动态属性和动态方法
 	insDict map[string]IFObject
+	insField  map[string]IFObject
+	//类的限定符 x.x.x.Test
+	qualifer string
 
 }
 
@@ -73,6 +81,7 @@ func (me *Klass)Init() IKlass {
 
 
 
+
 //添加静态虚拟方法
 //func  (me *Klass)addStaticVirtualMethod(name string, code []byte) *Klass{
 //	m:=NewFMethod(2,name)
@@ -85,10 +94,22 @@ func  (me *Klass)addStaticMethod(name string, method IFObject) *Klass{
 	return me
 }
 
+//添加静态属性
+func  (me *Klass)addStaticField(name string, field IFObject) *Klass{
+	me.staticField[name] = field
+	return me
+}
+
 
 //添加动态虚拟方法
 func  (me *Klass)addInsMethod(name string, method IFObject) *Klass{
 	me.insDict[name] = method
+	return me
+}
+
+
+func  (me *Klass)addInsField(name string, field IFObject) *Klass{
+	me.insField[name] = field
 	return me
 }
 

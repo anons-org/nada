@@ -87,6 +87,7 @@ Nada参考了JVM,CLI，ZENDVM，V8,Node等运行时的设计，并支实现了JV
 - vscode debug protocol https://vscode.readthedocs.io/en/latest/extensions/example-debuggers/
 - Go协程这样用才安全 https://taoshu.in/go/safe-goroutine.html
 - Go 语言 map 的并发安全问题 https://taoshu.in/go/go-map-concurrent-misue.html
+- JVM 的类加载机制 https://baijiahao.baidu.com/s?id=1662931890502685014&wfr=spider&for=pc
 
 
 ### 参与贡献

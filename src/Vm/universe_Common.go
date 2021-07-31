@@ -53,21 +53,43 @@ func (me *NSMethodArgType) SetKlass(kls IKlass)  {
 
 var vms *Vms
 
-
-func createKlass(name string) *Klass {
+/**
+	创建klass
+ */
+func createKlass(name string, qualifier string, params ...IFObject) *Klass {
 
 	kls:=new(Klass)
 	kls.name = NewFString(name)
+	kls.qualifer = qualifier
 	typeObj := new(TypeObject)
 	typeObj.SetOnwKlass(kls)
 	kls.SetTypeObject( typeObj )
-	kls.dict = make(map[string]IFObject)
-
-	kls.staticDict = make(map[string]IFObject)
-	kls.insDict    = make(map[string]IFObject)
+	kls.dict 		= make(map[string]IFObject)
+	kls.staticDict 	= make(map[string]IFObject)
+	kls.insDict    	= make(map[string]IFObject)
 
 	return kls
 }
+
+
+/**
+创建实例
+*/
+func  createKlassIns(callable IFObject , args *FArray) IFObject{
+	ob:=NewFObject()
+	ob.SetKlass( callable.(*TypeObject).GetOnwKlass() )
+	return ob;
+}
+
+
+
+func addKlassToVm(k string, kls IKlass) {
+	vms.metaKlass.set(k,kls)
+}
+
+
+
+
 
 
 

@@ -31,6 +31,39 @@ func (me *Interpreter)run(f *FMethod){
 	me.exec();
 }
 
+/**
+	解析器的方法，全局查找klass
+	但klass是一个全局的容器
+	所以 出现多线程时，可能多个解释器同时查找同一个全局Klass管理器
+ */
+func (me *Interpreter)findKlass(e IFObject) IKlass{
+	if s,ok:=e.(*FString);ok{
+		if s2:=vms.metaKlass.get( s.GetVal() ) ;s2!=nil{
+			return s2.(IKlass)
+		}else{//尝试加载新的KLASS
+
+		}
+	}
+	return nil;
+}
+
+/**
+	根据限定符加载Klass
+	加载klass的时机 https://baijiahao.baidu.com/s?id=1662931890502685014&wfr=spider&for=pc
+ */
+func (me *Interpreter)loadKlassByQualifier(e IFObject) IKlass{
+	if s,ok:=e.(*FString);ok{
+		if s2:=vms.metaKlass.get( s.GetVal() ) ; s2==nil{
+			//尝试加载新的KLASS
+
+
+		}else{
+			return s2.(IKlass)
+		}
+	}
+	return nil;
+}
+
 
 
 
@@ -52,10 +85,13 @@ func (me *Interpreter)exec(){
 					argT		:= 	opArg.pop()
 					argStr		:= 	opArg.pop()
 					mthodName	:=	opArg.pop()
-					clsName		:=	opArg.pop()
-					clsNames	:=	opArg.pop()
-					fmt.Print(argT, argStr, mthodName, clsName, clsNames)
-					fmt.Print(op.oper)
+					qualifier	:=	opArg.pop()
+					okClass		:=  me.findKlass( qualifier );
+
+
+					fmt.Print(me.frame.localVal)
+					fmt.Print(argT, argStr, mthodName, qualifier, okClass)
+
 				}
 
 			case OP.RETURN:
@@ -80,6 +116,13 @@ func (me *Interpreter)exec(){
 			case OP.ASTORE_1:
 				ob:=me.frame.statck.pop()
 				me.frame.localVal.set(1,ob)
+				fmt.Print(me.frame.localVal)
+
+
+
+				//log.Print(string(debug.Stack()))
+				//
+				//fmt.Print(op.oper)
 			case OP.LSTORE:
 
 			case OP.ISTORE:
@@ -105,6 +148,7 @@ func (me *Interpreter)exec(){
 
 			case OP.GOTO:
 			case OP.GETSTATIC:
+				//类没有加载的话，可以在此处加载 所以 要验证
 				me.frame.statck.push(op.oper)
 
 			default:
