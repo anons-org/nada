@@ -216,11 +216,12 @@ var BUILTN = struct {
 	NADA_BYTE string
 	NADA_ARRAY string
 	NADA_STACK string
+	NADA_OBJECT string
 
 }{
 
-	NADA_NATIVE: "nada.core.native",
-	NADA_VIRTUAL: "nada.core.method",
+	NADA_NATIVE: "nada.core.Native",
+	NADA_VIRTUAL: "nada.core.Method",
 	NADA_STRING:"nada.core.String",
 	NADA_FLOAT:"nada.core.Float",
 	NADA_UINT16:"nada.core.Uint16",
@@ -229,6 +230,7 @@ var BUILTN = struct {
 	NADA_TYPE:"nada.core.Type",
 	NADA_ARRAY:"nada.core.Array",
 	NADA_STACK:"nada.core.Stack",
+	NADA_OBJECT: "nada.core.Object",
 	JAVA_LANG_STRING:"nada.core.String",
 }
 

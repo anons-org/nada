@@ -44,8 +44,22 @@ func NewFMethod(t MethodType,name string)  *FMethod {
 }
 
 
+func NewNativeFMethod(name string, m func(arg *FArray) IFObject ) *FMethod {
+	n := new(FMethod).Build(METHOD_TYPE_NATIVE)
+	n.mName = name
+	n.call = m
+	return  n;
+}
+
+
+
 func NewFMap()  *FMap {
 	n := new(FMap).Build()
+	return  n
+}
+
+func NewFObject()  IFObject {
+	n := new(FObject).Build()
 	return  n
 }
 

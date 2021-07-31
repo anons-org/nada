@@ -12,7 +12,7 @@ type FMethod struct {
 
 	klass IKlass
 	//原生方法保存
-	call func(args []IFObject) IFObject
+	call func(args *FArray) IFObject
 
 	//参数和返回值的类型
 	argsType string
@@ -56,7 +56,7 @@ func (me *FMethod) SetKlass(klass IKlass) {
 }
 
 
-func (me *FMethod) Call(caller string, args []IFObject) IFObject {
+func (me *FMethod) Call(args *FArray) IFObject {
 	return me.call(args)
 }
 
@@ -64,7 +64,6 @@ func (me *FMethod) Call(caller string, args []IFObject) IFObject {
 	设置原生方法的call
  */
 func (me *FMethod) SetCall(call func(args []IFObject) IFObject) *FMethod {
-	me.call = call
 	return me
 }
 

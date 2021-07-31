@@ -5,8 +5,8 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	Utils "nada/src/utils"
 	"strings"
-	Utils "utils"
 
 	"os"
 )
@@ -757,7 +757,7 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 			n++;
 		case OP.GETSTATIC:
 			idx := binary.BigEndian.Uint16(data.read(2));
-			method.addCode(n,op, me.getCtToIFObject(idx))
+			method.addCode(n,op, me.getCtFieldRefToFArray(idx))
 			n+=2;
 		case OP.INVOKEVIRTUAL:
 			idx := binary.BigEndian.Uint16(data.read(2));
@@ -775,7 +775,7 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 
 func (me *ClassByteFile) buildKlass() {
 
-	kls := createKlass("")
+	kls := createKlass("","Test")
 	kls.name = NewFString("Test")
 	//each method
 	for _, v := range me.methods {
@@ -815,7 +815,7 @@ func NewClassByteFile() *ClassByteFile {
 	添加Klass
 */
 func (me *ClassByteFile) addKlass(kls *Klass) {
-	vms.metaKlass.set("nada.lib.TestKlass", kls)
+	vms.metaKlass.set("Test", kls)
 }
 
 
@@ -887,24 +887,29 @@ func (me *ClassByteFile) getCtMethodRef(idx uint16) *ConstantMethodref {
 
 
 
-//func (me *ClassByteFile) getCtMethodRefToFMethod(idx interface{}) *FMethod {
-//	val := me.constanPool.Get(idx)
-//	if mt, ok := val.(*ConstantMethodref); ok {
-//		//完善该对象的值
-//		cls := me.getCtClass(mt.classIdx)
-//		mt.rtClsName = ctConvStr(me, cls.nameIdx)
-//		nt := me.getCtNameAndType(mt.nameAndType)
-//		mt.rtFnName = ctConvStr(me, nt.nameIdx)
-//		mt.rtFnType = ctConvStr(me, nt.descIdx)
-//		//这个方法后面需要设置成引用类型的方法，因为在当前klass中引用了他
-//		ob:=  NewFMethod(METHOD_TYPE_VIRTUAL, mt.rtFnName)
-//		//设置方法参数类型和限定符
-//		ob.argsType = mt.rtFnType
-//		ob.setSpec(mt.rtClsName)
-//		return ob
-//	}
-//	return nil
-//}
+
+
+func (me *ClassByteFile) getCtFieldRefToFArray(idx interface{}) *FArray {
+	val := me.constanPool.Get(idx)
+	if mt, ok := val.(*ConstantFieldrefInfo); ok {
+
+		cls 	:= me.getCtClass(mt.clsIdx)
+		clsName	:= ctConvStr(me, cls.nameIdx)
+		nt 		:= me.getCtNameAndType(mt.nameAndTypeIdx)
+		ntName	:= ctConvStr(me, nt.nameIdx)
+		ntType	:= ctConvStr(me, nt.descIdx)
+		ary		:=NewFArray()
+		//class name
+		ary.add(NewFString(clsName))
+		// call field name
+		ary.add(NewFString(ntName))
+		//field type
+		ary.add(NewFString(ntType))
+		return ary
+	}
+	return nil
+}
+
 
 
 func (me *ClassByteFile) getCtMethodRefToFArray(idx interface{}) *FArray {

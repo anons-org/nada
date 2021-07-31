@@ -47,7 +47,7 @@ func (me *FArray) add(v IFObject) *FArray {
 //虚拟机内部使用的GET
 func (me *FArray) get(idx int) IFObject {
 	if idx>me.size-1{
-		return nil;
+		return NONE;
 	}
 	return me.val[idx]
 }
