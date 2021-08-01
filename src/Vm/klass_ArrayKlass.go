@@ -10,6 +10,14 @@ type ArrayKlass struct {
 
 }
 
+func (me *ArrayKlass) getObMethod(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
+
+func (me *ArrayKlass) getObField(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
+
 func (me *ArrayKlass) setStaticMethod(name string, method IFObject) IKlass {
 	panic("implement me")
 }

@@ -10,6 +10,30 @@ type FStack struct {
 	_size int;
 }
 
+func (me *FStack) getFieldDict() IFObject {
+	panic("implement me")
+}
+
+func (me *FStack) getMethodDict() IFObject {
+	panic("implement me")
+}
+
+func (me *FStack) getField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FStack) getMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FStack) setField(k string, v IFObject) {
+	panic("implement me")
+}
+
+func (me *FStack) setMethod(k string, v IFObject) {
+	panic("implement me")
+}
+
 func (me *FStack) GetKlass() IKlass {
 	return me.klass
 }
@@ -45,6 +69,9 @@ func (me *FStack) push(o IFObject) {
 
 
 
+func (me *FStack) test() IFObject{
+	return me
+}
 
 
 

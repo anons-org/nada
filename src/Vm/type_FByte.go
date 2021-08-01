@@ -17,6 +17,22 @@ func (me *FByte) getMethodDict() IFObject {
 	panic("implement me")
 }
 
+func (me *FByte) getField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FByte) getMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FByte) setField(k string, v IFObject) {
+	panic("implement me")
+}
+
+func (me *FByte) setMethod(k string, v IFObject) {
+	panic("implement me")
+}
+
 func (me *FByte) getVal() []byte {
 	return me.val
 }
@@ -46,5 +62,8 @@ func (me *FByte) SetKlass(klass IKlass) {
 func (me* FByte) Build() *FByte {
 	//设置class
 	me.SetKlass(  vms.metaKlass.get(BUILTN.NADA_BYTE).(*ByteKlass)  )
+	return me
+}
+func (me *FByte) test() IFObject{
 	return me
 }

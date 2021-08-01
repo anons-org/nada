@@ -13,6 +13,22 @@ func (me *FInt) getMethodDict() IFObject {
 	panic("implement me")
 }
 
+func (me *FInt) getField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FInt) getMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FInt) setField(k string, v IFObject) {
+	panic("implement me")
+}
+
+func (me *FInt) setMethod(k string, v IFObject) {
+	panic("implement me")
+}
+
 func (me *FInt) getVal() int {
 	return me.val
 }
@@ -51,6 +67,9 @@ func (me* FInt) Build() *FInt {
 
 
 
+func (me *FInt) test() IFObject{
+	return me
+}
 
 
 

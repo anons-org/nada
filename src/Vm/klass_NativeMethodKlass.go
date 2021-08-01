@@ -7,6 +7,14 @@ type NativeMethodKlass struct {
 	typeObject *TypeObject
 }
 
+func (me *NativeMethodKlass) getObMethod(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
+
+func (me *NativeMethodKlass) getObField(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
+
 func (me *NativeMethodKlass) setStaticMethod(name string, method IFObject) IKlass {
 	panic("implement me")
 }

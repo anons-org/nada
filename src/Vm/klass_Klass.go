@@ -28,9 +28,13 @@ type Klass struct {
 
 }
 
+func (me *Klass) getObMethod(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
 
-
-
+func (me *Klass) getObField(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
 
 func (me *Klass) getStaticMethod(k string) IFObject {
 	return me.staticMethod[k]
@@ -110,13 +114,13 @@ func  (me *Klass)setInsField(x string ,y IFObject) IKlass{
 
 //供实例调用的方法
 func  (me *Klass)setObMethod(x IFObject,  y IFObject, z IFObject) IKlass{
-	x.getMethodDict().(*FMap).set(y,z);
+	x.getMethodDict().(*FMap).set(y.(*FString).GetVal(),z)
 	return me
 }
 
 //供实例调用的方法
-func  (me *Klass)setObField(x IFObject,  y IFObject,z IFObject) IKlass{
-	x.getFieldDict().(*FMap).set(y,z);
+func  (me *Klass)setObField(x IFObject,  y IFObject, z IFObject) IKlass{
+	x.getFieldDict().(*FMap).set(y.(*FString).GetVal(),z)
 	return me
 }
 

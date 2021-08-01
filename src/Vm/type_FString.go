@@ -6,16 +6,28 @@ type FString struct {
 	klass IKlass
 }
 
-func (me FString) getFieldDict() IFObject {
+func (me * FString) getFieldDict() IFObject {
 	panic("implement me")
 }
 
-func (me FString) getMethodDict() IFObject {
+func (me * FString) getMethodDict() IFObject {
 	panic("implement me")
 }
 
-func (me FString) ValToString() {
+func (me * FString) getField(k string) IFObject {
+	panic("implement me")
+}
 
+func (me * FString) getMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me * FString) setField(k string, v IFObject) {
+	panic("implement me")
+}
+
+func (me * FString) setMethod(k string, v IFObject) {
+	panic("implement me")
 }
 
 func (me* FString) GetKlass() IKlass {
@@ -52,12 +64,9 @@ func (me* FString) Build() *FString {
 
 }
 
-//func (me* FString) NewFString(str string) *FString {
-//	//设置class
-//	me.SetVal(str)
-//	me.SetKlass(  KlassBean["nada.lib.StringKlass"]  )
-//	return me
-//}
+func (me *FString) test1() IFObject{
+	return me
+}
 
 
 

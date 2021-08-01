@@ -11,6 +11,14 @@ type Uint16Klass struct {
 
 }
 
+func (me *Uint16Klass) getObMethod(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
+
+func (me *Uint16Klass) getObField(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
+
 func (me *Uint16Klass) setStaticMethod(name string, method IFObject) IKlass {
 	panic("implement me")
 }

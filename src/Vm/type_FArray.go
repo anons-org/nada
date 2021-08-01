@@ -15,6 +15,22 @@ func (me *FArray) getMethodDict() IFObject {
 	panic("implement me")
 }
 
+func (me *FArray) getField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FArray) getMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FArray) setField(k string, v IFObject) {
+	panic("implement me")
+}
+
+func (me *FArray) setMethod(k string, v IFObject) {
+	panic("implement me")
+}
+
 func (me *FArray) getVal() []IFObject{
 	return me.val
 }
@@ -85,6 +101,9 @@ func (me *FArray) pop() IFObject {
 
 
 
+func (me *FArray) test() IFObject{
+	return me
+}
 
 
 

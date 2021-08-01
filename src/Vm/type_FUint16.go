@@ -6,6 +6,22 @@ type FUint16 struct {
 	val uint16
 }
 
+func (me *FUint16) getField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FUint16) getMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FUint16) setField(k string, v IFObject) {
+	panic("implement me")
+}
+
+func (me *FUint16) setMethod(k string, v IFObject) {
+	panic("implement me")
+}
+
 func (me *FUint16) getFieldDict() IFObject {
 	panic("implement me")
 }
@@ -46,6 +62,9 @@ func (me* FUint16) Build() *FUint16 {
 
 
 
+func (me *FUint16) test() IFObject{
+	return me
+}
 
 
 
