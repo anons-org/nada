@@ -11,6 +11,13 @@ type TypeObject struct {
 	klass IKlass
 }
 
+func (me *TypeObject) getFieldDict() IFObject {
+	panic("implement me")
+}
+
+func (me *TypeObject) getMethodDict() IFObject {
+	panic("implement me")
+}
 
 func  (me *TypeObject)SetOnwKlass(onwKlass IKlass) {
 	me.onwKlass = onwKlass

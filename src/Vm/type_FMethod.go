@@ -29,6 +29,14 @@ type FMethod struct {
 
 }
 
+func (me *FMethod) getFieldDict() IFObject {
+	panic("implement me")
+}
+
+func (me *FMethod) getMethodDict() IFObject {
+	panic("implement me")
+}
+
 func (me *FMethod) GetKlass() IKlass {
 	return me.klass
 }

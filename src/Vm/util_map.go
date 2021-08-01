@@ -42,6 +42,10 @@ func (me* Map ) Get(k interface{})  interface{}{
 	return nil
 }
 
+
+
+
+
 func (me* Map ) Filter()  {
 
 }

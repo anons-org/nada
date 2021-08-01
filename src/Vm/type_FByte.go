@@ -9,6 +9,13 @@ type FByte struct {
 
 }
 
+func (me *FByte) getFieldDict() IFObject {
+	panic("implement me")
+}
+
+func (me *FByte) getMethodDict() IFObject {
+	panic("implement me")
+}
 
 func (me *FByte) getVal() []byte {
 	return me.val

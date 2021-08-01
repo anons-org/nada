@@ -15,6 +15,13 @@ type FFloat struct {
 
 }
 
+func (me *FFloat) getFieldDict() IFObject {
+	panic("implement me")
+}
+
+func (me *FFloat) getMethodDict() IFObject {
+	panic("implement me")
+}
 
 func (me *FFloat) getVal() float64 {
 	return me.val
@@ -29,9 +36,6 @@ func (me *FFloat) GetKlass() IKlass {
 	return me.klass
 }
 
-func (me *FFloat) ValToString(){
-
-}
 
 
 

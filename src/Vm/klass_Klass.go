@@ -8,40 +8,46 @@ type Klass struct {
 	//类型对象
 	typeObject *TypeObject
 
-	//作废
-	dict map[string]IFObject
 
-	//静态属性和静态方法
-	staticDict map[string]IFObject
+
+	//静态方法
+	staticMethod map[string]IFObject
+	//动态方法
+	insMethod map[string]IFObject
+
 	//属性
 	staticField map[string]IFObject
 
-	//动态属性和动态方法
-	insDict map[string]IFObject
-	insField  map[string]IFObject
+	//动态属性
+	insField map[string]IFObject
+
+
+	//
 	//类的限定符 x.x.x.Test
 	qualifer string
 
 }
 
 
-func (me Klass) Dict(k string) IKlass {
-	panic("implement me")
+
+
+
+func (me *Klass) getStaticMethod(k string) IFObject {
+	return me.staticMethod[k]
 }
 
-
-func (me Klass) GetDict(k string) IFObject {
-	return me.dict[k]
+func (me *Klass) getStaticField(k string) IFObject {
+	return me.staticField[k]
 }
 
-
-func (me *Klass) getStaticDict(k string) IFObject {
-	return me.staticDict[k]
+func (me *Klass) getInsMethod(k string) IFObject {
+	return me.staticMethod[k]
 }
 
-func (me *Klass) getInsDict(k string) IFObject {
-	return me.staticDict[k]
+func (me *Klass) getInsField(k string) IFObject {
+	return me.staticField[k]
 }
+
 
 
 
@@ -49,14 +55,14 @@ func (me *Klass) getInsDict(k string) IFObject {
 /**
 	设置类型对象
 */
-func (me Klass)SetTypeObject(to *TypeObject) {
+func (me *Klass)SetTypeObject(to *TypeObject) {
 	me.typeObject = to
 }
 
 /**
 	获取类型对象
  */
-func (me Klass)GetTypeObject() *TypeObject {
+func (me *Klass)GetTypeObject() *TypeObject {
 	return me.typeObject
 }
 
@@ -79,44 +85,41 @@ func (me *Klass)Init() IKlass {
 
 
 
-
-
-
-//添加静态虚拟方法
-//func  (me *Klass)addStaticVirtualMethod(name string, code []byte) *Klass{
-//	m:=NewFMethod(2,name)
-//	me.staticDict[name] = m
-//	return me
-//}
-
-func  (me *Klass)addStaticMethod(name string, method IFObject) *Klass{
-	me.staticDict[name] = method
+func  (me *Klass)setStaticMethod(name string, method IFObject) IKlass{
+	me.staticMethod[name] = method
 	return me
 }
 
 //添加静态属性
-func  (me *Klass)addStaticField(name string, field IFObject) *Klass{
+func  (me *Klass)setStaticField(name string, field IFObject) IKlass{
 	me.staticField[name] = field
 	return me
 }
 
-
-//添加动态虚拟方法
-func  (me *Klass)addInsMethod(name string, method IFObject) *Klass{
-	me.insDict[name] = method
+//动态属性
+func  (me *Klass)setInsMethod(x string ,y IFObject) IKlass{
+	me.insMethod[x] = y
+	return me
+}
+//动态属性
+func  (me *Klass)setInsField(x string ,y IFObject) IKlass{
+	me.insField[x] = y
 	return me
 }
 
 
-func  (me *Klass)addInsField(name string, field IFObject) *Klass{
-	me.insField[name] = field
+//供实例调用的方法
+func  (me *Klass)setObMethod(x IFObject,  y IFObject, z IFObject) IKlass{
+	x.getMethodDict().(*FMap).set(y,z);
+	return me
+}
+
+//供实例调用的方法
+func  (me *Klass)setObField(x IFObject,  y IFObject,z IFObject) IKlass{
+	x.getFieldDict().(*FMap).set(y,z);
 	return me
 }
 
 
-//添加原生方法
-func  (me *Klass)addNativeMethod(name string){
-
-}
 
 

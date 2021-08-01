@@ -21,7 +21,7 @@ func (me *Vms) start() {
 	classN.Load(fileName).Parser()
 	//执行的时候，一定是有运行目录的 Test.class 在执行的根目录
 	main := me.metaKlass.get("Test").(IKlass)
-	f := main.getStaticDict("main").(*FMethod)
+	f := main.getStaticMethod("main").(*FMethod)
 
 	go func() {
 		interp := new(Interpreter)
@@ -53,11 +53,20 @@ func (me *Vms) Build() *Vms {
 	me.metaKlass.set(BUILTN.NADA_STACK, new(StackKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_OBJECT, new(ObjectKlass).Init())
 
-	//生成内置基础类
+
+	/**
+			生成内置基础类 过程 java.lang.System
+
+			java/io/PrintStream
+
+
+
+
+	 */
 
 	printStream := createKlass("PrintStream", "java/io/PrintStream")
-	//添加方法
-	printStream.addStaticMethod("print", NewNativeFMethod("out", testCall))
+	printStream.setStaticMethod("print", NewNativeFMethod("print", testCall))
+
 	//注册到虚拟机
 	addKlassToVm("java/io/PrintStream", printStream)
 
@@ -65,7 +74,14 @@ func (me *Vms) Build() *Vms {
 
 	//out 是实例....需要生成实例。。。
 	//systemKlass.addStaticField("out",))
+	ob := createKlassIns(printStream.GetTypeObject(),NewFArray())
+	systemKlass.setStaticField("out",ob)
 
+
+
+	ob.GetKlass().getStaticMethod("printf").GetKlass()
+
+	fmt.Print(ob)
 	//添加System
 	addKlassToVm("java/lang/System", systemKlass)
 

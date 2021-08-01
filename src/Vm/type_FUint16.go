@@ -6,6 +6,13 @@ type FUint16 struct {
 	val uint16
 }
 
+func (me *FUint16) getFieldDict() IFObject {
+	panic("implement me")
+}
+
+func (me *FUint16) getMethodDict() IFObject {
+	panic("implement me")
+}
 
 func (me *FUint16) getVal() uint16 {
 	return me.val

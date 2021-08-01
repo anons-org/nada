@@ -783,9 +783,9 @@ func (me *ClassByteFile) buildKlass() {
 		}
 		//deal with of accessFlag
 		if int(v.accessFlag) == ACC_PUBLIC|ACC_STATIC || int(v.accessFlag) == ACC_PRIVATE|ACC_STATIC || int(v.accessFlag) == ACC_PRIVATE|ACC_STATIC|ACC_SYNTHETIC {
-			kls.addStaticMethod(name, mt)
+			kls.setStaticMethod(name, mt)
 		} else {
-			kls.addInsMethod(name, mt)
+			kls.setInsMethod(name,mt)
 		}
 	}
 	me.addKlass(kls)

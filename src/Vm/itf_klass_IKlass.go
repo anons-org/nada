@@ -9,7 +9,41 @@ type IKlass interface {
 	GetTypeObject()  *TypeObject
 	SetTypeObject(	*TypeObject)
 
-    getStaticDict(k string) IFObject
+	setStaticMethod(name string, method IFObject) IKlass
+
+	//添加静态属性
+	setStaticField(name string, field IFObject) IKlass
+
+
+	setInsMethod(x string , y IFObject) IKlass
+
+	setInsField(x string , y IFObject) IKlass
+
+
+
+	getInsMethod(k string) IFObject
+
+	getInsField(k string) IFObject
+
+
+	getStaticMethod(name string) IFObject
+
+	//添加静态属性
+	getStaticField(name string) IFObject
+
+
+
+
+	//给实例的操作 ------------
+	setObMethod(x IFObject,  y IFObject, z IFObject) IKlass
+	//这方法 所有的KLASS 都应该必须实现
+	setObField(x IFObject,  y IFObject,z IFObject) IKlass
+
+
+
+
+
+
 
 
 
@@ -18,10 +52,7 @@ type IKlass interface {
 
 	Init() IKlass
 
-	//每个Klass应该有自己的字典
-	Dict(k string) IKlass
 
- 	GetDict(k string) IFObject
 
 
 }
