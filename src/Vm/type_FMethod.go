@@ -37,6 +37,22 @@ func (me *FMethod) getMethodDict() IFObject {
 	panic("implement me")
 }
 
+func (me *FMethod) getField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FMethod) getMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FMethod) setField(k string, v IFObject) {
+	panic("implement me")
+}
+
+func (me *FMethod) setMethod(k string, v IFObject) {
+	panic("implement me")
+}
+
 func (me *FMethod) GetKlass() IKlass {
 	return me.klass
 }
@@ -116,6 +132,9 @@ func (me *FMethod) setCode(code []byte)  *FMethod {
 
 
 
+func (me *FMethod) test() IFObject{
+	return me
+}
 
 
 

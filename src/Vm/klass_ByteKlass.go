@@ -10,6 +10,14 @@ type ByteKlass struct {
 
 }
 
+func (me *ByteKlass) getObMethod(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
+
+func (me *ByteKlass) getObField(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
+
 func (me *ByteKlass) setStaticMethod(name string, method IFObject) IKlass {
 	panic("implement me")
 }

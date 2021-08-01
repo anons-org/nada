@@ -34,11 +34,13 @@ type IKlass interface {
 
 
 
-	//给实例的操作 ------------
+	//给实例的操作 实例是没有静态方法和静态属性的!!------------
 	setObMethod(x IFObject,  y IFObject, z IFObject) IKlass
 	//这方法 所有的KLASS 都应该必须实现
 	setObField(x IFObject,  y IFObject,z IFObject) IKlass
 
+	getObMethod (x IFObject,  y IFObject) IFObject
+	getObField (x IFObject,  y IFObject) IFObject
 
 
 

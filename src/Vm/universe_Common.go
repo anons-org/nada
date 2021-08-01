@@ -49,6 +49,22 @@ func (me *NSMethodArgType) getMethodDict() IFObject {
 	panic("implement me")
 }
 
+func (me *NSMethodArgType) getField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *NSMethodArgType) getMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *NSMethodArgType) setField(k string, v IFObject) {
+	panic("implement me")
+}
+
+func (me *NSMethodArgType) setMethod(k string, v IFObject) {
+	panic("implement me")
+}
+
 func (me *NSMethodArgType) GetKlass() IKlass {
 	return nil
 }
@@ -57,6 +73,9 @@ func (me *NSMethodArgType) SetKlass(kls IKlass)   {
 
 }
 
+func (me *NSMethodArgType) test() IFObject  {
+	return me
+}
 
 
 

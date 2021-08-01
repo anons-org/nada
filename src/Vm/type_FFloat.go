@@ -23,6 +23,22 @@ func (me *FFloat) getMethodDict() IFObject {
 	panic("implement me")
 }
 
+func (me *FFloat) getField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FFloat) getMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FFloat) setField(k string, v IFObject) {
+	panic("implement me")
+}
+
+func (me *FFloat) setMethod(k string, v IFObject) {
+	panic("implement me")
+}
+
 func (me *FFloat) getVal() float64 {
 	return me.val
 }
@@ -53,4 +69,9 @@ func (me* FFloat) Build() *FFloat {
 	me.SetKlass(  vms.metaKlass.get(BUILTN.NADA_FLOAT).(*FloatKlass)  )
 	return me
 
+}
+
+
+func (me *FFloat) test() IFObject{
+	return me
 }

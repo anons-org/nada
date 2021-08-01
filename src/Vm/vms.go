@@ -77,7 +77,11 @@ func (me *Vms) Build() *Vms {
 	ob := createKlassIns(printStream.GetTypeObject(),NewFArray())
 	systemKlass.setStaticField("out",ob)
 
+	//给对象设置属性
+	ob.setField("age",NewFInt(1000))
 
+	x:=ob.getField("age");
+	fmt.Print(x)
 
 	ob.GetKlass().getStaticMethod("printf").GetKlass()
 

@@ -10,6 +10,14 @@ type FloatKlass struct {
 
 }
 
+func (me *FloatKlass) getObMethod(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
+
+func (me *FloatKlass) getObField(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
+
 func (me *FloatKlass) setStaticMethod(name string, method IFObject) IKlass {
 	panic("implement me")
 }

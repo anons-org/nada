@@ -11,12 +11,19 @@ type IFObject interface {
 	GetKlass() IKlass
 	SetKlass(IKlass)
 
+	//优先查找自己的 没有查找Klass的
+	getField(k string) IFObject
+	//优先查找自己的 没有查找Klass的
+	getMethod(k string) IFObject
+
+	//设置实例自己的字段
+	setField(k string, v IFObject)
+	//设置实例自己的方法
+	setMethod(k string, v IFObject)
+
 	getFieldDict() IFObject
 
 	getMethodDict() IFObject
-
-
-
 
 }
 
