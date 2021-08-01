@@ -58,12 +58,6 @@ func (me *FMethod) GetKlass() IKlass {
 }
 
 
-/**
-	设置方法名
- */
-func (me* FMethod) SetMethod(name string) {
-
-}
 
 
 func (me* FMethod) setSpec(s string) {

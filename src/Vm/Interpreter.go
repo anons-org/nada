@@ -85,12 +85,19 @@ func (me *Interpreter)exec(){
 					argT		:= 	opArg.pop()
 					argStr		:= 	opArg.pop()
 					mthodName	:=	opArg.pop()
-					qualifier	:=	opArg.pop()
-					okClass		:=  me.findKlass( qualifier );
+					qualifier	:=	opArg.pop().(IFObject)
+					arg1	:= me.frame.statck.pop()
+					//实例对象
+					callOb	:= me.frame.statck.pop()
+
+					mt:=callOb.getMethod(mthodName.(*FString).GetVal())
+					//okClass		:=  me.findKlass( qualifier );
+					mt.(*FMethod).Call(NewFArray().add(argStr));
+
 
 
 					fmt.Print(me.frame.localVal)
-					fmt.Print(argT, argStr, mthodName, qualifier, okClass)
+					fmt.Print(argT, argStr, mthodName, qualifier,callOb,arg1,mt)
 
 				}
 
@@ -149,7 +156,28 @@ func (me *Interpreter)exec(){
 			case OP.GOTO:
 			case OP.GETSTATIC:
 				//类没有加载的话，可以在此处加载 所以 要验证
-				me.frame.statck.push(op.oper)
+
+
+
+
+				if opArg,ok:=op.oper.(*FArray); ok{
+					//实例类型
+					insType		:= 	opArg.pop()
+					//实例名称
+					ins			:= 	opArg.pop()
+					//这个实例所在的Klass
+					onwKlass	:=	opArg.pop()
+					ob 		:= vms.metaKlass.get(onwKlass.(*FString).GetVal()).(IKlass)
+					insOb 	:= ob.getStaticField(  ins.(*FString).GetVal()  )
+					me.frame.statck.push(insOb)
+					fmt.Print(me.frame.localVal,insType,onwKlass,ob,insOb)
+
+
+				}
+
+
+
+
 
 			default:
 

@@ -16,7 +16,7 @@ type Vms struct {
 
 func (me *Vms) start() {
 	//初始化参数 klass等
-	var fileName = "nada/untitled/target/classes/Test.class"
+	var fileName = "E:\\AAAA_CODE\\goproj\\nada\\untitled\\target\\classes\\Test.class"
 	classN := NewClassByteFile()
 	classN.Load(fileName).Parser()
 	//执行的时候，一定是有运行目录的 Test.class 在执行的根目录
@@ -65,7 +65,7 @@ func (me *Vms) Build() *Vms {
 	 */
 
 	printStream := createKlass("PrintStream", "java/io/PrintStream")
-	printStream.setStaticMethod("print", NewNativeFMethod("print", testCall))
+	printStream.setInsMethod("print", NewNativeFMethod("print", testCall))
 
 	//注册到虚拟机
 	addKlassToVm("java/io/PrintStream", printStream)
@@ -77,15 +77,15 @@ func (me *Vms) Build() *Vms {
 	ob := createKlassIns(printStream.GetTypeObject(),NewFArray())
 	systemKlass.setStaticField("out",ob)
 
-	//给对象设置属性
-	ob.setField("age",NewFInt(1000))
-
-	x:=ob.getField("age");
-	fmt.Print(x)
-
-	ob.GetKlass().getStaticMethod("printf").GetKlass()
-
-	fmt.Print(ob)
+	////给对象设置属性
+	//ob.setField("age",NewFInt(1000))
+	//
+	//x:=ob.getField("age");
+	//fmt.Print(x)
+	//
+	//ob.GetKlass().getStaticMethod("printf").GetKlass()
+	//
+	//fmt.Print(ob)
 	//添加System
 	addKlassToVm("java/lang/System", systemKlass)
 

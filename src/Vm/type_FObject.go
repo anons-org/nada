@@ -1,8 +1,7 @@
 package Vm
 
 type FObject struct {
-	val   string
-	len   int
+	name string
 	klass IKlass
 
 	fieldDict *FMap
@@ -22,7 +21,8 @@ func (me * FObject) getField(k string) IFObject {
 }
 
 func (me * FObject) getMethod(k string) IFObject {
-	panic("implement me")
+	return me.GetKlass().getObMethod(me,NewFString(k)).(IFObject)
+
 }
 
 func (me * FObject) setField(k string, v IFObject) {
@@ -38,18 +38,6 @@ func (me* FObject) GetKlass() IKlass {
 }
 
 
-func (me *FObject) GetLen() int{
-	return me.len;
-}
-
-func (me *FObject) GetVal() string{
-	return me.val;
-}
-
-func (me *FObject) SetVal(val string) *FObject {
-	me.val = val;
-	return me;
-}
 
 
 /**

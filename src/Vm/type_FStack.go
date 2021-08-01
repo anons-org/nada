@@ -1,13 +1,13 @@
 package Vm
 
-import "container/list"
+
 
 type FStack struct {
 	klass IKlass
-	data list.List
+	data *FArray
 	//测试 观察用
 	debugData *FArray
-	_size int;
+
 }
 
 func (me *FStack) getFieldDict() IFObject {
@@ -46,6 +46,7 @@ func (me *FStack) SetKlass(klass IKlass) {
 
 func (me *FStack) Build() *FStack{
 	me.debugData = NewFArray();
+	me.data = NewFArray()
 	me.SetKlass(  vms.metaKlass.get(BUILTN.NADA_STACK).(*StackKlass)  )
 	return me
 }
@@ -53,16 +54,16 @@ func (me *FStack) Build() *FStack{
 
 func (me *FStack) pop() IFObject{
 	me.debugData.pop()
-	return me.data.Back().Value.(IFObject);
+	return me.data.pop().(IFObject);
 }
 
 func (me *FStack) size() int{
-	return me._size;
+	return me.data.size;
 }
 
 func (me *FStack) push(o IFObject) {
 	me.debugData.add(o)
-	me.data.PushBack(o);
+	me.data.add(o);
 }
 
 

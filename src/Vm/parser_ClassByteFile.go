@@ -68,6 +68,8 @@ type ClassByteFile struct {
 
 func (me *ClassByteFile) Load(fileName string) *ClassByteFile {
 
+
+
 	//fmt.Print(  CommonConstan.G_OT_DEF[CommonConstan.G_OT.STRING].Name);
 
 	//	var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\far-dev\\demo\\TestDemo1.class"

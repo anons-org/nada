@@ -92,9 +92,12 @@ func createKlass(name string, qualifier string, params ...IFObject) *Klass {
 	typeObj := new(TypeObject)
 	typeObj.SetOnwKlass(kls)
 	kls.SetTypeObject( typeObj )
-
+	//静态
 	kls.staticMethod 	= make(map[string]IFObject)
 	kls.staticField 	= make(map[string]IFObject)
+	//动态
+	kls.insField 		= make(map[string]IFObject)
+	kls.insMethod 		= make(map[string]IFObject)
 	return kls
 }
 

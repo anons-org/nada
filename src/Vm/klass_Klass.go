@@ -29,7 +29,17 @@ type Klass struct {
 }
 
 func (me *Klass) getObMethod(x IFObject, y IFObject) IFObject {
-	panic("implement me")
+
+	mn:=y.(*FString).GetVal();
+	//先找klass的动态方法
+	mob:=me.getInsMethod(mn)
+	if mob==nil{
+		mob = x.getMethodDict().(*FMap).get(mn).(IFObject)
+	}
+	if mob==nil{
+		return nil
+	}
+	return mob;
 }
 
 func (me *Klass) getObField(x IFObject, y IFObject) IFObject {
@@ -45,7 +55,7 @@ func (me *Klass) getStaticField(k string) IFObject {
 }
 
 func (me *Klass) getInsMethod(k string) IFObject {
-	return me.staticMethod[k]
+	return me.insMethod[k]
 }
 
 func (me *Klass) getInsField(k string) IFObject {
@@ -114,7 +124,10 @@ func  (me *Klass)setInsField(x string ,y IFObject) IKlass{
 
 //供实例调用的方法
 func  (me *Klass)setObMethod(x IFObject,  y IFObject, z IFObject) IKlass{
+
+
 	x.getMethodDict().(*FMap).set(y.(*FString).GetVal(),z)
+
 	return me
 }
 
