@@ -11,18 +11,45 @@ type Uint16Klass struct {
 
 }
 
-
-
-func (me *Uint16Klass) Dict(k string) IKlass {
+func (me *Uint16Klass) setStaticMethod(name string, method IFObject) IKlass {
 	panic("implement me")
 }
 
-
-func (me *Uint16Klass) GetDict(k string) IFObject {
-	return me.dict[k]
+func (me *Uint16Klass) setStaticField(name string, field IFObject) IKlass {
+	panic("implement me")
 }
 
+func (me *Uint16Klass) setInsMethod(x string, y IFObject) IKlass {
+	panic("implement me")
+}
 
+func (me *Uint16Klass) setInsField(x string, y IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *Uint16Klass) getInsMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *Uint16Klass) getInsField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *Uint16Klass) getStaticMethod(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *Uint16Klass) getStaticField(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *Uint16Klass) setObMethod(x IFObject, y IFObject, z IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *Uint16Klass) setObField(x IFObject, y IFObject, z IFObject) IKlass {
+	panic("implement me")
+}
 
 /**
 设置类型对象
@@ -59,8 +86,5 @@ func (me *Uint16Klass)Init() IKlass {
 }
 
 
-func (me *Uint16Klass) getStaticDict(k string) IFObject {
-	return nil
-}
 
 

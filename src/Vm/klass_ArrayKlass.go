@@ -10,16 +10,45 @@ type ArrayKlass struct {
 
 }
 
-func (me *ArrayKlass) Dict(k string) IKlass {
+func (me *ArrayKlass) setStaticMethod(name string, method IFObject) IKlass {
 	panic("implement me")
 }
 
-
-func (me *ArrayKlass) GetDict(k string) IFObject {
-	return me.dict[k]
+func (me *ArrayKlass) setStaticField(name string, field IFObject) IKlass {
+	panic("implement me")
 }
 
+func (me *ArrayKlass) setInsMethod(x string, y IFObject) IKlass {
+	panic("implement me")
+}
 
+func (me *ArrayKlass) setInsField(x string, y IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *ArrayKlass) getInsMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *ArrayKlass) getInsField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *ArrayKlass) getStaticMethod(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *ArrayKlass) getStaticField(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *ArrayKlass) setObMethod(x IFObject, y IFObject, z IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *ArrayKlass) setObField(x IFObject, y IFObject, z IFObject) IKlass {
+	panic("implement me")
+}
 
 /**
 设置类型对象
@@ -56,8 +85,5 @@ func (me *ArrayKlass)Init() IKlass {
 }
 
 
-func (me *ArrayKlass) getStaticDict(k string) IFObject {
-	return nil
-}
 
 

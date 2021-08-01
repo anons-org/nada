@@ -10,13 +10,44 @@ type ByteKlass struct {
 
 }
 
-func (me *ByteKlass) Dict(k string) IKlass {
+func (me *ByteKlass) setStaticMethod(name string, method IFObject) IKlass {
 	panic("implement me")
 }
 
+func (me *ByteKlass) setStaticField(name string, field IFObject) IKlass {
+	panic("implement me")
+}
 
-func (me *ByteKlass) GetDict(k string) IFObject {
-	return me.dict[k]
+func (me *ByteKlass) setInsMethod(x string, y IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *ByteKlass) setInsField(x string, y IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *ByteKlass) getInsMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *ByteKlass) getInsField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *ByteKlass) getStaticMethod(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *ByteKlass) getStaticField(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *ByteKlass) setObMethod(x IFObject, y IFObject, z IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *ByteKlass) setObField(x IFObject, y IFObject, z IFObject) IKlass {
+	panic("implement me")
 }
 
 /**
@@ -54,8 +85,5 @@ func (me *ByteKlass)Init() IKlass {
 }
 
 
-func (me *ByteKlass) getStaticDict(k string) IFObject {
-	return nil
-}
 
 

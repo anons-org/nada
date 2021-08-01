@@ -41,13 +41,22 @@ type NSMethodArgType struct {
 	retArgCount int
 }
 
+func (me *NSMethodArgType) getFieldDict() IFObject {
+	panic("implement me")
+}
+
+func (me *NSMethodArgType) getMethodDict() IFObject {
+	panic("implement me")
+}
+
 func (me *NSMethodArgType) GetKlass() IKlass {
 	return nil
 }
 
-func (me *NSMethodArgType) SetKlass(kls IKlass)  {
+func (me *NSMethodArgType) SetKlass(kls IKlass)   {
 
 }
+
 
 
 
@@ -64,10 +73,9 @@ func createKlass(name string, qualifier string, params ...IFObject) *Klass {
 	typeObj := new(TypeObject)
 	typeObj.SetOnwKlass(kls)
 	kls.SetTypeObject( typeObj )
-	kls.dict 		= make(map[string]IFObject)
-	kls.staticDict 	= make(map[string]IFObject)
-	kls.insDict    	= make(map[string]IFObject)
 
+	kls.staticMethod 	= make(map[string]IFObject)
+	kls.staticField 	= make(map[string]IFObject)
 	return kls
 }
 

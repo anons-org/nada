@@ -11,6 +11,13 @@ type IFObject interface {
 	GetKlass() IKlass
 	SetKlass(IKlass)
 
+	getFieldDict() IFObject
+
+	getMethodDict() IFObject
+
+
+
+
 }
 
 

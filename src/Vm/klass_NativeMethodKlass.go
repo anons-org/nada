@@ -7,16 +7,43 @@ type NativeMethodKlass struct {
 	typeObject *TypeObject
 }
 
-
-
-
-
-func (me *NativeMethodKlass) GetDict(k string) IFObject {
+func (me *NativeMethodKlass) setStaticMethod(name string, method IFObject) IKlass {
 	panic("implement me")
 }
 
+func (me *NativeMethodKlass) setStaticField(name string, field IFObject) IKlass {
+	panic("implement me")
+}
 
-func (me *NativeMethodKlass) Dict(k string) IKlass {
+func (me *NativeMethodKlass) setInsMethod(x string, y IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *NativeMethodKlass) setInsField(x string, y IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *NativeMethodKlass) getInsMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *NativeMethodKlass) getInsField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *NativeMethodKlass) getStaticMethod(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *NativeMethodKlass) getStaticField(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *NativeMethodKlass) setObMethod(x IFObject, y IFObject, z IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *NativeMethodKlass) setObField(x IFObject, y IFObject, z IFObject) IKlass {
 	panic("implement me")
 }
 
@@ -52,6 +79,3 @@ func (me *NativeMethodKlass)Init() IKlass {
 }
 
 
-func (me *NativeMethodKlass) getStaticDict(k string) IFObject {
-	return nil
-}

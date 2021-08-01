@@ -4,6 +4,9 @@ type FObject struct {
 	val   string
 	len   int
 	klass IKlass
+
+	fieldDict *FMap
+	methodDict *FMap
 }
 
 
@@ -40,6 +43,29 @@ func (me* FObject) Build() *FObject {
 	return me
 
 }
+
+//设置属性
+func (me* FObject) setField(k IFObject,v IFObject) *FObject {
+
+	return me
+
+}
+
+//增加方法
+func (me* FObject) setMethod(k IFObject,v IFObject) *FObject {
+	return me
+}
+
+
+func (me* FObject) getFieldDict() IFObject {
+	return me.fieldDict
+}
+
+func (me* FObject) getMethodDict() IFObject {
+	return me.methodDict
+}
+
+
 
 
 

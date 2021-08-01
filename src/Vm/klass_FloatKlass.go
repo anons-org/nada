@@ -10,16 +10,45 @@ type FloatKlass struct {
 
 }
 
-func (me *FloatKlass) Dict(k string) IKlass {
+func (me *FloatKlass) setStaticMethod(name string, method IFObject) IKlass {
 	panic("implement me")
 }
 
-
-func (me *FloatKlass) GetDict(k string) IFObject {
-	return me.dict[k]
+func (me *FloatKlass) setStaticField(name string, field IFObject) IKlass {
+	panic("implement me")
 }
 
+func (me *FloatKlass) setInsMethod(x string, y IFObject) IKlass {
+	panic("implement me")
+}
 
+func (me *FloatKlass) setInsField(x string, y IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *FloatKlass) getInsMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FloatKlass) getInsField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *FloatKlass) getStaticMethod(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *FloatKlass) getStaticField(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *FloatKlass) setObMethod(x IFObject, y IFObject, z IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *FloatKlass) setObField(x IFObject, y IFObject, z IFObject) IKlass {
+	panic("implement me")
+}
 
 /**
 	设置类型对象
@@ -56,8 +85,5 @@ func (me *FloatKlass)Init() IKlass {
 }
 
 
-func (me *FloatKlass) getStaticDict(k string) IFObject {
-	return nil
-}
 
 

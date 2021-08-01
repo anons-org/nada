@@ -14,12 +14,43 @@ type MethodKlass struct {
 
 }
 
-func (me *MethodKlass) GetDict(k string) IFObject {
+func (me *MethodKlass) setStaticMethod(name string, method IFObject) IKlass {
 	panic("implement me")
 }
 
+func (me *MethodKlass) setStaticField(name string, field IFObject) IKlass {
+	panic("implement me")
+}
 
-func (me *MethodKlass) Dict(k string) IKlass {
+func (me *MethodKlass) setInsMethod(x string, y IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *MethodKlass) setInsField(x string, y IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *MethodKlass) getInsMethod(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *MethodKlass) getInsField(k string) IFObject {
+	panic("implement me")
+}
+
+func (me *MethodKlass) getStaticMethod(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *MethodKlass) getStaticField(name string) IFObject {
+	panic("implement me")
+}
+
+func (me *MethodKlass) setObMethod(x IFObject, y IFObject, z IFObject) IKlass {
+	panic("implement me")
+}
+
+func (me *MethodKlass) setObField(x IFObject, y IFObject, z IFObject) IKlass {
 	panic("implement me")
 }
 
@@ -54,6 +85,3 @@ func (me *MethodKlass)Init() IKlass {
 	return me
 }
 
-func (me *MethodKlass) getStaticDict(k string) IFObject {
-	return me.staticDict[k]
-}

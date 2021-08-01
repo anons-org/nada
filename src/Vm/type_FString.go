@@ -6,6 +6,14 @@ type FString struct {
 	klass IKlass
 }
 
+func (me FString) getFieldDict() IFObject {
+	panic("implement me")
+}
+
+func (me FString) getMethodDict() IFObject {
+	panic("implement me")
+}
+
 func (me FString) ValToString() {
 
 }

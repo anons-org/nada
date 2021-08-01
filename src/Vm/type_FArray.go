@@ -7,6 +7,13 @@ type FArray struct {
 	size int
 }
 
+func (me *FArray) getFieldDict() IFObject {
+	panic("implement me")
+}
+
+func (me *FArray) getMethodDict() IFObject {
+	panic("implement me")
+}
 
 func (me *FArray) getVal() []IFObject{
 	return me.val

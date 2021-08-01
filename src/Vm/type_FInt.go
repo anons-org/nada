@@ -5,6 +5,13 @@ type FInt struct {
 	val int
 }
 
+func (me *FInt) getFieldDict() IFObject {
+	panic("implement me")
+}
+
+func (me *FInt) getMethodDict() IFObject {
+	panic("implement me")
+}
 
 func (me *FInt) getVal() int {
 	return me.val
