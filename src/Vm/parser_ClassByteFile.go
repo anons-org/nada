@@ -12,17 +12,16 @@ import (
 )
 
 /**
-	Class在解析的过程中，
-	需要把常量转化为实际的数据类型
-	这样可以减少解释器执行过程中对常量转换类型的消耗
-	数据类型请看 type_  开头的文件
-	class的解析并不是多神秘的事情，照着规范一个个字节处理就行了
-	没啥技术含量，就是细致活儿量大而已...
-	by mike
+Class在解析的过程中，
+需要把常量转化为实际的数据类型
+这样可以减少解释器执行过程中对常量转换类型的消耗
+数据类型请看 type_  开头的文件
+class的解析并不是多神秘的事情，照着规范一个个字节处理就行了
+没啥技术含量，就是细致活儿量大而已...
+by mike
 */
 
 type ClassByteFile struct {
-
 	constanPool *Map
 
 	//当前JAVA字节码读取位置
@@ -62,13 +61,9 @@ type ClassByteFile struct {
 	attrsCount uint16
 
 	//临时用用 主要存class文件的属性但属性都是字节码
-	attrs      []*Attributes
+	attrs []*Attributes
 	//也是class文件的属性 但已经解析成对象了
 	attriDict map[string]IAttributes
-
-
-
-
 }
 
 func (me *ClassByteFile) Load(fileName string) *ClassByteFile {
@@ -142,14 +137,14 @@ func (me *ClassByteFile) ReadUi8() int {
 }
 
 /**
-	读取常量池对象
+读取常量池对象
 */
 func (me *ClassByteFile) parserConstanInteger(idx int) {
 
 }
 
 /**
-	方法解析
+方法解析
 */
 func (me *ClassByteFile) parserMethodref(idx uint8) {
 	//常量池的对象，需要转成VM中的内置类型对象
@@ -162,7 +157,7 @@ func (me *ClassByteFile) parserMethodref(idx uint8) {
 }
 
 /**
-	类引用解析
+类引用解析
 */
 func (me *ClassByteFile) parserClassInfo(idx uint8) {
 	cls := new(ConstantClassInfo)
@@ -173,7 +168,7 @@ func (me *ClassByteFile) parserClassInfo(idx uint8) {
 }
 
 /**
-	接口解析
+接口解析
 */
 func (me *ClassByteFile) parserItfMethodInfo(idx uint8) {
 	itf := new(ConstantInterfaceMethodRefInfo)
@@ -188,14 +183,14 @@ func (me *ClassByteFile) parserItfMethodInfo(idx uint8) {
 
 /**
 
-	名称和类型解析
+名称和类型解析
 
-	程序员最大的问题就是容易认真，认真起来就喜欢抬杠
-	今天同事问我：老大，车间用两台电脑直接通过C#的scoket互联保证稳定性行的通不(被车间那帮家伙打报告了)，我就简单说了两句，另外一个同事，马上质疑如此这般
-	<其实这同事也就2年JAVA开发经验，别说操作系统和更底层的玩意儿，应该连socket的有多少中模式都还不清楚,哪儿来的的勇气质疑，请看段子开头>
-	对于他的质疑，我没有反驳，感觉没必要，思维不在一个层面，所以避重就轻的说：技术都是为业务服务的，只要你能保证车间工序正常运作，不出现生产事故就行
+程序员最大的问题就是容易认真，认真起来就喜欢抬杠
+今天同事问我：老大，车间用两台电脑直接通过C#的scoket互联保证稳定性行的通不(被车间那帮家伙打报告了)，我就简单说了两句，另外一个同事，马上质疑如此这般
+<其实这同事也就2年JAVA开发经验，别说操作系统和更底层的玩意儿，应该连socket的有多少中模式都还不清楚,哪儿来的的勇气质疑，请看段子开头>
+对于他的质疑，我没有反驳，感觉没必要，思维不在一个层面，所以避重就轻的说：技术都是为业务服务的，只要你能保证车间工序正常运作，不出现生产事故就行
 
-	朋友千个少，敌人一个多
+朋友千个少，敌人一个多
 
 
 */
@@ -278,19 +273,18 @@ func (me *ClassByteFile) parserAttrsInfo() {
 	for i := 0; i < int(me.attrsCount); i++ {
 		attr := new(Attributes)
 		//下面两个属性先取出来
-		attr.nameIdx 	= me.ReadShort()
+		attr.nameIdx = me.ReadShort()
 
+		aName := me.getCtString(attr.nameIdx)
 
-		aName:=me.getCtString(attr.nameIdx)
+		if aName == "BootstrapMethods" {
 
-		if aName == "BootstrapMethods"{
-
-			btms:=new(BootstrapMethods)
+			btms := new(BootstrapMethods)
 			btms.nameIdx = attr.nameIdx
 			btms.attrLen = me.ReadUint32()
 			btms.methodsNum = me.ReadShort()
 			for j := 0; j < int(btms.methodsNum); j++ {
-				btm:=new(BootstrapMethod)
+				btm := new(BootstrapMethod)
 				btm.bootsMethodRef = me.ReadShort()
 				//mh:= me.getCtMethodHandle( btm.bootsMethodRef )
 				//
@@ -300,29 +294,24 @@ func (me *ClassByteFile) parserAttrsInfo() {
 				//}
 				//交给按对象获取....
 
-
-
-
 				//参数个数
 				btm.argNum = me.ReadShort()
-				for x := 0; x < int(btm.argNum) ; x++ {
+				for x := 0; x < int(btm.argNum); x++ {
 					//读取参数
 					btm.args = append(btm.args, me.ReadShort())
 				}
-				btms.methods = append(btms.methods,btm);
+				btms.methods = append(btms.methods, btm)
 			}
-			if me.attriDict["BootstrapMethods"] == nil{
+			if me.attriDict["BootstrapMethods"] == nil {
 				me.attriDict["BootstrapMethods"] = btms
 			}
 
-		}else {
+		} else {
 			//如果都不是，先把数据取了再说，保证解析正常，以后再按需处理
-			attr.len 		= int(me.ReadUint32())
-			attr.bytes 		= me.Read(attr.len)
-			me.attrs 		= append(me.attrs, attr)
+			attr.len = int(me.ReadUint32())
+			attr.bytes = me.Read(attr.len)
+			me.attrs = append(me.attrs, attr)
 		}
-
-
 
 	}
 
@@ -366,14 +355,14 @@ func (me *ClassByteFile) parserMethodInfo() {
 
 				//code自己附加的属性
 				/**
-					LocalVariableTable 等属性由编译器生成，可有可无
-					具体信息参考《深入理解JAVA虚拟机》
-					所以，不管有么有都要处理，不然一旦有这些属性又没有解析
-					就出问题了
-					javac -g:none 不生成 LocalVariableTable
-					javac -g:vars   生成 LocalVariableTable
-					如果是IDEA等编辑器生成的class必然有LocalVariableTable
-				 */
+				LocalVariableTable 等属性由编译器生成，可有可无
+				具体信息参考《深入理解JAVA虚拟机》
+				所以，不管有么有都要处理，不然一旦有这些属性又没有解析
+				就出问题了
+				javac -g:none 不生成 LocalVariableTable
+				javac -g:vars   生成 LocalVariableTable
+				如果是IDEA等编辑器生成的class必然有LocalVariableTable
+				*/
 				for i := 0; i < int(attr.attrCount); i++ {
 					nameIdx = me.ReadShort()
 					aName := ctConvStr(me, nameIdx)
@@ -641,17 +630,17 @@ func (me *ClassByteFile) get(n int) {
 }
 
 /**
-	initialize operands in advance
-	需要提前生成的操作数：引用的，直接常量的
-	如:ILOAD 1 ,STORE 1
-	其他的一概在解释器中生成
-	为什么？
-	SIPUSH 1000
-	由于提前生成操作数的办法是NEW一个FINT对象，这种如果提前NEW 就已经和当前的指令绑定了
-	如果这个字节码在正好在一个可复用的方法中，就出现问题了！
+initialize operands in advance
+需要提前生成的操作数：引用的，直接常量的
+如:ILOAD 1 ,STORE 1
+其他的一概在解释器中生成
+为什么？
+SIPUSH 1000
+由于提前生成操作数的办法是NEW一个FINT对象，这种如果提前NEW 就已经和当前的指令绑定了
+如果这个字节码在正好在一个可复用的方法中，就出现问题了！
 
-	虽然不处理 但还是需要把字节数据截取出来，保证能在解释器中快速处理
-	取出来的数据存为FByte数据类型，草，还要加个数据类型。。。
+虽然不处理 但还是需要把字节数据截取出来，保证能在解释器中快速处理
+取出来的数据存为FByte数据类型，草，还要加个数据类型。。。
 
 */
 func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
@@ -659,123 +648,122 @@ func (me *ClassByteFile) bulidImmediate(method *FMethod, code []byte) {
 	//codes.Read(2);
 
 	data := NewBytes(code)
-	n:=0;
+	n := 0
 	for data.idx < len(code) {
 
 		op := data.read(1)[0]
 
 		switch op {
 		case OP.ALOAD_0:
-			method.addCode(n,op,nil)
-			n++;
+			method.addCode(n, op, nil)
+			n++
 		case OP.ALOAD_1:
-			method.addCode(n,op,nil)
+			method.addCode(n, op, nil)
 		case OP.INVOKESPECIAL:
 			//https://www.cnblogs.com/cfas/p/15063669.html
 			mt := me.getCtMethodRefToFArray(binary.BigEndian.Uint16(data.read(2)))
-			method.addCode(n,op,mt)
-			n+=2;
+			method.addCode(n, op, mt)
+			n += 2
 		case OP.RETURN:
-			method.addCode(n,op,nil)
-		case OP.ICONST_0,OP.ICONST_1://nada:压入int到栈 jvm:压入uint8到栈
-			method.addCode(n,op,nil)
+			method.addCode(n, op, nil)
+		case OP.ICONST_0, OP.ICONST_1: //nada:压入int到栈 jvm:压入uint8到栈
+			method.addCode(n, op, nil)
 		case OP.LDC:
 			idx := data.read(1)[0]
-			method.addCode(n,op, me.getCtToIFObject(idx))
-			n++;
-		case OP.ASTORE_0, OP.ASTORE_1, OP.ASTORE_2, OP.ASTORE_3,OP.ISTORE_0,OP.ISTORE_1,
-			 OP.ISTORE_2,OP.ISTORE_3: //don't need operands
-			method.addCode(n,op,nil)
+			method.addCode(n, op, me.getCtToIFObject(idx))
+			n++
+		case OP.ASTORE_0, OP.ASTORE_1, OP.ASTORE_2, OP.ASTORE_3, OP.ISTORE_0, OP.ISTORE_1,
+			OP.ISTORE_2, OP.ISTORE_3: //don't need operands
+			method.addCode(n, op, nil)
 
-		case OP.FSTORE://为压缩空间 nada 本地变量编号全部为2字节
-			idx := uint16(data.read(1)[0]);
-			method.addCode(n,op, NewFUint16(idx))
-			n++;
+		case OP.FSTORE: //为压缩空间 nada 本地变量编号全部为2字节
+			idx := uint16(data.read(1)[0])
+			method.addCode(n, op, NewFUint16(idx))
+			n++
 		case OP.LDC_W:
-			idx := binary.BigEndian.Uint16(data.read(2));
-			method.addCode(n,op, me.getCtToIFObject(idx))
-			n+=2;
+			idx := binary.BigEndian.Uint16(data.read(2))
+			method.addCode(n, op, me.getCtToIFObject(idx))
+			n += 2
 		case OP.INVOKESTATIC:
-			idx := binary.BigEndian.Uint16(data.read(2));
-			method.addCode(n,op, me.getCtToIFObject(idx))
-			n+=2;
+			idx := binary.BigEndian.Uint16(data.read(2))
+			method.addCode(n, op, me.getCtToIFObject(idx))
+			n += 2
 		case OP.ASTORE:
-			idx := uint16(data.read(1)[0]);
-			method.addCode(n,op, NewFUint16(idx));
-			n++;
+			idx := uint16(data.read(1)[0])
+			method.addCode(n, op, NewFUint16(idx))
+			n++
 		case OP.LSTORE:
-			idx := uint16(data.read(1)[0]);
-			method.addCode(n,op, NewFUint16(idx))
-			n++;
+			idx := uint16(data.read(1)[0])
+			method.addCode(n, op, NewFUint16(idx))
+			n++
 		case OP.ISTORE:
-			idx := uint16(data.read(1)[0]);
-			method.addCode(n,op, NewFUint16(idx))
-			n++;
-		case OP.BIPUSH://nada:压入int到栈 jvm:压入uint8到栈
-			method.addCode(n,op,  NewFByte(data.read(1)));
-			n++;
+			idx := uint16(data.read(1)[0])
+			method.addCode(n, op, NewFUint16(idx))
+			n++
+		case OP.BIPUSH: //nada:压入int到栈 jvm:压入uint8到栈
+			method.addCode(n, op, NewFByte(data.read(1)))
+			n++
 		case OP.SIPUSH:
-			idx := binary.BigEndian.Uint16(data.read(2));
-			method.addCode(n,op,NewFInt(int(idx)));
-			n+=2;
+			idx := binary.BigEndian.Uint16(data.read(2))
+			method.addCode(n, op, NewFInt(int(idx)))
+			n += 2
 		case OP.ILOAD:
-			idx := uint16(data.read(1)[0]);
-			method.addCode(n,op, NewFUint16(idx))
-			n++;
+			idx := uint16(data.read(1)[0])
+			method.addCode(n, op, NewFUint16(idx))
+			n++
 		case OP.IF_CMPGE:
-			idx := binary.BigEndian.Uint16(data.read(2));
-			method.addCode(n,op, NewFUint16(idx))
-			n+=2;
+			idx := binary.BigEndian.Uint16(data.read(2))
+			method.addCode(n, op, NewFUint16(idx))
+			n += 2
 		case OP.NEW:
-			idx := binary.BigEndian.Uint16(data.read(2));
-			method.addCode(n,op, me.getCtToIFObject(idx))
-			n+=2;
+			idx := binary.BigEndian.Uint16(data.read(2))
+			method.addCode(n, op, me.getCtToIFObject(idx))
+			n += 2
 		case OP.DUP:
 
-			method.addCode(n,op,nil)
+			method.addCode(n, op, nil)
 
 		case OP.INVOKEDYNAMIC:
-			idx := binary.BigEndian.Uint16(data.read(2));
+			idx := binary.BigEndian.Uint16(data.read(2))
 			//规定还有预留的2字节。。。
-			data.read(2);
-			method.addCode(n,op, me.getCtToIFObject(idx))
-			n+=4;
+			data.read(2)
+			method.addCode(n, op, me.getCtToIFObject(idx))
+			n += 4
 			//fmt.Printf("INVOKEDYNAMIC:%s",method.codeList[op])
-		case OP.POP,OP.POP2://iinc index(uint8) const(int8) to int
-			method.addCode(n,op,nil)
+		case OP.POP, OP.POP2: //iinc index(uint8) const(int8) to int
+			method.addCode(n, op, nil)
 		case OP.IINC:
-			idx:=uint16(data.read(1)[0]);
-			c:=int(data.read(1)[0]);
-			a:=NewFArray()
+			idx := uint16(data.read(1)[0])
+			c := int(data.read(1)[0])
+			a := NewFArray()
 			a.add(NewFUint16(idx))
 			a.add(NewFInt(c))
-			method.addCode(n,op,a)
-			n+=2;
+			method.addCode(n, op, a)
+			n += 2
 		case OP.GOTO:
-			idx := binary.BigEndian.Uint16(data.read(2));
-			method.addCode( n, op,NewFInt(int(idx)) )
-			n++;
+			idx := binary.BigEndian.Uint16(data.read(2))
+			method.addCode(n, op, NewFInt(int(idx)))
+			n++
 		case OP.GETSTATIC:
-			idx := binary.BigEndian.Uint16(data.read(2));
-			method.addCode(n,op, me.getCtFieldRefToFArray(idx))
-			n+=2;
+			idx := binary.BigEndian.Uint16(data.read(2))
+			method.addCode(n, op, me.getCtFieldRefToFArray(idx))
+			n += 2
 		case OP.INVOKEVIRTUAL:
-			idx := binary.BigEndian.Uint16(data.read(2));
-			method.addCode(n,op, me.getCtToIFObject(idx))
-			n+=2;
+			idx := binary.BigEndian.Uint16(data.read(2))
+			method.addCode(n, op, me.getCtToIFObject(idx))
+			n += 2
 		default:
-			method.addCode(n,op,nil)
-
+			method.addCode(n, op, nil)
 
 		}
-		n++;
+		n++
 	}
 
 }
 
 func (me *ClassByteFile) buildKlass() {
 
-	kls := createKlass("","Test")
+	kls := createKlass("", "Test")
 	kls.name = NewFString("Test")
 	//each method
 	for _, v := range me.methods {
@@ -812,64 +800,59 @@ func NewClassByteFile() *ClassByteFile {
 }
 
 /**
-	添加Klass
+添加Klass
 */
 func (me *ClassByteFile) addKlass(kls *Klass) {
 	vms.metaKlass.set("Test", kls)
 }
 
-
 /**
-	把常量池中的对象转为类型对象
+把常量池中的对象转为类型对象
 */
 func (me *ClassByteFile) getCtToIFObject(idx interface{}) IFObject {
 
-	v := me.constanPool.Get(idx);
-	var ob IFObject = nil;
+	v := me.constanPool.Get(idx)
+	var ob IFObject = nil
 	switch v.(type) {
-		case *ConstantIntegerInfo:
-		case *ConstantFloatInfo:
-		case *ConstantStringInfo:
-			ob = me.getCtStringToFString(v.(*ConstantStringInfo).strIdx)
-		case *ConstantDoubleInfo:
-			hb := v.(*ConstantDoubleInfo).hByte
-			lb := v.(*ConstantDoubleInfo).lByte
-			hb = append(hb, lb...)
-			fVal := Utils.Float64frombytes(hb)
-			ob= NewFFLoat(fVal)
-		case *ConstantLongInfo:
-		case *ConstantMethodref:
-			ob = me.getCtMethodRefToFArray(idx)
-		case *ConstantNameAndType:
+	case *ConstantIntegerInfo:
+	case *ConstantFloatInfo:
+	case *ConstantStringInfo:
+		ob = me.getCtStringToFString(v.(*ConstantStringInfo).strIdx)
+	case *ConstantDoubleInfo:
+		hb := v.(*ConstantDoubleInfo).hByte
+		lb := v.(*ConstantDoubleInfo).lByte
+		hb = append(hb, lb...)
+		fVal := Utils.Float64frombytes(hb)
+		ob = NewFFLoat(fVal)
+	case *ConstantLongInfo:
+	case *ConstantMethodref:
+		ob = me.getCtMethodRefToFArray(idx)
+	case *ConstantNameAndType:
 
-		case *ConstantInvokeDynInfo:
-			//search in bootstrap
-			//Getbootstrap attributes
-			idv:=v.(*ConstantInvokeDynInfo)
-			iv:=idv.bootMethodAttrIdx;
-			v:=me.attriDict["BootstrapMethods"].(*BootstrapMethods).methods[iv]
-			mrf:=me.getCtMethodHandle(v.bootsMethodRef)
-			//callSite
-			callSite:= me.getCtMethodRefToFArray(mrf.refIdx)
-			//be call infos
-			beCallInfos:= me.getCtNameAndTypeToFArray( idv.nameAndTypeIdx )
-			//return array
-			ob=NewFArray().add(callSite).add(beCallInfos)
+	case *ConstantInvokeDynInfo:
+		//search in bootstrap
+		//Getbootstrap attributes
+		idv := v.(*ConstantInvokeDynInfo)
+		iv := idv.bootMethodAttrIdx
+		v := me.attriDict["BootstrapMethods"].(*BootstrapMethods).methods[iv]
+		mrf := me.getCtMethodHandle(v.bootsMethodRef)
+		//callSite
+		callSite := me.getCtMethodRefToFArray(mrf.refIdx)
+		//be call infos
+		beCallInfos := me.getCtNameAndTypeToFArray(idv.nameAndTypeIdx)
+		//return array
+		ob = NewFArray().add(callSite).add(beCallInfos)
 
-		default:
-			fmt.Print("Unresolvable constant pool data was encountered,Closing program....")
+	default:
+		fmt.Print("Unresolvable constant pool data was encountered,Closing program....")
 
-		}
+	}
 
 	return ob
 }
 
-
-
-
-
 /**
-	获取常量池中的Methodref
+获取常量池中的Methodref
 */
 func (me *ClassByteFile) getCtMethodRef(idx uint16) *ConstantMethodref {
 	val := me.constanPool.Get(idx)
@@ -885,20 +868,16 @@ func (me *ClassByteFile) getCtMethodRef(idx uint16) *ConstantMethodref {
 	return nil
 }
 
-
-
-
-
 func (me *ClassByteFile) getCtFieldRefToFArray(idx interface{}) *FArray {
 	val := me.constanPool.Get(idx)
 	if mt, ok := val.(*ConstantFieldrefInfo); ok {
 
-		cls 	:= me.getCtClass(mt.clsIdx)
-		clsName	:= ctConvStr(me, cls.nameIdx)
-		nt 		:= me.getCtNameAndType(mt.nameAndTypeIdx)
-		ntName	:= ctConvStr(me, nt.nameIdx)
-		ntType	:= ctConvStr(me, nt.descIdx)
-		ary		:=NewFArray()
+		cls := me.getCtClass(mt.clsIdx)
+		clsName := ctConvStr(me, cls.nameIdx)
+		nt := me.getCtNameAndType(mt.nameAndTypeIdx)
+		ntName := ctConvStr(me, nt.nameIdx)
+		ntType := ctConvStr(me, nt.descIdx)
+		ary := NewFArray()
 		//class name
 		ary.add(NewFString(clsName))
 		// call field name
@@ -909,8 +888,6 @@ func (me *ClassByteFile) getCtFieldRefToFArray(idx interface{}) *FArray {
 	}
 	return nil
 }
-
-
 
 func (me *ClassByteFile) getCtMethodRefToFArray(idx interface{}) *FArray {
 	val := me.constanPool.Get(idx)
@@ -923,7 +900,7 @@ func (me *ClassByteFile) getCtMethodRefToFArray(idx interface{}) *FArray {
 		mt.rtFnName = ctConvStr(me, nt.nameIdx)
 		//runtime arg and type
 		mt.rtFnType = ctConvStr(me, nt.descIdx)
-		ary:=NewFArray()
+		ary := NewFArray()
 		//class name
 		ary.add(NewFString(mt.rtClsName))
 		//method name
@@ -934,44 +911,39 @@ func (me *ClassByteFile) getCtMethodRefToFArray(idx interface{}) *FArray {
 		//method args count
 		ary.add(me.getMethodArgTypeInfo(mt.rtFnType))
 
-
 		return ary
 	}
 	return nil
 }
 
-
-func (me *ClassByteFile) getMethodArgTypeInfo(buf string)  IFObject {
-
+func (me *ClassByteFile) getMethodArgTypeInfo(buf string) IFObject {
 
 	// 原生字符串
 	//buf := `(Ljava/lang/String;)V`
 
 	//先用)切割 分开参数和返回参数
 
-	bufArg:=strings.Split(buf,")")
+	bufArg := strings.Split(buf, ")")
 
-	fmt.Print( bufArg )
+	fmt.Print(bufArg)
 
-	bufArg[0] = strings.ReplaceAll(bufArg[0],"(","");
+	bufArg[0] = strings.ReplaceAll(bufArg[0], "(", "")
 
-	argst:=strings.Split(bufArg[0],";")
+	argst := strings.Split(bufArg[0], ";")
 
 	var args []string
-	for _,v:= range argst{
-		if v!=""{
-			args = append(args,v);
+	for _, v := range argst {
+		if v != "" {
+			args = append(args, v)
 		}
 	}
 
 	return &NSMethodArgType{
-		args: args,
+		args:     args,
 		argCount: len(args),
-	};
+	}
 
 }
-
-
 
 func (me *ClassByteFile) getCtMethodHandle(idx uint16) *ConstantMethodHandleInfo {
 	val := me.constanPool.Get(idx)
@@ -981,8 +953,6 @@ func (me *ClassByteFile) getCtMethodHandle(idx uint16) *ConstantMethodHandleInfo
 	}
 	return nil
 }
-
-
 
 /**
 获取常量池中的Class
@@ -1009,17 +979,15 @@ func (me *ClassByteFile) getCtNameAndType(idx uint16) *ConstantNameAndType {
 func (me *ClassByteFile) getCtNameAndTypeToFArray(idx uint16) *FArray {
 	val := me.constanPool.Get(idx)
 	if nt, ok := val.(*ConstantNameAndType); ok {
-		ob:=NewFArray();
-		nameStr:=me.getCtStringToFString(nt.nameIdx);
-		descStr:=me.getCtStringToFString(nt.descIdx);
+		ob := NewFArray()
+		nameStr := me.getCtStringToFString(nt.nameIdx)
+		descStr := me.getCtStringToFString(nt.descIdx)
 		ob.add(nameStr)
 		ob.add(descStr)
-		return ob;
+		return ob
 	}
 	return nil
 }
-
-
 
 func (me *ClassByteFile) getCtStringToFString(idx uint16) *FString {
 	s := me.getCtString(idx)
@@ -1036,7 +1004,7 @@ func (me *ClassByteFile) getCtString(idx uint16) string {
 }
 
 /**
-	常量对象转string
+常量对象转string
 */
 func ctConvStr(me *ClassByteFile, idx uint16) string {
 	val := me.constanPool.Get(idx)
@@ -1051,4 +1019,3 @@ func ct2FString(me *ClassByteFile, idx uint16) *FString {
 	s2 := NewFString(s)
 	return s2
 }
-
