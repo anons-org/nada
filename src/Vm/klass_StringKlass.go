@@ -1,9 +1,5 @@
 package Vm
 
-import (
-	"fmt"
-)
-
 type StringKlass struct {
 	//klass名称
 	name string
@@ -95,8 +91,8 @@ func (me *StringKlass)Init() IKlass {
 	typeObj.SetOnwKlass(me)
 	me.SetTypeObject( typeObj )
 	me.dict = make(map[string]IFObject)
-	me.dict["indexOf"] = new(FMethod).Build(1).SetCall(indexOf)
-	me.dict["print"] = new(FMethod).Build(1).SetCall(print)
+	//me.dict["indexOf"] = new(FMethod).Build(1).SetCall(indexOf)
+	//me.dict["print"] = new(FMethod).Build(1).SetCall(print)
 
 	return me
 }
@@ -105,13 +101,6 @@ func (me *StringKlass)Init() IKlass {
 
 
 
-/**
-String print
-*/
-func print(args []IFObject) IFObject {
-	fmt.Print("测试原生方法.....")
-	return nil
-}
 
 
 

@@ -46,6 +46,7 @@ func (me *Vms) Build() *Vms {
 	me.metaKlass.set(BUILTN.NADA_VIRTUAL, new(MethodKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_STRING, new(StringKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_FLOAT, new(FloatKlass).Init())
+	me.metaKlass.set(BUILTN.NADA_DOUBLE, new(DoubleKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_UINT16, new(Uint16Klass).Init())
 	me.metaKlass.set(BUILTN.NADA_INT, new(IntKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_BYTE, new(ByteKlass).Init())
@@ -65,7 +66,7 @@ func (me *Vms) Build() *Vms {
 	 */
 
 	printStream := createKlass("PrintStream", "java/io/PrintStream")
-	printStream.setInsMethod("print", NewNativeFMethod("print", testCall))
+	printStream.setInsMethod("print", NewNativeFMethod("print", printStreamPrint))
 
 	//注册到虚拟机
 	addKlassToVm("java/io/PrintStream", printStream)
@@ -76,6 +77,11 @@ func (me *Vms) Build() *Vms {
 	//systemKlass.addStaticField("out",))
 	ob := createKlassIns(printStream.GetTypeObject(),NewFArray())
 	systemKlass.setStaticField("out",ob)
+
+
+	double := vms.metaKlass.get("java/lang/Double").(IKlass)//createKlass("Double", "java/lang/Double")
+	double.setStaticMethod("valueOf", NewNativeFMethod("valueOf", doubleValueOf))
+
 
 	////给对象设置属性
 	//ob.setField("age",NewFInt(1000))

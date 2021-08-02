@@ -82,17 +82,19 @@ func (me *Interpreter)exec(){
 			case OP.INVOKEVIRTUAL:
 				//先弹出参数类型
 				if opArg,ok:=op.oper.(*FArray); ok{
-					argT		:= 	opArg.pop()
-					argStr		:= 	opArg.pop()
+					//argtype
+					opArg.pop()
+					opArg.pop()
 					mthodName	:=	opArg.pop()
-					qualifier	:=	opArg.pop().(IFObject)
+					//qualifier
+					opArg.pop()
 					arg		    := me.frame.statck.pop()
 					//实例对象
 					callOb	:= me.frame.statck.pop()
 					mt := callOb.getMethod(mthodName.(*FString).GetVal())
-					mt.(*FMethod).Call(NewFArray().add(argStr));
-					fmt.Print(me.frame.localVal)
-					fmt.Print(argT, argStr, mthodName, qualifier,callOb,arg,mt)
+					mt.(*FMethod).Call(NewFArray().add(arg));
+					//fmt.Print(me.frame.localVal)
+					//fmt.Print(argT, argStr, mthodName, qualifier,callOb,arg,mt)
 
 				}
 
@@ -109,8 +111,28 @@ func (me *Interpreter)exec(){
 			case OP.FSTORE://为压缩空间 nada 本地变量编号全部为2字节
 
 			case OP.LDC_W:
+				me.frame.statck.push(op.oper)
+				fmt.Print(op.oper)
 
 			case OP.INVOKESTATIC:
+				/**
+					op.oper args
+					--- 限定符
+					--- 调用的方法
+					--- 描述符
+					--- 参数类型和个数
+				 */
+				if opArg,ok:=op.oper.(*FArray); ok{
+					opArg.pop();
+					opArg.pop();
+					mn:=opArg.pop();
+					qualfier:=opArg.pop();
+					mt:=vms.metaKlass.get(qualfier.(*FString).GetVal()).(IKlass).getStaticMethod(mn.(*FString).GetVal()).(*FMethod)
+					mt.Call(NewFArray().add( me.frame.statck.pop() ))
+					fmt.Print(op.oper,mn,qualfier)
+				}
+
+
 
 			case OP.ASTORE:
 				ob:=me.frame.statck.pop()
@@ -151,10 +173,6 @@ func (me *Interpreter)exec(){
 			case OP.GOTO:
 			case OP.GETSTATIC:
 				//类没有加载的话，可以在此处加载 所以 要验证
-
-
-
-
 				if opArg,ok:=op.oper.(*FArray); ok{
 					//实例类型
 					insType		:= 	opArg.pop()

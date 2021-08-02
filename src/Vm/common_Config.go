@@ -222,6 +222,7 @@ var BUILTN = struct {
 	NADA_NATIVE string
 	NADA_TYPE string
 	NADA_FLOAT string
+	NADA_DOUBLE string
 	NADA_UINT16 string
 	NADA_INT string
 	NADA_BYTE string
@@ -235,6 +236,7 @@ var BUILTN = struct {
 	NADA_VIRTUAL: "nada.core.Method",
 	NADA_STRING:"nada.core.String",
 	NADA_FLOAT:"nada.core.Float",
+	NADA_DOUBLE:"java/lang/Double",
 	NADA_UINT16:"nada.core.Uint16",
 	NADA_INT:"nada.core.Int",
 	NADA_BYTE:"nada.core.Byte",

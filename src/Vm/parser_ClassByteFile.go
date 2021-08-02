@@ -825,7 +825,7 @@ func (me *ClassByteFile) getCtToIFObject(idx interface{}) IFObject {
 		lb := v.(*ConstantDoubleInfo).lByte
 		hb = append(hb, lb...)
 		fVal := Utils.Float64frombytes(hb)
-		ob = NewFFLoat(fVal)
+		ob = NewFDouble(fVal)
 	case *ConstantLongInfo:
 	case *ConstantMethodref:
 		ob = me.getCtMethodRefToFArray(idx)

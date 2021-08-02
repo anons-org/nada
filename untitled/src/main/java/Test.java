@@ -15,7 +15,11 @@ public class Test {
 
 	public static void main(String[]  args){
 		String s="打印输出测试";
-		System.out.print(s);
+
+
+		Double abcc = 128.4444444444444444444444444444444444444444444444444444;
+
+		System.out.print(abcc);
 	}
 
 	native public  void testOk ();

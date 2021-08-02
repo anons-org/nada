@@ -13,6 +13,12 @@ func NewFFLoat(v float64)  *FFloat {
 }
 
 
+func NewFDouble(v float64)  *FDouble {
+	n := new(FDouble).Build().setVal(v)
+	return  n
+}
+
+
 func NewFByte(v []byte)  *FByte {
 	n := new(FByte).Build().setVal(v)
 	return  n

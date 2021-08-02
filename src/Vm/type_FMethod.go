@@ -73,7 +73,6 @@ func (me *FMethod) SetKlass(klass IKlass) {
 	me.klass = klass;
 }
 
-
 func (me *FMethod) Call(args *FArray) IFObject {
 	return me.call(args)
 }
