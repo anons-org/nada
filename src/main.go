@@ -3,70 +3,15 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"nada/src/Vm"
-	"os"
 )
 
-/**
-class文件解析
-*/
-func parserClass() {
-	//var fileName = "E:\\AAAA_CODE\\new-eclipse-workspace\\untitled\\target\\classes\\Test.class"
-	var fileName = "../Test.class"
-	file, err := os.OpenFile(fileName, os.O_RDWR, 0666)
-	if err != nil {
-		fmt.Println("Open file error!", err)
-		return
-	}
-
-	stat, _ := file.Stat()
-
-	fmt.Print(stat.Size())
-
-	buf := make([]byte, stat.Size())
-
-	//var data []byte;
-
-	for {
-		length, err := file.Read(buf)
-		if err != nil {
-			if err == io.EOF {
-				break
-			} else {
-				fmt.Println("Read file error!", err)
-				return
-			}
-		}
-		//data = append(data,buf);
-		fmt.Println(length, string(buf))
-	}
-	for _, val := range buf {
-		H := fmt.Sprintf("%016x", val)
-		fmt.Printf("index slice= %s\n", H)
-
-	}
-	x := 1
-	fmt.Print(x)
-}
-
-func call(ob *Vm.FString, fns string) {
-
-	//fn := ob.GetKlass().GetDict(fns)
-	//mt, _ := fn.(*Vm.FMethod)
-	//mt.Call("this", []Vm.IFObject{})
-}
 
 func main() {
 
-	s := []string{"a", "b", "c", "d"}
-
-	fmt.Print(s[:len(s)-1])
-
-	//过滤<></>
-	//for _, text := range result {
-	//	fmt.Println("text[1] = ", text[1])
-	//}
+	//s := []string{"a", "b", "c", "d"}
+	//
+	//fmt.Print(s[:len(s)-1])
 
 	Vm.CommonInit()
 	Vm.Start()
