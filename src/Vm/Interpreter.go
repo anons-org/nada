@@ -86,18 +86,13 @@ func (me *Interpreter)exec(){
 					argStr		:= 	opArg.pop()
 					mthodName	:=	opArg.pop()
 					qualifier	:=	opArg.pop().(IFObject)
-					arg1	:= me.frame.statck.pop()
+					arg		    := me.frame.statck.pop()
 					//实例对象
 					callOb	:= me.frame.statck.pop()
-
-					mt:=callOb.getMethod(mthodName.(*FString).GetVal())
-					//okClass		:=  me.findKlass( qualifier );
+					mt := callOb.getMethod(mthodName.(*FString).GetVal())
 					mt.(*FMethod).Call(NewFArray().add(argStr));
-
-
-
 					fmt.Print(me.frame.localVal)
-					fmt.Print(argT, argStr, mthodName, qualifier,callOb,arg1,mt)
+					fmt.Print(argT, argStr, mthodName, qualifier,callOb,arg,mt)
 
 				}
 
