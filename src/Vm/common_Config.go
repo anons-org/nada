@@ -204,6 +204,17 @@ const (
 )
 
 
+
+var KLS_T = struct {
+	StringKlass,
+	NativeMethodKlass string
+}{
+	StringKlass:"stringKlass",
+	NativeMethodKlass:"NativeMethodKlass",
+}
+
+
+
 var BUILTN = struct {
 	JAVA_LANG_STRING   string
 	NADA_STRING string

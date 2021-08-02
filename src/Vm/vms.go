@@ -16,7 +16,7 @@ type Vms struct {
 
 func (me *Vms) start() {
 	//初始化参数 klass等
-	var fileName = "nada/untitled/target/classes/Test.class"
+	var fileName = "E:\\AAAA_CODE\\goproj\\nada\\untitled\\target\\classes\\Test.class"
 	classN := NewClassByteFile()
 	classN.Load(fileName).Parser()
 	//执行的时候，一定是有运行目录的 Test.class 在执行的根目录
@@ -53,19 +53,18 @@ func (me *Vms) Build() *Vms {
 	me.metaKlass.set(BUILTN.NADA_STACK, new(StackKlass).Init())
 	me.metaKlass.set(BUILTN.NADA_OBJECT, new(ObjectKlass).Init())
 
-
 	/**
-			生成内置基础类 过程 java.lang.System
+	生成内置基础类 过程 java.lang.System
 
-			java/io/PrintStream
-
-
+	java/io/PrintStream
 
 
-	 */
+
+
+	*/
 
 	printStream := createKlass("PrintStream", "java/io/PrintStream")
-	printStream.setStaticMethod("print", NewNativeFMethod("print", testCall))
+	printStream.setInsMethod("print", NewNativeFMethod("print", testCall))
 
 	//注册到虚拟机
 	addKlassToVm("java/io/PrintStream", printStream)
@@ -74,18 +73,18 @@ func (me *Vms) Build() *Vms {
 
 	//out 是实例....需要生成实例。。。
 	//systemKlass.addStaticField("out",))
-	ob := createKlassIns(printStream.GetTypeObject(),NewFArray())
-	systemKlass.setStaticField("out",ob)
+	ob := createKlassIns(printStream.GetTypeObject(), NewFArray())
+	systemKlass.setStaticField("out", ob)
 
-	//给对象设置属性
-	ob.setField("age",NewFInt(1000))
-
-	x:=ob.getField("age");
-	fmt.Print(x)
-
-	ob.GetKlass().getStaticMethod("printf").GetKlass()
-
-	fmt.Print(ob)
+	////给对象设置属性
+	//ob.setField("age",NewFInt(1000))
+	//
+	//x:=ob.getField("age");
+	//fmt.Print(x)
+	//
+	//ob.GetKlass().getStaticMethod("printf").GetKlass()
+	//
+	//fmt.Print(ob)
 	//添加System
 	addKlassToVm("java/lang/System", systemKlass)
 

@@ -3,6 +3,7 @@ package Vm
 var TRUE *FString
 var FALSE *FString
 var NONE *FString
+
 //ACC_PUBLIC	0x0001	方法是否为public
 //ACC_PRIVATE	0x0002	方法是否为private
 //ACC_PROTECTED	0x0004	方法是否为protected
@@ -17,9 +18,9 @@ var NONE *FString
 //ACC_SYNTHETIC	0x1000	方法是否是有编译器自动产生的
 
 //访问标识
-var ACC_PUBLIC 	= 0x0001
+var ACC_PUBLIC = 0x0001
 var ACC_PRIVATE = 0x0002
-var ACC_STATIC 	= 0x0008
+var ACC_STATIC = 0x0008
 var ACC_SYNTHETIC = 0x1000
 
 //-----------------------------
@@ -35,9 +36,9 @@ type OpcodeStruct struct {
 }
 
 type NSMethodArgType struct {
-	args []string
-	argCount int
-	retArgs []string
+	args        []string
+	argCount    int
+	retArgs     []string
 	retArgCount int
 }
 
@@ -69,59 +70,65 @@ func (me *NSMethodArgType) GetKlass() IKlass {
 	return nil
 }
 
-func (me *NSMethodArgType) SetKlass(kls IKlass)   {
+func (me *NSMethodArgType) SetKlass(kls IKlass) {
 
 }
 
-func (me *NSMethodArgType) test() IFObject  {
+func (me *NSMethodArgType) test() IFObject {
 	return me
 }
 
-
-
-var vms *Vms
+func (me *NSMethodArgType) test() IFObject {
+	return me
+}
 
 /**
-	创建klass
- */
+创建klass
+*/
 func createKlass(name string, qualifier string, params ...IFObject) *Klass {
 
-	kls:=new(Klass)
+	kls := new(Klass)
 	kls.name = NewFString(name)
 	kls.qualifer = qualifier
 	typeObj := new(TypeObject)
 	typeObj.SetOnwKlass(kls)
-	kls.SetTypeObject( typeObj )
-
-	kls.staticMethod 	= make(map[string]IFObject)
-	kls.staticField 	= make(map[string]IFObject)
+	kls.SetTypeObject(typeObj)
+	//静态
+	kls.staticMethod = make(map[string]IFObject)
+	kls.staticField = make(map[string]IFObject)
+	//动态
+	kls.insField = make(map[string]IFObject)
+	kls.insMethod = make(map[string]IFObject)
 	return kls
 }
-
 
 /**
 创建实例
 */
-func  createKlassIns(callable IFObject , args *FArray) IFObject{
-	ob:=NewFObject()
-	ob.SetKlass( callable.(*TypeObject).GetOnwKlass() )
-	return ob;
+func createKlassIns(callable IFObject, args *FArray) IFObject {
+	ob := NewFObject()
+	ob.SetKlass(callable.(*TypeObject).GetOnwKlass())
+	return ob
 }
 
-
+/**
+创建实例
+*/
+func createKlassIns(callable IFObject, args *FArray) IFObject {
+	ob := NewFObject()
+	ob.SetKlass(callable.(*TypeObject).GetOnwKlass())
+	return ob
+}
 
 func addKlassToVm(k string, kls IKlass) {
-	vms.metaKlass.set(k,kls)
+	vms.metaKlass.set(k, kls)
 }
 
+func addKlassToVm(k string, kls IKlass) {
+	vms.metaKlass.set(k, kls)
+}
 
-
-
-
-
-
-
-func CommonInit()  {
+func CommonInit() {
 	vms = new(Vms)
 	vms.Build()
 	TRUE = NewFString("true")
@@ -129,8 +136,7 @@ func CommonInit()  {
 	NONE = NewFString("none")
 }
 
-func Start(){
-
+func Start() {
 
 	//fa:=NewFArray()
 	//fa.add(NewFString("1"))
@@ -138,13 +144,6 @@ func Start(){
 	//
 	//fa.pop()
 
-
 	vms.start()
 
-
-
 }
-
-
-
-

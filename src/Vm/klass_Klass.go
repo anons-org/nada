@@ -9,6 +9,8 @@ type Klass struct {
 	typeObject *TypeObject
 
 
+<<<<<<< HEAD
+=======
 
 	//静态方法
 	staticMethod map[string]IFObject
@@ -25,6 +27,24 @@ type Klass struct {
 	//
 	//类的限定符 x.x.x.Test
 	qualifer string
+>>>>>>> d7d4e1de8394c65024aee21618fb077a4c573a9d
+
+	//静态方法
+	staticMethod map[string]IFObject
+	//动态方法
+	insMethod map[string]IFObject
+
+	//属性
+	staticField map[string]IFObject
+
+	//动态属性
+	insField map[string]IFObject
+
+
+<<<<<<< HEAD
+	//
+	//类的限定符 x.x.x.Test
+	qualifer string
 
 }
 
@@ -36,6 +56,26 @@ func (me *Klass) getObField(x IFObject, y IFObject) IFObject {
 	panic("implement me")
 }
 
+=======
+func (me *Klass) getObMethod(x IFObject, y IFObject) IFObject {
+
+	mn:=y.(*FString).GetVal();
+	//先找klass的动态方法
+	mob:=me.getInsMethod(mn)
+	if mob==nil{
+		mob = x.getMethodDict().(*FMap).get(mn).(IFObject)
+	}
+	if mob==nil{
+		return nil
+	}
+	return mob;
+}
+
+func (me *Klass) getObField(x IFObject, y IFObject) IFObject {
+	panic("implement me")
+}
+
+>>>>>>> d7d4e1de8394c65024aee21618fb077a4c573a9d
 func (me *Klass) getStaticMethod(k string) IFObject {
 	return me.staticMethod[k]
 }
@@ -45,7 +85,11 @@ func (me *Klass) getStaticField(k string) IFObject {
 }
 
 func (me *Klass) getInsMethod(k string) IFObject {
+<<<<<<< HEAD
 	return me.staticMethod[k]
+=======
+	return me.insMethod[k]
+>>>>>>> d7d4e1de8394c65024aee21618fb077a4c573a9d
 }
 
 func (me *Klass) getInsField(k string) IFObject {
@@ -114,7 +158,14 @@ func  (me *Klass)setInsField(x string ,y IFObject) IKlass{
 
 //供实例调用的方法
 func  (me *Klass)setObMethod(x IFObject,  y IFObject, z IFObject) IKlass{
+<<<<<<< HEAD
 	x.getMethodDict().(*FMap).set(y.(*FString).GetVal(),z)
+=======
+
+
+	x.getMethodDict().(*FMap).set(y.(*FString).GetVal(),z)
+
+>>>>>>> d7d4e1de8394c65024aee21618fb077a4c573a9d
 	return me
 }
 

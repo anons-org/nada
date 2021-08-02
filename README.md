@@ -10,54 +10,10 @@ https://gitee.com/grateful/nada
 ### Project introduction
 Nada refers to the design of JVM,CLI, ZENDVM, V8,Node and other runtime, and implements the instruction set of JVM, supports the running of Ts,Js,PHP,Java and other high-level languages. At the same time, it enhances javascript (type, interface, generics), and fundamentally solves the longstanding complaints of Js.
 
-# # #  
+###  
+- Allows PHP,JAVA,JS,TS to run as scripts in GO
 - As a runtime, the core goal of Nada is to provide entrepreneurs and businesses with a basic service framework for fast trial and error, fast product validation, and fast market capture at the lowest technology cost.
 
-### Features
-
-- javascript enhancements. Nada uses the JSS specification to enhance javascript
-
-- Let and function can be ignored
-- Annotation support  
-  ` ` `  
-  Attribute annotation, class annotation, method annotation, interface annotation, custom annotation  
-  ` ` `
-
-- Type enhancement  
-  ` ` `  
-  int bigInt boolean string double float array any  
-  ` ` `
-- demo  
-  ` ` `  
-  test(int a, any b){  
-  }  
-  ` ` `
-
-- Interface Support  
-  ` ` `  
-  class Test extends A implements IA,IB,IC{  
-  }  
-  ` ` `
-- Static property and method support  
-  ` ` `  
-  class Test extends A implements IA,IB,IC{  
-  static string name;  
-  static getName(){  
-  }  
-  }  
-  ` ` `
-- interface  
-  ` ` `  
-  Interface IFoo{  
-  }  
-  ` ` `
-
-
-
-- hot more
-- Native distributed
-- Support for compiling plug-ins
-- Multiple instruction set support
 
 
 ### Development plan
