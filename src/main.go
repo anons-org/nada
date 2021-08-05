@@ -3,18 +3,21 @@ package main
 
 import (
 	"fmt"
-	"nada/src/Vm"
+	"nada/src/vm"
 )
 
 
 func main() {
 
+
+	//Utils.MiscIns().GetDescStrData("(DIZVLjava/lang/String;)I");
+
 	//s := []string{"a", "b", "c", "d"}
 	//
 	//fmt.Print(s[:len(s)-1])
 
-	Vm.CommonInit()
-	Vm.Start()
+	vm.CommonInit()
+	vm.Start()
 
 	x := 1
 

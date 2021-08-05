@@ -3,6 +3,11 @@ import lib.FTask;
 
 public class Test {
 
+	class User{
+		String name;
+	}
+
+
 	static int age = 100;
 
 	static {
@@ -14,15 +19,16 @@ public class Test {
 	}
 
 	public static void main(String[]  args){
-		String s="打印输出测试";
+//		int[] a = new int[3];
+//		a[0]=9;
+//		User[] user = new User[10];
+//		user[0].name="1232";
 
-
-		Double abcc = 128.4444444444444444444444444444444444444444444444444444;
-
-		System.out.print(abcc);
+		int abc[]={1,2,3,45};
+		abc[0]=999;
 	}
 
-	native public  void testOk ();
+
 	public   static void main11(String[] args){
 	
 
@@ -33,7 +39,7 @@ public class Test {
 		int inttest = 989899898;
 		float fltest = 1.555555555566666666666666666666666666666666666f;
 		Double abc = 1.22233333333333333333333333;
-		long xxxxx = 888888888888888888L;
+		long xxxxx = 1234567891011121314L;
 		boolean booltest = true;
 		
 		
